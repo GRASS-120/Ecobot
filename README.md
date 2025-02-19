@@ -1,7 +1,7 @@
 ## Как скачать проект
-1. git init
-2. git remote add origin https://github.com/GRASS-120/Ecobot.git
-3. git pull origin main
+1. `git init`
+2. `git remote add origin https://github.com/GRASS-120/Ecobot.git`
+3. `git pull origin main`
 
 ## Как открыть проект
 1. качаем Unity
