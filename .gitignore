@@ -1,0 +1,39 @@
+﻿#ignore thumbnails created by windows
+Thumbs.db
+#Ignore files build by Visual Studio
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.bak
+*.cache
+*.ilk
+*.log
+[Bb]in
+*.sbr
+obj/
+_ReSharper*/
+.vs/
+.gradle/
+.[Pp]ublish/
+.[Ii]ntermediate/
+/Server/Resources/*.json
+/Server/Resources/data.bin
+
+# Rider
+**/.idea/**/workspace.xml
+**/.idea/**/usage.statistics.xml
+**/.idea/**/shelf/
+
+# Local asset bundles
+**/[Aa]ssets/[Ss]treamingAssets/Android/*
+**/[Aa]ssets/[Ss]treamingAssets/Android.meta
+**/[Aa]ssets/[Ss]treamingAssets/StandaloneWindows/*
+**/[Aa]ssets/[Ss]treamingAssets/StandaloneWindows.meta
+
+# Temporary build files
+**/.utmp/
