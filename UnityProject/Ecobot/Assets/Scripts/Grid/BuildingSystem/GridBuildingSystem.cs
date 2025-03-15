@@ -11,8 +11,6 @@ namespace Grid.BuildingSystem
     {
         public event Action<Building> OnBuildingPlaced;
         public event Action OnBuildingPositionChanged;
-        // public 
-        // public static event Action OnBuildingChanged;
 
         [Header("Entities")]
         [SerializeField] private PlayerInputManager inputManager;
@@ -20,7 +18,6 @@ namespace Grid.BuildingSystem
         [SerializeField] private GameManager gameManager;
         [SerializeField] private BuildingPreview.BuildingPreview buildingPreview;
         [SerializeField] private List<BuildingItem> buildingTypeList;
-
         [Header("Visual")]
         [SerializeField] private GameObject pointer;
         [SerializeField] private GameObject gridVisualTiles;
@@ -84,7 +81,7 @@ namespace Grid.BuildingSystem
         private void OnDemountBuilding_Callback(object sender, EventArgs e)
         {
             GridNode gridNode = _grid.GetGridObject(_mousePosition);
-            Building building = gridNode.building;
+            Building building = gridNode.Building;
 
             if (building == null) return;
             
@@ -100,7 +97,8 @@ namespace Grid.BuildingSystem
         {
             _dir = BuildingItem.GetNextDir(_dir);
         }
-
+        
+        // todo: state machine?
         public void HandleBuilding() {
             if (_mousePosition != player.GetMouseRaycast().position)
             {

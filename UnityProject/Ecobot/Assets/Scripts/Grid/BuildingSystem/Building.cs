@@ -5,7 +5,6 @@ using Utils;
 namespace Grid.BuildingSystem
 {
     [RequireComponent(typeof(BoxCollider))]
-    
     public class Building : MonoBehaviour {
         private BuildingItem _buildingItem;
         private Vector2Int _origin;

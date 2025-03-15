@@ -10,7 +10,6 @@ namespace Grid
     public class GridMap : MonoBehaviour {
         [Header("Entities")]
         [SerializeField] private GameManager gameManager;
-
         [Header("Params")]
         public int width = 100;
         public int height = 100;
@@ -25,7 +24,8 @@ namespace Grid
         private void Awake()
         {
             _grid = new GridBase<GridNode>(
-                width, height, cellSize, Vector3.zero, (GridBase<GridNode> g, Vector2Int cell) => new GridNode(g, cell)
+                width, height, cellSize, Vector3.zero,
+                (GridBase<GridNode> g, Vector2Int cell) => new GridNode(g, cell)
             );
             _gridNodesWithBuilding = new List<GridNode>();
             _currentMode = gameManager.CurrentMode;
@@ -43,6 +43,7 @@ namespace Grid
 
         private void Update()
         {
+            // todo: !!!
             switch (_currentMode) {
                 default:
                 case GameManager.Mode.Interface:

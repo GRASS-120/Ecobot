@@ -5,45 +5,46 @@ using UnityEngine;
 namespace Grid
 {
     public class GridNode {
-        public Vector2Int cell;
-        public int gCost;  // расстояние от стартовой ноды
-        public int hCost;  // расстояние до конца
-        public int fCost;  // g + h
-        public bool isWalkable;
-        public Building building;
-
-        private GridBase<GridNode> _grid;
+        public Vector2Int Cell;
+        public int GCost;  // расстояние от стартовой ноды
+        public int HCost;  // расстояние до конца
+        public int FCost;  // g + h
+        public bool IsWalkable;
+        public Building Building;
+        public GridNode CameFromNode;
+        
+        private readonly GridBase<GridNode> _grid;
 
         public GridNode(GridBase<GridNode> grid, Vector2Int cell) {
             _grid = grid;
-            building = null;
-            this.cell = cell;
-            isWalkable = true;
+            Building = null;
+            Cell = cell;
+            IsWalkable = true;
         }
 
-        public GridNode cameFromNode;
-
         public void CalculateFCost() {
-            fCost = gCost + hCost;
+            FCost = GCost + HCost;
         }
 
         public bool CanBuild() {
-            return building == null;
+            return Building == null;
         }
 
         public void SetBuilding(Building building) {
-            this.building = building;
-            isWalkable = false;
-            _grid.TriggerGridObjectChanged(cell);
+            Building = building;
+            IsWalkable = false;
+            
+            _grid.TriggerGridObjectChanged(Cell);
         }
 
         public void ClearBuilding() {
-            building = null;
-            _grid.TriggerGridObjectChanged(cell);
+            Building = null;
+            
+            _grid.TriggerGridObjectChanged(Cell);
         }
 
         public override string ToString() {
-            return $"({cell.x}, {cell.y} | {building})";
+            return $"({Cell.x}, {Cell.y} | {Building})";
         }
     }
 }

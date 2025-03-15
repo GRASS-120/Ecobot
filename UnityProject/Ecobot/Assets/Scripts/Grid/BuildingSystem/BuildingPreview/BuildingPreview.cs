@@ -79,9 +79,9 @@ namespace Grid.BuildingSystem.BuildingPreview
             _buildingItem.Value.GetSizesDependsOnDir(gridBuildingSystem.Dir, out int w, out int h);  // если left/right, то h = w, w = h
             
             var size = new Vector3(
-                gridBuildingSystem.Grid.cellSize * w / 2f,
+                gridBuildingSystem.Grid.CellSize * w / 2f,
                 1, 
-                gridBuildingSystem.Grid.cellSize * h / 2f);
+                gridBuildingSystem.Grid.CellSize * h / 2f);
             _canBuildByCollision.Value = _buildingPreviewVisual.Plane.GetComponent<BuildingPreviewPlane>().CheckCollision(targetPosition, size);
         }
 
@@ -94,9 +94,9 @@ namespace Grid.BuildingSystem.BuildingPreview
         private Vector3 CalcVisualPlaneSize()
         {
             return new Vector3(
-                gridBuildingSystem.Grid.cellSize * _buildingItem.Value.width / 10f,
+                gridBuildingSystem.Grid.CellSize * _buildingItem.Value.width / 10f,
                 1, 
-                gridBuildingSystem.Grid.cellSize * _buildingItem.Value.height / 10f);
+                gridBuildingSystem.Grid.CellSize * _buildingItem.Value.height / 10f);
         }
     }
 }

@@ -35,7 +35,7 @@ public class Player : MonoBehaviour {
 
         _isWalking = _moveDir != Vector3.zero;
 
-        _characterController.Move(_moveDir * moveSpeed * Time.deltaTime);
+        _characterController.Move(_moveDir * (moveSpeed * Time.deltaTime));
     }
 
     private void HandleRotation()
