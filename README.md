@@ -4,8 +4,8 @@
 3. `git pull origin main`
 
 ## Гайды
-1. https://youtu.be/t3m1iGIPZ40?si=gxTG6ed1J7gbEAqy
-2. https://youtu.be/eZoSNuuDEDM?si=cppGqUPzpASACXKB
+1. Основы GIT + UNITY: https://youtu.be/t3m1iGIPZ40?si=gxTG6ed1J7gbEAqy
+2. Использования GIT в команде: https://youtu.be/eZoSNuuDEDM?si=cppGqUPzpASACXKB
 
 ## Как открыть проект
 1. Скачиваем Unity
