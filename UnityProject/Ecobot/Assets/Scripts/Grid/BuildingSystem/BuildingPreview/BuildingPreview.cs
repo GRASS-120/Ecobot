@@ -1,4 +1,5 @@
 ﻿using Game;
+using Game.Mods;
 using R3;
 using UnityEngine;
 
@@ -34,7 +35,7 @@ namespace Grid.BuildingSystem.BuildingPreview
 
             gridBuildingSystem.CurrentBuildingItem.Subscribe(OnBuildingChanged_Callback).AddTo(this);
             gridBuildingSystem.OnBuildingPlaced += OnBuildingPlaced_Callback;
-            gameManager.OnModeChanged += OnModeChanged_Callback;
+            gameManager.CurrentMode.Subscribe(OnModeChanged_Callback);
         }
         
         private void LateUpdate()
@@ -42,7 +43,7 @@ namespace Grid.BuildingSystem.BuildingPreview
             UpdatePreviewPosition();
         }
 
-        private void OnModeChanged_Callback(GameManager.Mode currentMode)
+        private void OnModeChanged_Callback(GameMode currentMode)
         {
             _buildingPreviewVisual.HandleModeChanging(currentMode);
         }

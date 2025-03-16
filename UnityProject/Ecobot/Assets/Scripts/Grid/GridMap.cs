@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Game;
+using Game.Mods;
 using Grid.BuildingSystem;
 using Grid.PathfindingSystem;
+using R3;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -19,7 +21,7 @@ namespace Grid
         private GridBase<GridNode> _grid;
         private List<GridNode> _gridNodesWithBuilding;
         private GridBuildingSystem _gridBuildingSystem;
-        private GameManager.Mode _currentMode;
+        private GameMode _currentMode;
         public GridBase<GridNode> Grid => _grid;
 
         private void Awake()
@@ -29,38 +31,44 @@ namespace Grid
                 (GridBase<GridNode> g, Vector2Int cell) => new GridNode(g, cell)
             );
             _gridNodesWithBuilding = new List<GridNode>();
-            _currentMode = gameManager.CurrentMode;
         }
         
         // роблема в том, что не понятно к какой постройке принадлежит клетка...
 
         private void Start()
         {
+            // _currentMode = gameManager.CurrentMode.Value;
             _grid.OnGridObjectChanged += OnGridObjectChanged;
             _gridBuildingSystem = GetComponentInChildren<GridBuildingSystem>();
             
-            gameManager.OnModeChanged += OnModeChanged_Callback;
+            gameManager.CurrentMode.Subscribe(OnModeChanged_Callback);
         }
 
         private void Update()
         {
-            // todo: !!!
-            switch (_currentMode) {
-                default:
-                case GameManager.Mode.Interface:
-                case GameManager.Mode.Programming:
-                case GameManager.Mode.Menu:
-                case GameManager.Mode.Inventory:
-                case GameManager.Mode.Default: {
-                    // pathfindingSystem.gameObject.SetActive(true);
-                    break;
-                }
-                case GameManager.Mode.Building: {
-                    // pathfindingSystem.gameObject.SetActive(false);
-                    _gridBuildingSystem.HandleBuilding();
-                    break;
-                }
+            if (_currentMode == null) return;
+            
+            if (_currentMode is BuildingMode)
+            {
+                _gridBuildingSystem.HandleBuilding();
             }
+            // todo: !!!
+            // switch (_currentMode) {
+            //     default:
+            //     case GameManager.Mode.Interface:
+            //     case GameManager.Mode.Programming:
+            //     case GameManager.Mode.Menu:
+            //     case GameManager.Mode.Inventory:
+            //     case GameManager.Mode.Default: {
+            //         // pathfindingSystem.gameObject.SetActive(true);
+            //         break;
+            //     }
+            //     case GameManager.Mode.Building: {
+            //         // pathfindingSystem.gameObject.SetActive(false);
+            //         _gridBuildingSystem.HandleBuilding();
+            //         break;
+            //     }
+            // }
         }
         
         private void OnGridObjectChanged(Vector2Int obj)   // скорее нужно обрабатывать событие установки постройки
@@ -68,7 +76,7 @@ namespace Grid
             // Debug.Log(obj);
         }
 
-        private void OnModeChanged_Callback(GameManager.Mode currentMode)
+        private void OnModeChanged_Callback(GameMode currentMode)
         {
             _currentMode = currentMode;
         }

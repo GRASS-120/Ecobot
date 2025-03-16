@@ -17,6 +17,7 @@ namespace Game.Mods
             ModeAction?.Invoke();
         }
 
+
         public abstract void ActivateInputMap();
         public abstract void DisableInputMap();
     }

@@ -1,5 +1,6 @@
 using System;
 using Game.Mods;
+// using Game.Mods;
 using R3;
 using UnityEngine;
 
@@ -12,28 +13,19 @@ namespace Game
     // (имеет смысл сделать разные ивенты для разных функций - start и тп)
     
     public class GameManager : MonoBehaviour {
-        // public event Action<Mode> OnModeChanged;
-
         [SerializeField] private PlayerInputManager inputManager;
 
         public ReactiveProperty<GameMode> CurrentMode; // todo: reactive property
 
-        public enum Mode {
-            Default,
-            Building,
-            Inventory,
-            Interface,
-            Programming,
-            Menu
-        }
-
         private void Awake()
         {
-            CurrentMode = new ReactiveProperty<GameMode>();
+            // перенести в словарь (как со спелами)
+            CurrentMode = new ReactiveProperty<GameMode>(new GameplayMode(inputManager));
         }
     
         private void Start()
         {
+            CurrentMode.Subscribe(SetCurrentMode);
             inputManager.OnToggleBuildMode += OnToggleBuildMode_Callback;
         }
         
@@ -42,15 +34,23 @@ namespace Game
 
         private void OnToggleBuildMode_Callback(object sender, EventArgs e)
         {
-            // _currentMode = _currentMode == Mode.Default ? Mode.Building : Mode.Default;
+            CurrentMode.Value = CurrentMode.Value is GameplayMode ? new BuildingMode(inputManager) : new GameplayMode(inputManager);
+            // CurrentMode.Value = CurrentMode.Value is  Mode.Default ? Mode.Building : Mode.Default;
             // OnModeChanged?.Invoke(_currentMode);
         }
 
-        public void ChangeMode(Mode mode)
+        private void SetCurrentMode(GameMode mode)
         {
-            // CurrentMode.Value = mode;
-            // _currentMode = mode;
-            // OnModeChanged?.Invoke(_currentMode);
+            CurrentMode.Value.DisableInputMap();
+            CurrentMode.Value = mode;
+            CurrentMode.Value.ActivateInputMap();
         }
+
+        // public void ChangeMode(Mode mode)
+        // {
+        //     // CurrentMode.Value = mode;
+        //     // _currentMode = mode;
+        //     // OnModeChanged?.Invoke(_currentMode);
+        // }
     }
 }

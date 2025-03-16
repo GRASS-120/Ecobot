@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game;
+using Game.Mods;
 using R3;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -49,15 +50,16 @@ namespace Grid.BuildingSystem
             inputManager.OnRotateBuilding += OnRotateBuilding_Callback;
             inputManager.OnDemountBuilding += OnDemountBuilding_Callback;
             
-            gameManager.OnModeChanged += OnModeChanged_Callback;
+            gameManager.CurrentMode.Subscribe(OnModeChanged_Callback);
 
             _currentBuildingItem.Subscribe(CurrentBuildingItem_Callback).AddTo(this);
         }
 
-        private void OnModeChanged_Callback(GameManager.Mode currentMode)
+        private void OnModeChanged_Callback(GameMode currentMode)
         {
             // handle visual
-            bool isBuildingMode = currentMode == GameManager.Mode.Building;
+            bool isBuildingMode = currentMode is BuildingMode;
+            
             pointer.SetActive(isBuildingMode);
             gridVisualTiles.SetActive(isBuildingMode);
             

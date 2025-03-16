@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Game;
+using Game.Mods;
 using R3;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -49,15 +50,16 @@ namespace Grid.BuildingSystem.BuildingPreview
             }
         }
 
-        public void HandleModeChanging(GameManager.Mode currentMode)
+        // todo: !!! 
+        public void HandleModeChanging(GameMode currentMode)
         {
-            if (currentMode == GameManager.Mode.Default)
+            if (currentMode is GameplayMode)
             {
                 if (_visual == null) return;
                 Destroy(_visual.gameObject);
                 Destroy(_plane.gameObject);
             }
-            else if (currentMode == GameManager.Mode.Building)
+            else if (currentMode is BuildingMode)
             {
                 if (_buildingItem == null) return;
                 RefreshVisual(_targetPosition, _planeSize);
