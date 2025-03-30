@@ -34,8 +34,9 @@ namespace Grid.BuildingSystem
 
         public GridBase<GridNode> Grid => _grid;
         public BuildingItem.Dir Dir => _dir;
-        public ReactiveProperty<bool> CanBuildByGrid => _canBuildByGrid;
-
+        public GameManager GameManager => gameManager;
+        public PlayerManager Player => player;
+        
         public ReadOnlyReactiveProperty<BuildingItem> CurrentBuildingItem => _currentBuildingItem;
 
         private void Awake()
@@ -50,21 +51,30 @@ namespace Grid.BuildingSystem
             inputManager.OnRotateBuilding += OnRotateBuilding_Callback;
             inputManager.OnDemountBuilding += OnDemountBuilding_Callback;
             
-            gameManager.CurrentMode.Subscribe(OnModeChanged_Callback);
+            // gameManager.CurrentMode.Subscribe(OnModeChanged_Callback);
             
             _currentBuildingItem.Subscribe(CurrentBuildingItem_Callback).AddTo(this);
+
+            gameManager.BuildingMode.OnEnterEvent += OnEnterBuildingMode_Callback;
+            gameManager.BuildingMode.OnExitEvent += OnExitBuildingMode_Callback;
         }
 
-        // on enter + on exit
-        private void OnModeChanged_Callback(GameMode currentMode)
+        private void OnEnterBuildingMode_Callback()
         {
-            bool isBuildingMode = currentMode is BuildingMode;
-            
-            pointer.SetActive(isBuildingMode);
-            gridVisualTiles.SetActive(isBuildingMode);
+            pointer.SetActive(true);
+            gridVisualTiles.SetActive(true);
             
             ClearBuildingItem();  
         }
+        
+        private void OnExitBuildingMode_Callback()
+        {
+            pointer.SetActive(false);
+            gridVisualTiles.SetActive(false);
+            
+            ClearBuildingItem();  
+        }
+        
         private void ResetDir()
         {
             _dir = BuildingItem.Dir.Down;

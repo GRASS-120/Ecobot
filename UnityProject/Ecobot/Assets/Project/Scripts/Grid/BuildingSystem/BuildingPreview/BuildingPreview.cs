@@ -2,15 +2,14 @@
 using Game.Mods;
 using R3;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Grid.BuildingSystem.BuildingPreview
 {
     public class BuildingPreview : MonoBehaviour
     {
         [Header("Entities")]
-        [SerializeField] private GridBuildingSystem gridBuildingSystem;
-        [SerializeField] private GameManager gameManager;
-        [SerializeField] private PlayerManager player;
+        [SerializeField] private GridBuildingSystem buildingSystem;
 
         private BuildingPreviewVisual _buildingPreviewVisual;
         private Vector3 _mousePosition;
@@ -20,6 +19,7 @@ namespace Grid.BuildingSystem.BuildingPreview
 
         public ReactiveProperty<bool> CanBuildByCollision => _canBuildByCollision;
         public ReactiveProperty<BuildingItem> BuildingItem => _buildingItem;
+        public GridBuildingSystem BuildingSystem => buildingSystem;
 
         private void Awake()
         {
@@ -31,11 +31,12 @@ namespace Grid.BuildingSystem.BuildingPreview
         private void Start()
         {
             // пофиксил тем, что переместил из Awake в Start...
-            _mousePosition = player.GetMouseRaycast().position;
+            _mousePosition = buildingSystem.Player.GetMouseRaycast().position;
 
-            gridBuildingSystem.CurrentBuildingItem.Subscribe(OnBuildingChanged_Callback).AddTo(this);
-            gridBuildingSystem.OnBuildingPlaced += OnBuildingPlaced_Callback;
-            gameManager.CurrentMode.Subscribe(OnModeChanged_Callback);
+            buildingSystem.CurrentBuildingItem.Subscribe(OnBuildingChanged_Callback).AddTo(this);
+            buildingSystem.OnBuildingPlaced += OnBuildingPlaced_Callback;
+            
+            buildingSystem.GameManager.GameplayMode.OnEnterEvent += OnEnterGameplayMode_Callback;
         }
         
         private void LateUpdate()
@@ -43,9 +44,9 @@ namespace Grid.BuildingSystem.BuildingPreview
             UpdatePreviewPosition();
         }
 
-        private void OnModeChanged_Callback(GameMode currentMode)
+        private void OnEnterGameplayMode_Callback()
         {
-            _buildingPreviewVisual.HandleModeChanging(currentMode);
+            _buildingPreviewVisual.DestroyPreview();
         }
 
         private void OnBuildingChanged_Callback(BuildingItem item)
@@ -68,9 +69,9 @@ namespace Grid.BuildingSystem.BuildingPreview
         {
             // если брать _mousePosition из building system, то она не будет обновляться вне режима строительства =>
             // при включении постройка будет перемещаться с прошлого положения в текущее резко
-            _mousePosition = player.GetMouseRaycast().position;
+            _mousePosition = buildingSystem.Player.GetMouseRaycast().position;
             Vector3 targetPosition = CalcTargetPosition();
-            Quaternion toRotation = _buildingItem.Value == null ? Quaternion.identity : Quaternion.Euler(0, _buildingItem.Value.GetRotationAngle(gridBuildingSystem.Dir), 0);
+            Quaternion toRotation = _buildingItem.Value == null ? Quaternion.identity : Quaternion.Euler(0, _buildingItem.Value.GetRotationAngle(buildingSystem.Dir), 0);
             
             transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 15f);
             transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, Time.deltaTime * 15f);
@@ -78,27 +79,27 @@ namespace Grid.BuildingSystem.BuildingPreview
             if (_buildingItem.Value == null) return;
 
             
-            _buildingItem.Value.GetSizesDependsOnDir(gridBuildingSystem.Dir, out int w, out int h);  // если left/right, то h = w, w = h
+            _buildingItem.Value.GetSizesDependsOnDir(buildingSystem.Dir, out int w, out int h);  // если left/right, то h = w, w = h
             
             var size = new Vector3(
-                gridBuildingSystem.Grid.CellSize * w / 2f,
+                buildingSystem.Grid.CellSize * w / 2f,
                 1, 
-                gridBuildingSystem.Grid.CellSize * h / 2f);
+                buildingSystem.Grid.CellSize * h / 2f);
             _canBuildByCollision.Value = _buildingPreviewVisual.Plane.GetComponent<BuildingPreviewPlane>().CheckCollision(targetPosition, size);
         }
 
         private Vector3 CalcTargetPosition()
         {
-            Vector2Int mouseGridPosition = gridBuildingSystem.Grid.GetGridPosition(_mousePosition);
+            Vector2Int mouseGridPosition = buildingSystem.Grid.GetGridPosition(_mousePosition);
             return new Vector3(mouseGridPosition.x, 1f, mouseGridPosition.y);
         }
 
         private Vector3 CalcVisualPlaneSize()
         {
             return new Vector3(
-                gridBuildingSystem.Grid.CellSize * _buildingItem.Value.width / 10f,
+                buildingSystem.Grid.CellSize * _buildingItem.Value.width / 10f,
                 1, 
-                gridBuildingSystem.Grid.CellSize * _buildingItem.Value.height / 10f);
+                buildingSystem.Grid.CellSize * _buildingItem.Value.height / 10f);
         }
     }
 }

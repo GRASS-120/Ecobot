@@ -2289,9 +2289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06b6ea16da1d4c0d955f06256119a799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridBuildingSystem: {fileID: 798626357}
-  gameManager: {fileID: 1732608866}
-  player: {fileID: 1457998935}
+  buildingSystem: {fileID: 798626357}
 --- !u!54 &333059103
 Rigidbody:
   m_ObjectHideFlags: 0

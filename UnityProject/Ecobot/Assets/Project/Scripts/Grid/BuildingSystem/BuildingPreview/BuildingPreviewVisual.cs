@@ -50,20 +50,11 @@ namespace Grid.BuildingSystem.BuildingPreview
             }
         }
 
-        // todo: !!! 
-        public void HandleModeChanging(GameMode currentMode)
+        public void DestroyPreview()
         {
-            if (currentMode is GameplayMode)
-            {
-                if (_visual == null) return;
-                Destroy(_visual.gameObject);
-                Destroy(_plane.gameObject);
-            }
-            else if (currentMode is BuildingMode)
-            {
-                if (_buildingItem == null) return;
-                RefreshVisual(_targetPosition, _planeSize);
-            }
+            if (_visual == null) return;
+            Destroy(_visual.gameObject);
+            Destroy(_plane.gameObject);
         }
 
         public void RefreshVisual(Vector3 targetPosition, Vector3 planeSize)
