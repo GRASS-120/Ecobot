@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour {
+public class PlayerManager : MonoBehaviour {
     [Header("Entities")]
     [SerializeField] private PlayerInputManager inputManager;
 

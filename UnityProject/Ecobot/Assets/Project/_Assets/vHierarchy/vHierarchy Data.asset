@@ -25,6 +25,8 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-410087039-0
         - globalObjectIdString: GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-770899512-0
         - globalObjectIdString: GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1732608864-0
+        - globalObjectIdString: GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-832575517-0
+        - globalObjectIdString: GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-800910331-0
         values:
         - colorIndex: 0
           iconNameOrGuid: Camera Icon
@@ -35,8 +37,12 @@ MonoBehaviour:
         - colorIndex: 0
           iconNameOrGuid: MeshCollider Icon
         - colorIndex: 0
-          iconNameOrGuid: Light Icon
+          iconNameOrGuid: DirectionalLight Icon
         - colorIndex: 0
           iconNameOrGuid: Canvas Icon
         - colorIndex: 0
           iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Light Icon
+        - colorIndex: 0
+          iconNameOrGuid: Folder Icon

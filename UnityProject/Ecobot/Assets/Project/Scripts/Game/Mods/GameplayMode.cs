@@ -1,9 +1,23 @@
-﻿namespace Game.Mods
+﻿using UnityEngine;
+
+namespace Game.Mods
 {
     public class GameplayMode : GameMode
     {
         public GameplayMode(PlayerInputManager playerInputManager) : base(playerInputManager)
         {
+        }
+        
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            ActivateInputMap();
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            DisableInputMap();
         }
 
         public override void ActivateInputMap()

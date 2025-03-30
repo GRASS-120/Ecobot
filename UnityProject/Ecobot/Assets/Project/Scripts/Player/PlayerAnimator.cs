@@ -21,7 +21,7 @@ public class PlayerAnimator : MonoBehaviour {
     [SerializeField] private float acceleration = 2f; 
     [SerializeField] private float deceleration = 5f; 
 
-    private Player _player;
+    private PlayerManager _player;
     private Animator _animator;
     private float _velocityZ = 0f;
     private float _velocityX = 0f;
@@ -30,7 +30,7 @@ public class PlayerAnimator : MonoBehaviour {
     private int _velocityXHash;
 
     void Awake() {
-        _player = GetComponentInParent<Player>();
+        _player = GetComponentInParent<PlayerManager>();
         _animator = GetComponent<Animator>();
         _velocityZHash = Animator.StringToHash("Velocity Z");
         _velocityXHash = Animator.StringToHash("Velocity X");

@@ -10,7 +10,7 @@ namespace Grid.BuildingSystem.BuildingPreview
         [Header("Entities")]
         [SerializeField] private GridBuildingSystem gridBuildingSystem;
         [SerializeField] private GameManager gameManager;
-        [SerializeField] private Player player;
+        [SerializeField] private PlayerManager player;
 
         private BuildingPreviewVisual _buildingPreviewVisual;
         private Vector3 _mousePosition;

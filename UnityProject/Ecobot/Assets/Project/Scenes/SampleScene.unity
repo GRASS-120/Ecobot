@@ -2643,6 +2643,8 @@ MonoBehaviour:
   width: 100
   height: 100
   cellSize: 1
+  buildingSystem: {fileID: 798626357}
+  pathfindingSystem: {fileID: 1383265489}
 --- !u!1 &468499725
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ namespace Grid.PathfindingSystem
     {
         [Header("Entities")]
         [SerializeField] private Bot bot;
-        [SerializeField] private Player player;
+        [SerializeField] private PlayerManager player;
         
         private GridBase<GridNode> _grid;
         private Vector3 _mousePosition;
@@ -17,11 +17,7 @@ namespace Grid.PathfindingSystem
             _grid = GetComponentInParent<GridMap>().Grid;
         }
 
-        private void Update()
-        {
-            HandlePathfinding();
-        }
-
+        // todo: remake
         public void HandlePathfinding()
         {
             _mousePosition = player.GetMouseRaycast().position;

@@ -16,7 +16,7 @@ namespace Grid.BuildingSystem
 
         [Header("Entities")]
         [SerializeField] private PlayerInputManager inputManager;
-        [SerializeField] private Player player;
+        [SerializeField] private PlayerManager player;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private BuildingPreview.BuildingPreview buildingPreview;
         [SerializeField] private List<BuildingItem> buildingTypeList;
@@ -51,13 +51,13 @@ namespace Grid.BuildingSystem
             inputManager.OnDemountBuilding += OnDemountBuilding_Callback;
             
             gameManager.CurrentMode.Subscribe(OnModeChanged_Callback);
-
+            
             _currentBuildingItem.Subscribe(CurrentBuildingItem_Callback).AddTo(this);
         }
 
+        // on enter + on exit
         private void OnModeChanged_Callback(GameMode currentMode)
         {
-            // handle visual
             bool isBuildingMode = currentMode is BuildingMode;
             
             pointer.SetActive(isBuildingMode);
@@ -81,7 +81,7 @@ namespace Grid.BuildingSystem
             _currentBuildingItem.Value = null;
         }
 
-        private void OnDemountBuilding_Callback(object sender, EventArgs e)
+        private void OnDemountBuilding_Callback()
         {
             GridNode gridNode = _grid.GetGridObject(_mousePosition);
             Building building = gridNode.Building;
@@ -96,13 +96,13 @@ namespace Grid.BuildingSystem
             }
         }
 
-        private void OnRotateBuilding_Callback(object sender, EventArgs e)
+        private void OnRotateBuilding_Callback()
         {
             _dir = BuildingItem.GetNextDir(_dir);
         }
         
-        // todo: state machine?
         public void HandleBuilding() {
+            
             if (_mousePosition != player.GetMouseRaycast().position)
             {
                 OnBuildingPositionChanged?.Invoke();
