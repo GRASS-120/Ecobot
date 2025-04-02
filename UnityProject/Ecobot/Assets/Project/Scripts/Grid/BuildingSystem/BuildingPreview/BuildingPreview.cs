@@ -14,17 +14,17 @@ namespace Grid.BuildingSystem.BuildingPreview
         private BuildingPreviewVisual _buildingPreviewVisual;
         private Vector3 _mousePosition;
 
-        private ReactiveProperty<BuildingItem> _buildingItem;
+        private ReactiveProperty<BuildingSO> _buildingItem;
         private ReactiveProperty<bool> _canBuildByCollision;
 
         public ReactiveProperty<bool> CanBuildByCollision => _canBuildByCollision;
-        public ReactiveProperty<BuildingItem> BuildingItem => _buildingItem;
+        public ReactiveProperty<BuildingSO> BuildingItem => _buildingItem;
         public GridBuildingSystem BuildingSystem => buildingSystem;
 
         private void Awake()
         {
             _canBuildByCollision = new ReactiveProperty<bool>(true);
-            _buildingItem = new ReactiveProperty<BuildingItem>();
+            _buildingItem = new ReactiveProperty<BuildingSO>();
             _buildingPreviewVisual = GetComponent<BuildingPreviewVisual>();
         }
 
@@ -49,9 +49,9 @@ namespace Grid.BuildingSystem.BuildingPreview
             _buildingPreviewVisual.DestroyPreview();
         }
 
-        private void OnBuildingChanged_Callback(BuildingItem item)
+        private void OnBuildingChanged_Callback(BuildingSO so)
         {
-            _buildingItem.Value = item;
+            _buildingItem.Value = so;
             
             if (_buildingItem.Value == null) return; 
             

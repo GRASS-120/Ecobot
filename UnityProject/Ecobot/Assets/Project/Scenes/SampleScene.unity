@@ -4677,15 +4677,7 @@ MonoBehaviour:
   player: {fileID: 1457998935}
   gameManager: {fileID: 1732608866}
   buildingPreview: {fileID: 333059102}
-  buildingTypeList:
-  - {fileID: 11400000, guid: a6c5ef06b677a7f4b8e4a5773a6142dc, type: 2}
-  - {fileID: 11400000, guid: fdca845ffde649644a464410f67816ab, type: 2}
-  - {fileID: 11400000, guid: b2dfdeb326e174a4eb4d9b0f5a23c262, type: 2}
-  - {fileID: 11400000, guid: b0192ebdca4c5e4468544d4eb2d26fac, type: 2}
-  - {fileID: 11400000, guid: e3e50360834fd144a9f115c8d47a980d, type: 2}
-  - {fileID: 11400000, guid: 1bb5d4d613da66e4fa3764eaeb4f9ca1, type: 2}
-  - {fileID: 11400000, guid: c1c6e992264b43a4b86bde566338f526, type: 2}
-  - {fileID: 11400000, guid: f40db8ce0f662f54aac129513369ca52, type: 2}
+  buildingListSO: {fileID: 11400000, guid: 75c558c02170baa419f4d27f3d90cd3f, type: 2}
   pointer: {fileID: 266907772}
   gridVisualTiles: {fileID: 468499725}
 --- !u!1 &800910331
@@ -5033,6 +5025,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e6cc830875d4d64c83aeb9696dcd08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bots:
+  - {fileID: 5866666021363098226}
 --- !u!1 &873428998
 GameObject:
   m_ObjectHideFlags: 0

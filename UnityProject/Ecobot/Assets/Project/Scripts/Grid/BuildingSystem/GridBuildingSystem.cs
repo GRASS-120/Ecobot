@@ -19,31 +19,37 @@ namespace Grid.BuildingSystem
         [SerializeField] private PlayerManager player;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private BuildingPreview.BuildingPreview buildingPreview;
-        [SerializeField] private List<BuildingItem> buildingTypeList;
+        [SerializeField] private BuildingListSO buildingListSO;
+        
         [Header("Visual")]
         [SerializeField] private GameObject pointer;
         [SerializeField] private GameObject gridVisualTiles;
 
-        private ReactiveProperty<BuildingItem> _currentBuildingItem;
-        private BuildingItem.Dir _dir;
-        private Building _currentBuilding;
+        private ReactiveProperty<BuildingSO> _currentBuildingItem;
+        private ReactiveProperty<bool> _canBuildByGrid;
+        private BuildingDatabase _buildingDatabase;
         private GridBase<GridNode> _grid;
+        private BuildingSO.Dir _dir;
+        private Building _currentBuilding;
         private Vector3 _mousePosition;
         private LayerMask _groundMask;
-        private ReactiveProperty<bool> _canBuildByGrid;
+        private List<BuildingSO> _buildingTypeList;
 
         public GridBase<GridNode> Grid => _grid;
-        public BuildingItem.Dir Dir => _dir;
+        public BuildingSO.Dir Dir => _dir;
         public GameManager GameManager => gameManager;
         public PlayerManager Player => player;
+        public BuildingDatabase BuildingDatabase => _buildingDatabase;
         
-        public ReadOnlyReactiveProperty<BuildingItem> CurrentBuildingItem => _currentBuildingItem;
+        public ReadOnlyReactiveProperty<BuildingSO> CurrentBuildingItem => _currentBuildingItem;
 
         private void Awake()
         {
             _grid = GetComponentInParent<GridMap>().Grid;
             _canBuildByGrid = new ReactiveProperty<bool>(true);
-            _currentBuildingItem = new ReactiveProperty<BuildingItem>();
+            _currentBuildingItem = new ReactiveProperty<BuildingSO>();
+            _buildingTypeList = buildingListSO.buildings;
+            _buildingDatabase = new BuildingDatabase(buildingListSO);
         }
 
         private void Start()
@@ -51,8 +57,7 @@ namespace Grid.BuildingSystem
             inputManager.OnRotateBuilding += OnRotateBuilding_Callback;
             inputManager.OnDemountBuilding += OnDemountBuilding_Callback;
             
-            // gameManager.CurrentMode.Subscribe(OnModeChanged_Callback);
-            
+            // OnBuildingPlaced +=             
             _currentBuildingItem.Subscribe(CurrentBuildingItem_Callback).AddTo(this);
 
             gameManager.BuildingMode.OnEnterEvent += OnEnterBuildingMode_Callback;
@@ -77,10 +82,10 @@ namespace Grid.BuildingSystem
         
         private void ResetDir()
         {
-            _dir = BuildingItem.Dir.Down;
+            _dir = BuildingSO.Dir.Down;
         }
 
-        private void CurrentBuildingItem_Callback(BuildingItem item)
+        private void CurrentBuildingItem_Callback(BuildingSO so)
         {
             ResetDir();
             pointer.SetActive(false);
@@ -108,7 +113,7 @@ namespace Grid.BuildingSystem
 
         private void OnRotateBuilding_Callback()
         {
-            _dir = BuildingItem.GetNextDir(_dir);
+            _dir = BuildingSO.GetNextDir(_dir);
         }
         
         public void HandleBuilding() {
@@ -157,21 +162,21 @@ namespace Grid.BuildingSystem
             // ! remake
             bool hasBuildingChanged = false;
 
-            if (Input.GetKeyDown(KeyCode.Alpha1)) {_currentBuildingItem.Value = buildingTypeList[0];
+            if (Input.GetKeyDown(KeyCode.Alpha1)) {_currentBuildingItem.Value = _buildingTypeList[0];
                 hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha2)) {_currentBuildingItem.Value = buildingTypeList[1];
+            if (Input.GetKeyDown(KeyCode.Alpha2)) {_currentBuildingItem.Value = _buildingTypeList[1];
                 hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha3)) {_currentBuildingItem.Value = buildingTypeList[2];
+            if (Input.GetKeyDown(KeyCode.Alpha3)) {_currentBuildingItem.Value = _buildingTypeList[2];
                 hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha4)) {_currentBuildingItem.Value = buildingTypeList[3];
+            if (Input.GetKeyDown(KeyCode.Alpha4)) {_currentBuildingItem.Value = _buildingTypeList[3];
                 hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha5)) {_currentBuildingItem.Value = buildingTypeList[4];
+            if (Input.GetKeyDown(KeyCode.Alpha5)) {_currentBuildingItem.Value = _buildingTypeList[4];
                 hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha6)) {_currentBuildingItem.Value = buildingTypeList[5];
+            if (Input.GetKeyDown(KeyCode.Alpha6)) {_currentBuildingItem.Value = _buildingTypeList[5];
                 hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha7)) {_currentBuildingItem.Value = buildingTypeList[6];
+            if (Input.GetKeyDown(KeyCode.Alpha7)) {_currentBuildingItem.Value = _buildingTypeList[6];
                 hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha8)) {_currentBuildingItem.Value = buildingTypeList[7];
+            if (Input.GetKeyDown(KeyCode.Alpha8)) {_currentBuildingItem.Value = _buildingTypeList[7];
                 hasBuildingChanged = true;}
 
             if (!hasBuildingChanged) return;

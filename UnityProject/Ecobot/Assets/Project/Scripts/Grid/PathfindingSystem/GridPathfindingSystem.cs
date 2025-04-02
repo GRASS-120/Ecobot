@@ -1,4 +1,5 @@
 ﻿using System;
+using Bots;
 using UnityEngine;
 
 namespace Grid.PathfindingSystem
@@ -11,17 +12,17 @@ namespace Grid.PathfindingSystem
         
         private GridBase<GridNode> _grid;
         private Vector3 _mousePosition;
-
+        
         private void Start()
         {
             _grid = GetComponentInParent<GridMap>().Grid;
         }
-
+        
         // todo: remake
         public void HandlePathfinding()
         {
             _mousePosition = player.GetMouseRaycast().position;
-
+        
             if (Input.GetMouseButtonDown(0)) {
                 bot.SetTargetPosition(_mousePosition);
             }
