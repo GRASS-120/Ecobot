@@ -17,10 +17,13 @@ MonoBehaviour:
     - a47745d8587f54343ac3f05af99632a7
     - 6b787033e3cdf624fa511551bcff7e8f
     - cea37656721ac7c47b019adb8c1f5a70
+    - 0d09b97a24db818449bbea11d23c0f99
     values:
     - colorIndex: 6
       iconNameOrGuid: 
     - colorIndex: 8
       iconNameOrGuid: 
     - colorIndex: 7
+      iconNameOrGuid: 
+    - colorIndex: 3
       iconNameOrGuid: 

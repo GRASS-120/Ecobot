@@ -1,5 +1,5 @@
 ﻿using System;
-using Bots;
+using Bot;
 using UnityEngine;
 
 namespace Grid.PathfindingSystem
@@ -7,7 +7,7 @@ namespace Grid.PathfindingSystem
     public class GridPathfindingSystem : MonoBehaviour
     {
         [Header("Entities")]
-        [SerializeField] private Bot bot;
+        [SerializeField] private BotBase _botBase;
         [SerializeField] private PlayerManager player;
         
         private GridBase<GridNode> _grid;
@@ -21,11 +21,11 @@ namespace Grid.PathfindingSystem
         // todo: remake
         public void HandlePathfinding()
         {
-            _mousePosition = player.GetMouseRaycast().position;
-        
-            if (Input.GetMouseButtonDown(0)) {
-                bot.SetTargetPosition(_mousePosition);
-            }
+            // _mousePosition = player.GetMouseRaycast().position;
+            //
+            // if (Input.GetMouseButtonDown(0)) {
+            //     bot.SetTargetPosition(_mousePosition);
+            // }
         }
     }
 }

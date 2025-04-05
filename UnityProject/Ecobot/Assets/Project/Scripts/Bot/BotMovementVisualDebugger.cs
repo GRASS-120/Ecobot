@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Bots
+namespace Bot
 {
-    public class BotVisualDebugger : MonoBehaviour
+    public class BotMovementVisualDebugger : MonoBehaviour
     {
         public void DrawPath(List<Vector3> path) {
             if (path != null) {

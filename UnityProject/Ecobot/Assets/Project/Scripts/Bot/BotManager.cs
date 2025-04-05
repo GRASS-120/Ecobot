@@ -1,15 +1,15 @@
-using System;
 using System.Collections.Generic;
 using Grid;
 using UnityEngine;
 
-namespace Bots
+namespace Bot
 {
     public class BotManager : MonoBehaviour
     {
         [Header("Entities")]
         [SerializeField] private GridMap gridMap;
-        [SerializeField] private List<Bot> bots;
+        [SerializeField] private List<BotBase> bots;
+        [SerializeField] private Transform target;
 
         private void Awake()
         {
@@ -18,12 +18,15 @@ namespace Bots
                 bot.Init(gridMap);
             }
         }
-        
-        private void Update()
+
+        // todo: tmp
+        private void Start()
         {
             foreach (var bot in bots)
             {
-                bot.HandleMovement();  // TODO: -> MOVEMENT MANAGER 
+                var c = bot.CommandController.Fabric.CreateMoveCommand(target.position);
+                bot.CommandController.AddCommand(c);
+                bot.CommandController.Play();
             }
         }
     }
