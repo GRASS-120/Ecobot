@@ -32,7 +32,7 @@ namespace Grid.BuildingSystem.BuildingPreview
         private void Start()
         {
             _buildingPreview.CanBuildByCollision.Subscribe(HandleVisual).AddTo(this);
-            _buildingPreview.BuildingItem.Subscribe((item => _buildingSo = item)).AddTo(this);
+            _buildingPreview.BuildingItem.Subscribe(item => _buildingSo = item).AddTo(this);
         }
 
         public void HandleVisual(bool canBuildByCollision)

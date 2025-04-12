@@ -1,5 +1,6 @@
 ﻿using System;
 using Bot;
+using Player;
 using UnityEngine;
 
 namespace Grid.PathfindingSystem

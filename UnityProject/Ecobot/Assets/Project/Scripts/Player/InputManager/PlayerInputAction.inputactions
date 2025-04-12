@@ -2,7 +2,7 @@
     "name": "PlayerInputAction",
     "maps": [
         {
-            "name": "DefaultMode",
+            "name": "GameplayMode",
             "id": "de339ef5-21b2-4147-9c94-cb516524e930",
             "actions": [
                 {
@@ -27,6 +27,15 @@
                     "name": "ToggleBuildMode",
                     "type": "Button",
                     "id": "4c680bf1-8cca-436b-9bf7-d2aae6ff9b38",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "0f2d5acf-3827-4a62-8000-2034b8268873",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -148,6 +157,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "MouseDelta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e7a9e94c-8763-4580-ac3d-bfe65766f574",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

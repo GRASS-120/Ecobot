@@ -789,7 +789,6 @@ GameObject:
   - component: {fileID: 136731915}
   - component: {fileID: 136731914}
   - component: {fileID: 136731913}
-  - component: {fileID: 136731916}
   m_Layer: 6
   m_Name: Terrain
   m_TagString: Untagged
@@ -872,20 +871,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1448865248}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &136731916
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 136731912}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7568fb1a5b73001478579475bba46273, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  terrainToCopy: {fileID: 136731914}
-  avoidCulling: 0
 --- !u!4 &148238232 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7319666979965804918, guid: e13d1e297156f4544ab94d99144112c0,
@@ -2996,7 +2981,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1115756086394208, guid: 2cde8179277215b4fafbb51cd3f7fcd0, type: 3}
       propertyPath: m_Name
-      value: SM_Chr_RobotFemale_01
+      value: root
       objectReference: {fileID: 0}
     - target: {fileID: 1115756086394208, guid: 2cde8179277215b4fafbb51cd3f7fcd0, type: 3}
       propertyPath: m_Layer
@@ -4026,7 +4011,7 @@ Transform:
   m_GameObject: {fileID: 692018602}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.43, z: 1.121}
+  m_LocalPosition: {x: 0, y: 1.95, z: 0.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4519,6 +4504,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0410527fb1be7d44092160d3333e0921, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: buildings
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[Grid.BuildingSystem.BuildingSO,
+        Assembly-CSharp],[System.Collections.Generic.List`1[[Grid.BuildingSystem.Building,
+        Assembly-CSharp]], mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.ObjectEqualityComparer`1[[Grid.BuildingSystem.BuildingSO,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   inputManager: {fileID: 1616137094}
   player: {fileID: 1457998935}
   gameManager: {fileID: 1732608866}
@@ -6602,6 +6617,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputManager: {fileID: 1616137094}
+  mainCamera: {fileID: 330585545}
   virtualCamera: {fileID: 1270396875}
   zoomSpeed: 3
   targetFOVMin: 30
@@ -7150,10 +7166,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1457998932}
   - component: {fileID: 1457998935}
-  - component: {fileID: 1457998934}
-  - component: {fileID: 1457998933}
   - component: {fileID: 1457998937}
   - component: {fileID: 1457998938}
+  - component: {fileID: 1457998934}
+  - component: {fileID: 1457998933}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -7240,6 +7256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputManager: {fileID: 1616137094}
+  cameraManager: {fileID: 1270396877}
   moveSpeed: 12
 --- !u!114 &1457998937
 MonoBehaviour:
@@ -7253,11 +7270,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0db2b34cb861413397745a221c683fd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InteractionPoint: {fileID: 692018603}
-  InteractionLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  InteractionPointRadius: 1
+  interactorSource: {fileID: 692018603}
+  interactionRange: 10
 --- !u!114 &1457998938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7705,7 +7719,7 @@ GameObject:
   - component: {fileID: 1616137095}
   - component: {fileID: 1616137094}
   m_Layer: 8
-  m_Name: PlayerInputManager
+  m_Name: InputManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

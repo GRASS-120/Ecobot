@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Bot.Command
@@ -23,6 +24,7 @@ namespace Bot.Command
             _commands.Add(command);
         }
 
+        [Button("Click me")]
         public void Play()
         {
             foreach (var command in _commands.ToList())
@@ -34,7 +36,6 @@ namespace Bot.Command
                     Debug.Log($"command {command} executed");
                     command.Execute();
                 }
-                
             }
         }
     }

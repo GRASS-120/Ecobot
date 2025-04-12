@@ -1,4 +1,6 @@
-﻿namespace Game.Mods
+﻿using Player.InputManager;
+
+namespace Game.Mods
 {
     public class MenuMode : GameMode
     {

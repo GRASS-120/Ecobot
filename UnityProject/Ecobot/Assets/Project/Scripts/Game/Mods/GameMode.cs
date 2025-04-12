@@ -1,5 +1,6 @@
 ﻿using System;
 using FiniteStateMachine;
+using Player.InputManager;
 
 namespace Game.Mods
 {

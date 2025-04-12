@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Player.InputManager;
+using UnityEngine;
 
 namespace Game.Mods
 {

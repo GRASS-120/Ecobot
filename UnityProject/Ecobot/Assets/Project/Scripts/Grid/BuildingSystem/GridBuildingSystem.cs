@@ -2,28 +2,34 @@ using System;
 using System.Collections.Generic;
 using Game;
 using Game.Mods;
+using Player;
 using R3;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.InputSystem;
+using PlayerInputManager = Player.InputManager.PlayerInputManager;
 
 namespace Grid.BuildingSystem
 {
-    public class GridBuildingSystem : MonoBehaviour
+    public class GridBuildingSystem : SerializedMonoBehaviour
     {
         public event Action<Building> OnBuildingPlaced;
         public event Action OnBuildingPositionChanged;
 
-        [Header("Entities")]
+        [Title("Components")]
         [SerializeField] private PlayerInputManager inputManager;
         [SerializeField] private PlayerManager player;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private BuildingPreview.BuildingPreview buildingPreview;
         [SerializeField] private BuildingListSO buildingListSO;
         
-        [Header("Visual")]
+        [Title("Visual")]
         [SerializeField] private GameObject pointer;
         [SerializeField] private GameObject gridVisualTiles;
+        
+        [Title("Data")][ReadOnly]
+        [SerializeField] private Dictionary<BuildingSO, List<Building>> buildings;
 
         private ReactiveProperty<BuildingSO> _currentBuildingItem;
         private ReactiveProperty<bool> _canBuildByGrid;
@@ -39,7 +45,6 @@ namespace Grid.BuildingSystem
         public BuildingSO.Dir Dir => _dir;
         public GameManager GameManager => gameManager;
         public PlayerManager Player => player;
-        public BuildingDatabase BuildingDatabase => _buildingDatabase;
         
         public ReadOnlyReactiveProperty<BuildingSO> CurrentBuildingItem => _currentBuildingItem;
 
@@ -48,22 +53,24 @@ namespace Grid.BuildingSystem
             _grid = GetComponentInParent<GridMap>().Grid;
             _canBuildByGrid = new ReactiveProperty<bool>(true);
             _currentBuildingItem = new ReactiveProperty<BuildingSO>();
+            
             _buildingTypeList = buildingListSO.buildings;
             _buildingDatabase = new BuildingDatabase(buildingListSO);
+            buildings = _buildingDatabase.BuildingsData;
         }
 
         private void Start()
         {
             inputManager.OnRotateBuilding += OnRotateBuilding_Callback;
             inputManager.OnDemountBuilding += OnDemountBuilding_Callback;
-            
-            // OnBuildingPlaced +=             
+
+            OnBuildingPlaced += OnBuildingPlaced_Callback;           
             _currentBuildingItem.Subscribe(CurrentBuildingItem_Callback).AddTo(this);
 
             gameManager.BuildingMode.OnEnterEvent += OnEnterBuildingMode_Callback;
             gameManager.BuildingMode.OnExitEvent += OnExitBuildingMode_Callback;
         }
-
+        
         private void OnEnterBuildingMode_Callback()
         {
             pointer.SetActive(true);
@@ -78,6 +85,11 @@ namespace Grid.BuildingSystem
             gridVisualTiles.SetActive(false);
             
             ClearBuildingItem();  
+        }
+
+        private void OnBuildingPlaced_Callback(Building obj)
+        {
+            _buildingDatabase.Append(obj);
         }
         
         private void ResetDir()
@@ -103,6 +115,7 @@ namespace Grid.BuildingSystem
 
             if (building == null) return;
             
+            _buildingDatabase.Remove(building);
             building.DestroySelf();
             
             Vector2Int[,] gridPositionList = building.AllGridPositions;
@@ -132,7 +145,6 @@ namespace Grid.BuildingSystem
             if (Input.GetMouseButtonDown(1)) {
                 Vector2Int[,] gridPositionMatrix = _currentBuildingItem.Value.GetAllGridPositions(mouseGridPosition, _dir);
             
-                // _canBuildByGrid = true;
                 foreach (Vector2Int gridPosition in gridPositionMatrix) {
                     if (!_grid.GetGridObject(gridPosition).CanBuild()) {
                         _canBuildByGrid.Value = false;
@@ -140,17 +152,13 @@ namespace Grid.BuildingSystem
                     }
                 }
                 
-                // Debug.Log(_canBuildByGrid + " " + buildingPreview.CanBuildByCollision);
-            
                 if (_canBuildByGrid.Value && buildingPreview.CanBuildByCollision.Value) {
                     Vector3 buildingWorldPosition = _grid.GetWorldPosition(mouseGridPosition);
                     Building building = Building.Create(buildingWorldPosition, mouseGridPosition, _dir, _currentBuildingItem.Value);
 
                     foreach (Vector2Int gridPosition in gridPositionMatrix) {
                         _grid.GetGridObject(gridPosition).SetBuilding(building);
-                        // Instantiate(pointer, _grid.GetWorldPosition(gridPosition), Quaternion.identity);
                     }
-                    // Instantiate(center, _grid.GetWorldPosition(mouseGridPosition), Quaternion.identity);
                     
                     ResetDir();
                     OnBuildingPlaced?.Invoke(building);

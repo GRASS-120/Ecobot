@@ -1,6 +1,7 @@
 using System;
 using FiniteStateMachine;
 using Game.Mods;
+using Player.InputManager;
 using R3;
 using UnityEngine;
 using Utils;

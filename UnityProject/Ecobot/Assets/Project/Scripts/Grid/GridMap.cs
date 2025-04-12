@@ -5,21 +5,22 @@ using Game.Mods;
 using Grid.BuildingSystem;
 using Grid.PathfindingSystem;
 using R3;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Grid
 {
     public class GridMap : MonoBehaviour {
-        [Header("Entities")]
+        [Title("Components")]
         [SerializeField] private GameManager gameManager;
         
-        [Header("Params")]
+        [Title("Params")]
         public int width = 100;
         public int height = 100;
         public float cellSize = 1f;
         
-        [Header("Grid Systems")]
+        [Title("Grid Systems")]
         [SerializeField] private GridBuildingSystem buildingSystem;
         [SerializeField] private GridPathfindingSystem pathfindingSystem;
         

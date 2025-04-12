@@ -26,7 +26,6 @@ namespace Bot
             {
                 var c = bot.CommandController.Fabric.CreateMoveCommand(target.position);
                 bot.CommandController.AddCommand(c);
-                bot.CommandController.Play();
             }
         }
     }
