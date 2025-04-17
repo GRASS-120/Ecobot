@@ -184,8 +184,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99299b39080969842bf5ae4d698405db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 3
-  rotationSpeed: 200
+  baseMovementSpeed: 4
+  baseRotationSpeed: 100
+  baseJumpAmplitude: 0.5
+  baseJumpFrequency: 10
+  horizontalAmplitude: 5
+  horizontalAmplitudeVariation: 5
+  speedVariation: 2
+  rotationVariation: 30
+  amplitudeVariation: 0.2
+  frequencyVariation: 2
 --- !u!23 &7837847198419853405
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -209,7 +217,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 847479a8af5747a4581e3c5d8a6cacef, type: 2}
+  - {fileID: 2100000, guid: 684bd0630e8409344af6e014fc206aab, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

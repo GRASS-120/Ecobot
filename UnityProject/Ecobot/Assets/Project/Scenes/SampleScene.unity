@@ -7747,10 +7747,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ec49ea6d3ebec34581cdd8b6dd65420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heightOffset: 0.6
   tumbleweedPrefab: {fileID: 4168235972698704609, guid: 6efebcad1ce885d43a7c3508bde9a397,
     type: 3}
-  fadeTime: 1
+  fadeTime: 0
+  maxTumbleweeds: 20
+  windDirection: 47
+  windForce: 2
   gridMap: {fileID: 454463668}
 --- !u!1 &1695369144
 GameObject:
