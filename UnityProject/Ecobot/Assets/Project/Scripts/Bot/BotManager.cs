@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Grid;
+using Grid.Base;
 using UnityEngine;
 
 namespace Bot

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using Grid.Base;
 using UnityEngine;
 
-namespace Grid
+namespace Grid.PathfindingSystem
 {
-    public class Pathfinding {
+    public class Pathfinder {
         private const int MOVE_STRAIGHT_COST = 10;
         private const int MOVE_DIAGONAL_COST = 14;
 
@@ -11,7 +12,7 @@ namespace Grid
         private List<GridNode> _openList;    // ноды, которые считаем
         private List<GridNode> _closedList;  // ноды, которые не считаем (либо прошли, либо isWalkable = false)
 
-        public Pathfinding(GridBase<GridNode> grid) {
+        public Pathfinder(GridBase<GridNode> grid) {
             _grid = grid;
         }
 

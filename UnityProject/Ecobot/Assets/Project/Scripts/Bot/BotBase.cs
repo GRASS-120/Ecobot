@@ -1,5 +1,6 @@
 using Bot.Command;
 using Grid;
+using Grid.Base;
 using InteractionSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;

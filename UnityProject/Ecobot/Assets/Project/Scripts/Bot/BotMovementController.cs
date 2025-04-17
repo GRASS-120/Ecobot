@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Grid;
+using Grid.Base;
+using Grid.PathfindingSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -12,7 +14,7 @@ namespace Bot
         [SerializeField] private float moveSpeed = 5f;
 
         private BotBase _bot;
-        private Pathfinding _pathfinder;
+        private Pathfinder _pathfinder;
         private BotMovementVisualDebugger _movementVisualDebugger;
         private int _currentPathIndex = 0;
         private List<Vector3> _pathVectorList;
@@ -20,7 +22,7 @@ namespace Bot
         public void Init(BotBase bot, GridMap gridMap)
         {
             _bot = bot;
-            _pathfinder = new Pathfinding(gridMap.Grid);
+            _pathfinder = new Pathfinder(gridMap.Grid);
             _movementVisualDebugger = GetComponent<BotMovementVisualDebugger>();
         }
         

@@ -1,15 +1,12 @@
-using System;
 using System.Collections.Generic;
 using Game;
 using Game.Mods;
 using Grid.BuildingSystem;
 using Grid.PathfindingSystem;
-using R3;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Grid
+namespace Grid.Base
 {
     public class GridMap : MonoBehaviour {
         [Title("Components")]

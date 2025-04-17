@@ -2,7 +2,7 @@ using Grid.BuildingSystem;
 using UnityEngine;
 
 //! наверное все же нужно разделить ноды: сделать общую ноду и от нее наследовать
-namespace Grid
+namespace Grid.Base
 {
     public class GridNode {
         public Vector2Int Cell;

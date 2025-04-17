@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Grid
+namespace Grid.Base
 {
     public class GridBase<T> {
         public event Action<Vector2Int> OnGridObjectChanged;

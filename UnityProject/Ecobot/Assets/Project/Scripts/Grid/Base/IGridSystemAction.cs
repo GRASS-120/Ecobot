@@ -1,4 +1,4 @@
-﻿namespace Grid
+﻿namespace Grid.Base
 {
     // ???
     public interface IGridSystem

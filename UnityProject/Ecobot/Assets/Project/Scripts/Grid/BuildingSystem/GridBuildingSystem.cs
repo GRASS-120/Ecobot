@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Game;
 using Game.Mods;
+using Grid.Base;
 using Player;
 using R3;
 using Sirenix.OdinInspector;
