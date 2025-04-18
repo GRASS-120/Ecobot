@@ -1,7 +1,9 @@
-﻿namespace GUI.Main
+﻿using GUI.UIFramework.Base;
+
+namespace GUI.Main
 {
-    public class PopupBViewModel
+    public class PopupBViewModel : WindowViewModel
     {
-        
+        public override string Id => "PopupB";
     }
 }

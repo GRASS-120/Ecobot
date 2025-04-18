@@ -1,6 +1,8 @@
-﻿namespace GUI.Main
+﻿using GUI.UIFramework.Base;
+
+namespace GUI.Main
 {
-    public class PopupBBinder
+    public class PopupBBinder : WindowBinder<PopupBViewModel>
     {
         
     }
