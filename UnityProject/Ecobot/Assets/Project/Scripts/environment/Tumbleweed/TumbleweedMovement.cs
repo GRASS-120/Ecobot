@@ -1,5 +1,4 @@
 using UnityEngine;
-
 namespace environment.Tumbleweed
 {
     public class TumbleweedMovement : MonoBehaviour
