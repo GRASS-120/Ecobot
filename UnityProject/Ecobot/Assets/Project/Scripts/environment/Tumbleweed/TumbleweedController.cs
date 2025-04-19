@@ -2,6 +2,7 @@ using UnityEngine;
 using Grid;
 using System.Collections;
 using System.Collections.Generic;
+using Grid.Base;
 
 namespace environment.Tumbleweed
 {
