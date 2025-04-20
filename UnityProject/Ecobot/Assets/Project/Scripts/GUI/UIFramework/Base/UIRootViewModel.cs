@@ -8,7 +8,7 @@ using UnityEngine;
 namespace GUI.UIFramework.Base
 {
     // CONTAINER
-    public class UIRootViewModel : IDisposable
+    public abstract class UIRootViewModel : IDisposable
     {
         public ReadOnlyReactiveProperty<WindowViewModel> OpenedScreen => _openedScreen;
         public IObservableCollection<WindowViewModel> OpenedPopups => _openedPopups;
@@ -26,7 +26,7 @@ namespace GUI.UIFramework.Base
             _openedScreen.Value = screen;
         }
 
-        private void OpenPopup(WindowViewModel popup)
+        public void OpenPopup(WindowViewModel popup)
         {
             if (_openedPopups.Contains(popup))
             {

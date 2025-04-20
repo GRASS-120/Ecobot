@@ -2,7 +2,7 @@
 
 namespace GUI.Main
 {
-    public class PopupBBinder : PopupBinder<PopupBViewModel>
+    public class PopupBView : PopupView<PopupBViewModel>
     {
         
     }

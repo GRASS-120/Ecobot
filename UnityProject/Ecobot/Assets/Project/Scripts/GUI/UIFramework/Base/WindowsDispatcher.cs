@@ -3,31 +3,34 @@ using UnityEngine;
 
 namespace GUI.UIFramework.Base
 {
-    public class WindowsContainer : MonoBehaviour
+    /// <summary>
+    /// Класс, который предоставляет методы для загрузки окон в соответствующий Transform
+    /// </summary>
+    public class WindowsDispatcher : MonoBehaviour
     {
         [Header("Containers")]
         [SerializeField] private Transform screensContainer;
         [SerializeField] private Transform popupsContainer;
 
-        private readonly Dictionary<WindowViewModel, IWindowBinder> _openedPopups = new();
-        private IWindowBinder _openedScreen;
+        private readonly Dictionary<WindowViewModel, IWindowView> _openedPopups = new();
+        private IWindowView _openedScreen;
 
         public void OpenPopup(WindowViewModel viewModel)
         {
             var prefabPath = GetPrefabPath(viewModel);
             var prefab = Resources.Load<GameObject>(prefabPath);
             var createdPopup = Instantiate(prefab, popupsContainer);
-            var binder = createdPopup.GetComponent<IWindowBinder>();
+            var view = createdPopup.GetComponent<IWindowView>();
             
-            binder.Bind(viewModel);
-            _openedPopups.Add(viewModel, binder);
+            view.Bind(viewModel);
+            _openedPopups.Add(viewModel, view);
         }
 
         public void ClosePopup(WindowViewModel viewModel)
         {
-            var binder = _openedPopups[viewModel];
+            var view = _openedPopups[viewModel];
             
-            binder?.Close();
+            view?.Close();
             _openedPopups.Remove(viewModel);
         }
         
@@ -36,10 +39,10 @@ namespace GUI.UIFramework.Base
             var prefabPath = GetPrefabPath(viewModel);
             var prefab = Resources.Load<GameObject>(prefabPath);
             var createdScreen = Instantiate(prefab, screensContainer);
-            var binder = createdScreen.GetComponent<IWindowBinder>();
+            var view = createdScreen.GetComponent<IWindowView>();
             
-            binder.Bind(viewModel);
-            _openedScreen = binder;
+            view.Bind(viewModel);
+            _openedScreen = view;
         }
 
         private static string GetPrefabPath(WindowViewModel viewModel)

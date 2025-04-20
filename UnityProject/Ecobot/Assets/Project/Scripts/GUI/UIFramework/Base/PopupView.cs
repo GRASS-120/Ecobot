@@ -3,8 +3,9 @@ using UnityEngine.UI;
 
 namespace GUI.UIFramework.Base
 {
-    public abstract class PopupBinder<T> : WindowBinder<T> where T : WindowViewModel
+    public abstract class PopupView<T> : WindowView<T> where T : WindowViewModel
     {
+        [Header("Buttons")]
         [SerializeField] private Button btnClose;
         [SerializeField] private Button btnCloseAlt;
 

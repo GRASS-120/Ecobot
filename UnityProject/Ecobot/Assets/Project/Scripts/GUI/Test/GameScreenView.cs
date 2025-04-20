@@ -5,13 +5,19 @@ using UnityEngine.UI;
 
 namespace GUI.Main
 {
-    public class ScreenGameBinder : WindowBinder<ScreenGameViewModel>
+    public class GameScreenView : ScreenView<GameScreenViewModel>
     {
         [Header("Buttons")]
         [SerializeField] private Button btnPopupA;
         [SerializeField] private Button btnPopupB;
         [SerializeField] private Button btnGoToMainMenu;
 
+        // override OnBind для реализации доп логики
+        protected override void OnBind(GameScreenViewModel model)
+        {
+            base.OnBind(model);
+        }
+        
         private void OnEnable()
         {
             btnPopupA.onClick.AddListener(OnPopupABtn_Clicked);
@@ -33,7 +39,7 @@ namespace GUI.Main
         
         private void OnPopupBBtn_Clicked()
         {
-            ViewModel.RequestOpenPopupA();
+            ViewModel.RequestOpenPopupB();
         }
         
         private void OnGoToMainMenuBtn_Clicked()

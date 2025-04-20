@@ -1,6 +1,7 @@
 using System;
 using FiniteStateMachine;
 using Game.Mods;
+using GUI.Main;
 using Player.InputManager;
 using R3;
 using UnityEngine;
@@ -9,6 +10,7 @@ using Utils;
 namespace Game
 {
     public class GameManager : MonoBehaviour {
+        [SerializeField] private GameplayUIManager uiManager;
         [SerializeField] private PlayerInputManager inputManager;
 
         public ReactiveProperty<GameMode> CurrentMode;

@@ -5,8 +5,9 @@ namespace GUI.UIFramework.Base
 {
     public abstract class WindowViewModel : IDisposable
     {
-        public Observable<WindowViewModel> CloseRequested => _closeRequested;
         public abstract string Id { get; } 
+        
+        public Observable<WindowViewModel> CloseRequested => _closeRequested;
         
         private readonly Subject<WindowViewModel> _closeRequested = new();
 

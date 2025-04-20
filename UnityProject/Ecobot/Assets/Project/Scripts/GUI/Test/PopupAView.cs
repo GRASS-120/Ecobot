@@ -2,7 +2,7 @@
 
 namespace GUI.Main
 {
-    public class PopupABinder : PopupBinder<PopupAViewModel>
+    public class PopupAView : PopupView<PopupAViewModel>
     {
         // override OnBind для реализации доп логики
         protected override void OnBind(PopupAViewModel model)
