@@ -5106,8 +5106,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1203990398}
+  - component: {fileID: 1203990399}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: TumbleweedController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5128,6 +5129,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1203990399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203990397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ec49ea6d3ebec34581cdd8b6dd65420, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tumbleweedPrefab: {fileID: 4168235972698704609, guid: 6efebcad1ce885d43a7c3508bde9a397,
+    type: 3}
+  fadeTime: 1
+  maxTumbleweeds: 5
+  windDirection: 45
+  windForce: 1
+  gridMap: {fileID: 454463668}
 --- !u!1001 &1213330532
 PrefabInstance:
   m_ObjectHideFlags: 0
