@@ -6,7 +6,7 @@ namespace GUI.Main
     public class GameScreenViewModel : WindowViewModel
     {
         private readonly GameplayUIManager _uiManager;
-        public override string Id => "ScreenGame";
+        public override string Id => "GameplayScreen";
 
         public GameScreenViewModel(GameplayUIManager uiManager)
         {
@@ -26,7 +26,8 @@ namespace GUI.Main
 
         public void RequestGoToMainMenu()
         {
-            _uiManager.OpenScreenGame();
+            Debug.Log("POHUY");
+            // _uiManager.OpenScreenGame();
         }
     }
 }

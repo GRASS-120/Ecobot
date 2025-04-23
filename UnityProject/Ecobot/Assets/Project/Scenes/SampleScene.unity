@@ -2157,6 +2157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 689d7c0f1d924326b5cd8487c8646225, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiRootView: {fileID: 770899518}
   gameplayUIManager: {fileID: 1463472620}
 --- !u!1 &537886544
 GameObject:
@@ -8150,7 +8151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d733b185bd963fe45ab2b5f0542e08d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiManager: {fileID: 0}
+  uiManager: {fileID: 525184665}
   inputManager: {fileID: 1616137094}
 --- !u!1 &1735220449
 GameObject:
@@ -9711,6 +9712,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GameplayScreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492212979647434835, guid: ac1ca87bfcb086347a0dc657448de277,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

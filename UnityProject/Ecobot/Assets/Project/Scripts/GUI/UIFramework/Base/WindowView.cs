@@ -8,6 +8,7 @@ namespace GUI.UIFramework.Base
 
         public void Bind(WindowViewModel viewModel)
         {
+            Debug.Log("biba");
             ViewModel = (T)viewModel;
 
             OnBind(ViewModel);

@@ -12,13 +12,15 @@ namespace GUI.Main
         {
             _rootViewModel = new GameUIRootViewModel();
             rootView.Bind(_rootViewModel);
+            
+            OpenScreenGame();
         }
         
         public GameScreenViewModel OpenScreenGame()
         {
             var viewModel = new GameScreenViewModel(this);
             // var rootUI = UIGameRootViewModel
-            
+            Debug.Log("Open Screen Game " + viewModel);
             _rootViewModel.OpenScreen(viewModel);
             
             return viewModel;

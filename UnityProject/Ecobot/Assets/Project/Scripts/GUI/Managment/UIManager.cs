@@ -12,7 +12,6 @@ namespace GUI.UIFramework.Base
     {
         [Header("Components")]
         [SerializeField] private UIRootView uiRootView;
-        [SerializeField] private GameManager gameManager;
         
         [Header("UI Managers")]
         [SerializeField] private GameplayUIManager gameplayUIManager;

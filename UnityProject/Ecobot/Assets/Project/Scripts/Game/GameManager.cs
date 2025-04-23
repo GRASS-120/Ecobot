@@ -2,6 +2,7 @@ using System;
 using FiniteStateMachine;
 using Game.Mods;
 using GUI.Main;
+using GUI.UIFramework.Base;
 using Player.InputManager;
 using R3;
 using UnityEngine;
@@ -10,7 +11,7 @@ using Utils;
 namespace Game
 {
     public class GameManager : MonoBehaviour {
-        [SerializeField] private GameplayUIManager uiManager;
+        [SerializeField] private UIManager uiManager;
         [SerializeField] private PlayerInputManager inputManager;
 
         public ReactiveProperty<GameMode> CurrentMode;
@@ -38,6 +39,8 @@ namespace Game
             
             CurrentMode = new ReactiveProperty<GameMode>(GameplayMode);
             _stateMachine.SetState(GameplayMode);
+            
+            uiManager.Init();
         }
     
         private void Start()
