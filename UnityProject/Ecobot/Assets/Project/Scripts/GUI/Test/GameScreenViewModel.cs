@@ -1,4 +1,5 @@
-﻿using GUI.UIFramework.Base;
+﻿using GUI.UIFramework;
+using GUI.UIFramework.Base;
 using UnityEngine;
 
 namespace GUI.Main
@@ -27,7 +28,6 @@ namespace GUI.Main
         public void RequestGoToMainMenu()
         {
             Debug.Log("POHUY");
-            // _uiManager.OpenScreenGame();
         }
     }
 }

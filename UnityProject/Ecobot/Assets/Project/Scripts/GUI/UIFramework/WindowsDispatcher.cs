@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using GUI.UIFramework.Base;
 using UnityEngine;
 
-namespace GUI.UIFramework.Base
+namespace GUI.UIFramework
 {
     /// <summary>
-    /// Класс, который предоставляет методы для загрузки окон в соответствующий Transform
+    /// Компонент для управления загрузкой и отображением окон UI.
+    /// Отвечает за динамическое создание экранов и всплывающих окон из префабов
+    /// и их размещение в соответствующий контейнер.
     /// </summary>
     public class WindowsDispatcher : MonoBehaviour
     {
@@ -21,9 +24,6 @@ namespace GUI.UIFramework.Base
             var prefab = Resources.Load<GameObject>(prefabPath);
             var createdPopup = Instantiate(prefab, popupsContainer);
             var view = createdPopup.GetComponent<IWindowView>();
-            
-            Debug.Log($"prefab: {createdPopup}");
-
             
             view.Bind(viewModel);
             _openedPopups.Add(viewModel, view);
@@ -50,8 +50,6 @@ namespace GUI.UIFramework.Base
             var view = createdScreen.GetComponent<IWindowView>();
             
             _openedScreen?.Close();
-            Debug.Log($"prefab: {createdScreen}");
-
             
             view.Bind(viewModel);
             _openedScreen = view;
@@ -59,7 +57,6 @@ namespace GUI.UIFramework.Base
 
         private static string GetPrefabPath(WindowViewModel viewModel)
         {
-            Debug.Log($"UI/{viewModel.Id}");
             return $"UI/{viewModel.Id}";
         }
     }

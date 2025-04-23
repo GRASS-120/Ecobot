@@ -1,21 +1,24 @@
-﻿using ObservableCollections;
+﻿using GUI.UIFramework.Base;
+using ObservableCollections;
 using R3;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace GUI.UIFramework.Base
+namespace GUI.UIFramework
 {
     /// <summary>
-    /// Класс, который накидываем на Canvas. Наследники ему нужны, так как
-    /// например, логика в игре и логика в меню может различаться
+    /// Абстрактный класс для корневого представления пользовательского интерфейса.
+    /// Размещается на Canvas и управляет диспетчеризацией экранов и всплывающих окон через <see cref="WindowsDispatcher"/>.
+    /// Наследники ему нужны, так как, например, логика в игре и логика в меню может различаться
     /// </summary>
     public abstract class UIRootView : MonoBehaviour
     {
         [SerializeField] private WindowsDispatcher windowsDispatcher;
         
+        // Подписки на все открытые окна
         private readonly CompositeDisposable _subscriptions = new();
         
-        public virtual void Bind(UIRootViewModel viewModel)
+        // Управляет отрисовкой окон
+        public virtual void Dispatch(UIRootViewModel viewModel)
         {
             _subscriptions.Add(viewModel.OpenedScreen.Subscribe(newScreen =>
             {
@@ -38,11 +41,11 @@ namespace GUI.UIFramework.Base
                 windowsDispatcher.ClosePopup(e.Value);
             }));
             
-            OnBind();
+            OnDispatch();
         }
         
         // todo: такие функции переделать на Action или ReactiveCommand
-        protected virtual void OnBind() {}
+        protected virtual void OnDispatch() {}
 
         private void OnDestroy()
         {

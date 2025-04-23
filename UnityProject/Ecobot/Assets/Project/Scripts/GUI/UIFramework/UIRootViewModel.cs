@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GUI.UIFramework.Base;
 using ObservableCollections;
 using R3;
 using UnityEngine;
 
-namespace GUI.UIFramework.Base
+namespace GUI.UIFramework
 {
-    // CONTAINER
+    /// <summary>
+    /// Базовая модель представления для корневого UI.
+    /// Хранит текущие открытые окна, предоставляет методы для работы с ними
+    /// </summary>
     public abstract class UIRootViewModel : IDisposable
     {
         public ReadOnlyReactiveProperty<WindowViewModel> OpenedScreen => _openedScreen;
@@ -19,7 +23,7 @@ namespace GUI.UIFramework.Base
         // todo: при помощи этого словаря по идее можно реализовать cached - услово, те окна, что не показываются, можно
         // скрыть... хотя диспозить же не нужно, хм...
         private Dictionary<WindowViewModel, IDisposable> _popupSubscriptions = new();
-
+        
         public void OpenScreen(WindowViewModel screen)
         {
             _openedScreen.Value?.Dispose();

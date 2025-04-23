@@ -1,11 +1,12 @@
 ﻿using System;
+using GUI.UIFramework;
 using GUI.UIFramework.Base;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace GUI.Main
 {
-    public class GameScreenView : ScreenView<GameScreenViewModel>
+    public class GameOverlayView : OverlayView<GameScreenViewModel>
     {
         [Header("Buttons")]
         [SerializeField] private Button btnPopupA;
