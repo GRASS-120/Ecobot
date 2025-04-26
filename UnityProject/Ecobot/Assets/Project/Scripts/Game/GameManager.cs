@@ -1,8 +1,9 @@
 using System;
 using FiniteStateMachine;
 using Game.Mods;
+using Game.Mods.Core;
+using GUI.Core;
 using GUI.Main;
-using GUI.UIFramework.Base;
 using Player.InputManager;
 using R3;
 using UnityEngine;

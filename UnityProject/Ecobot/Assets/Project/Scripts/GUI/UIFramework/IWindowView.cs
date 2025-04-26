@@ -1,6 +1,4 @@
-﻿using GUI.UIFramework.Base;
-
-namespace GUI.UIFramework
+﻿namespace GUI.UIFramework
 {
     public interface IWindowView
     {

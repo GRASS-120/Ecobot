@@ -1,5 +1,4 @@
-﻿using GUI.UIFramework.Base;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace GUI.UIFramework

@@ -1,6 +1,4 @@
-﻿using GUI.UIFramework.Base;
-
-namespace GUI.UIFramework
+﻿namespace GUI.UIFramework
 {
     /// <summary>
     /// Абстрактный базовый класс для экранных окон, занимающих большую часть экрана (например, HUD или меню).

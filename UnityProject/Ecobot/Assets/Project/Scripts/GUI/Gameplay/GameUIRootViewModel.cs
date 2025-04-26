@@ -1,7 +1,6 @@
 ﻿using GUI.UIFramework;
-using GUI.UIFramework.Base;
 
-namespace GUI.Main
+namespace GUI.Gameplay
 {
     // типо главный контроллер
     public class GameUIRootViewModel : UIRootViewModel

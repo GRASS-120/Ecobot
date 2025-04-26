@@ -1,8 +1,8 @@
-﻿using GUI.UIFramework;
-using GUI.UIFramework.Base;
+﻿using GUI.Main;
+using GUI.UIFramework;
 using UnityEngine;
 
-namespace GUI.Main
+namespace GUI.Gameplay
 {
     /// <summary>
     /// Менеджер всех окон, связанных с Gameplay. Создает ViewModel для всех окон
@@ -17,7 +17,7 @@ namespace GUI.Main
             rootView.Dispatch(_rootViewModel);
             
             // открываем по умолчанию
-            OpenScreenGame();
+            // OpenScreenGame();
         }
         
         public GameScreenViewModel OpenScreenGame()

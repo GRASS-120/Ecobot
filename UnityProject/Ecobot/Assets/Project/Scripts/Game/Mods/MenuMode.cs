@@ -1,4 +1,5 @@
-﻿using Player.InputManager;
+﻿using Game.Mods.Core;
+using Player.InputManager;
 
 namespace Game.Mods
 {

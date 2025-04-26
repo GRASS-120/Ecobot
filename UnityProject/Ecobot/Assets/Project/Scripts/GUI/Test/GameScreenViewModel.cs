@@ -1,5 +1,5 @@
-﻿using GUI.UIFramework;
-using GUI.UIFramework.Base;
+﻿using GUI.Gameplay;
+using GUI.UIFramework;
 using UnityEngine;
 
 namespace GUI.Main
