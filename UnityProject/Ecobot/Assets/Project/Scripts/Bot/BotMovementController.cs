@@ -55,6 +55,7 @@ namespace Bot
                 Vector3 direction = (targetPosition - _bot.transform.position).normalized;
                 if (direction != Vector3.zero) {
                     Quaternion toRotation = Quaternion.LookRotation(direction, Vector3.up);
+                    
                     // так как моделька не в сторону Oz (в unity по умолчанию так, просто модель экспортировали криво видимо),
                     // а в Ox, то из-за этого криво работает перемещение - робот едет правым боком. причем если робота просто
                     // через инспектор повернуть, то это не помогает. только так - через код

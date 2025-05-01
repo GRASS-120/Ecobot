@@ -7,7 +7,11 @@ namespace InteractionSystem
         // public event Action<IInteractable> OnInteractionComplete;
 
         // + hold interaction
-        public void StartInteraction(IInteractor interactor);
-        public void StopInteraction(IInteractor interactor);
+        
+        // public void StartInteraction(IInteractor interactor);
+        // public void StopInteraction(IInteractor interactor);
+        
+        public void Interact(IInteractor interactor);
+        public void AltInteract(IInteractor interactor);
     }
 }

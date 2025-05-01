@@ -2135,13 +2135,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 525184663}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 960, y: 540, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1463472621}
-  m_Father: {fileID: 0}
+  - {fileID: 709623583}
+  m_Father: {fileID: 800910332}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &525184665
 MonoBehaviour:
@@ -2157,6 +2158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiRootView: {fileID: 770899518}
   gameplayUIManager: {fileID: 1463472620}
+  programmingUIManager: {fileID: 709623584}
 --- !u!1 &537886544
 GameObject:
   m_ObjectHideFlags: 0
@@ -3721,6 +3723,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1457998932}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &709623582
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 709623583}
+  - component: {fileID: 709623584}
+  m_Layer: 0
+  m_Name: ProgrammingUIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &709623583
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709623582}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 525184664}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &709623584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709623582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f38382ed58747e388010108688ca120, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &713311604
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4481,10 +4527,12 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1732608865}
+  - {fileID: 525184664}
   - {fileID: 1457998932}
   - {fileID: 454463667}
   - {fileID: 862895011}
   - {fileID: 1448865248}
+  - {fileID: 1203990398}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &806473066
@@ -5189,12 +5237,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1203990397}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 45, y: 0.4791552, z: 50}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.7200012, y: -0.4183081, z: -8.209999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 800910332}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1213330532
 PrefabInstance:
@@ -6839,6 +6887,7 @@ GameObject:
   - component: {fileID: 1457998938}
   - component: {fileID: 1457998934}
   - component: {fileID: 1457998933}
+  - component: {fileID: 1457998939}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -6959,6 +7008,89 @@ MonoBehaviour:
   secondaryInventorySize: 30
   secondaryInventorySystem:
     inventorySlots: []
+--- !u!114 &1457998939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457998931}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 710c360f8cc4ba44b935371e658d471b,
+    type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 25dea6ae-b0d0-490d-9216-5bcf0d283bc5
+    m_ActionName: 'GameplayMode/MousePosition[/Mouse/position]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 422b50a5-1039-4d0e-a736-b7aa240fcd98
+    m_ActionName: 'GameplayMode/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4c680bf1-8cca-436b-9bf7-d2aae6ff9b38
+    m_ActionName: 'GameplayMode/ToggleBuildMode[/Keyboard/f3]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0f2d5acf-3827-4a62-8000-2034b8268873
+    m_ActionName: 'GameplayMode/Interact[/Keyboard/e]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d0aca384-e5a0-47a0-8e18-768405c6c55b
+    m_ActionName: 'GameplayMode/MouseScroll[/Mouse/scroll]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0590fc1a-5a8f-4e65-9d83-20b0ef1ba9a3
+    m_ActionName: 'GameplayMode/MouseDelta[/Mouse/delta]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6b3377f3-2145-4a30-a82e-448368970d05
+    m_ActionName: 'BuildingMode/DemountBuilding[/Keyboard/t]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8ad0dcfd-109b-4bea-a503-d5c98dd55ebb
+    m_ActionName: 'BuildingMode/RotateBuilding[/Keyboard/r]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5f030627-6b65-4f6a-8cb0-215caedce006
+    m_ActionName: ProgrammingMode/New action
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2a39bdb4-422a-40c6-b74b-31932faab7d9
+    m_ActionName: InterfaceMode/New action
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 42689c30-7356-491d-acd7-564992793ea3
+    m_ActionName: MenuMode/New action
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 57bd5d45-2930-4c7f-9ead-289e6b865d11
+    m_ActionName: Inventory/New action
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 176d73ac-f24d-4ba8-b0e1-ddc5058cf913
+    m_ActionName: 'GameplayMode/AltInteract[/Keyboard/f]'
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: GameplayMode
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1462691644
 GameObject:
   m_ObjectHideFlags: 0
@@ -8118,7 +8250,7 @@ Transform:
   m_GameObject: {fileID: 1732608864}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.720001, y: 0.43191028, z: -8.314346}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9600,7 +9732,5 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1960243487}
-  - {fileID: 525184664}
   - {fileID: 800910332}
   - {fileID: 770899513}
-  - {fileID: 1203990398}

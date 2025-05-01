@@ -18,16 +18,5 @@ namespace GUI.Main
         {
             _uiManager.OpenPopupA();
         }
-
-        public void RequestOpenPopupB()
-        {
-            _uiManager.OpenPopupB();
-
-        }
-
-        public void RequestGoToMainMenu()
-        {
-            Debug.Log("POHUY");
-        }
     }
 }

@@ -41,7 +41,7 @@ namespace Game
             CurrentMode = new ReactiveProperty<GameMode>(GameplayMode);
             _stateMachine.SetState(GameplayMode);
             
-            uiManager.Init();
+            uiManager.Init(this);
         }
     
         private void Start()

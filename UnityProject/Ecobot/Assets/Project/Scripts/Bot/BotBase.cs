@@ -22,14 +22,14 @@ namespace Bot
             commandController.Init(this);
         }
 
-        public void StartInteraction(IInteractor interactor)
+        public void Interact(IInteractor interactor)
         {
             Debug.Log(interactor);
         }
-
-        public void StopInteraction(IInteractor interactor)
+        
+        public void AltInteract(IInteractor interactor)
         {
-            throw new System.NotImplementedException();
+            Debug.Log(interactor);
         }
     }
 }

@@ -9,7 +9,10 @@ namespace Player.InputManager
         public event Action OnToggleBuildMode;
         public event Action OnRotateBuilding;
         public event Action OnDemountBuilding;
+        
+        // добавить сюда ивенты для start, cancel и тп?
         public event Action OnInteract; 
+        public event Action OnAltInteract; 
 
         [SerializeField] private GameManager gameManager;
     
@@ -22,7 +25,8 @@ namespace Player.InputManager
 
             _inputActions.GameplayMode.ToggleBuildMode.performed += ToggleBuildMode_Callback;
             _inputActions.GameplayMode.Interact.performed += OnInteract_Callback;
-        
+            _inputActions.GameplayMode.AltInteract.performed += OnAltInteract_Callback;
+            
             _inputActions.BuildingMode.RotateBuilding.performed += RotateBuilding_Callback;
             _inputActions.BuildingMode.DemountBuilding.performed += DemountBuilding_Callback;
         }
@@ -67,6 +71,10 @@ namespace Player.InputManager
         
         private void OnInteract_Callback(InputAction.CallbackContext context) {
             OnInteract?.Invoke();
+        }
+        
+        private void OnAltInteract_Callback(InputAction.CallbackContext context) {
+            OnAltInteract?.Invoke();
         }
 
         public Vector2 GetMovementVectorNormalized() {

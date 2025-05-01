@@ -1,4 +1,7 @@
-﻿using GUI.Main;
+﻿using Game.Mods;
+using Game.Mods.Core;
+using GUI.Core;
+using GUI.Main;
 using GUI.UIFramework;
 using UnityEngine;
 
@@ -7,7 +10,7 @@ namespace GUI.Gameplay
     /// <summary>
     /// Менеджер всех окон, связанных с Gameplay. Создает ViewModel для всех окон
     /// </summary>
-    public class GameplayUIManager : MonoBehaviour
+    public class GameplayUIManager : MonoBehaviour, IUIManager
     {
         private GameUIRootViewModel _rootViewModel;
 
@@ -22,6 +25,8 @@ namespace GUI.Gameplay
         
         public GameScreenViewModel OpenScreenGame()
         {
+            // инвентарь, hud и тп
+            
             var viewModel = new GameScreenViewModel(this);
            
             _rootViewModel.OpenScreen(viewModel);
@@ -37,14 +42,7 @@ namespace GUI.Gameplay
             
             return viewModel;
         }
-        
-        public PopupBViewModel OpenPopupB()
-        {
-            var viewModel = new PopupBViewModel();
-            
-            _rootViewModel.OpenPopup(viewModel);
-            
-            return viewModel;
-        }
+
+        // public GameMode GameMode => new BuildingMode();
     }
 }
