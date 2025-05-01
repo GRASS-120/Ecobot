@@ -42,6 +42,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "AltInteract",
+                    "type": "Button",
+                    "id": "176d73ac-f24d-4ba8-b0e1-ddc5058cf913",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "MouseScroll",
                     "type": "Value",
                     "id": "d0aca384-e5a0-47a0-8e18-768405c6c55b",
@@ -168,6 +177,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ebd8dca6-46e4-436a-93b0-0c4f9b991a01",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AltInteract",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

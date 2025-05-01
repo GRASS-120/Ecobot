@@ -2,7 +2,7 @@
 using FiniteStateMachine;
 using Player.InputManager;
 
-namespace Game
+namespace Game.Mods.Core
 {
     public abstract class GameMode : BaseState
     {

@@ -128,6 +128,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""AltInteract"",
+                    ""type"": ""Button"",
+                    ""id"": ""176d73ac-f24d-4ba8-b0e1-ddc5058cf913"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""MouseScroll"",
                     ""type"": ""Value"",
                     ""id"": ""d0aca384-e5a0-47a0-8e18-768405c6c55b"",
@@ -254,6 +263,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ebd8dca6-46e4-436a-93b0-0c4f9b991a01"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AltInteract"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -428,6 +448,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_GameplayMode_Movement = m_GameplayMode.FindAction("Movement", throwIfNotFound: true);
         m_GameplayMode_ToggleBuildMode = m_GameplayMode.FindAction("ToggleBuildMode", throwIfNotFound: true);
         m_GameplayMode_Interact = m_GameplayMode.FindAction("Interact", throwIfNotFound: true);
+        m_GameplayMode_AltInteract = m_GameplayMode.FindAction("AltInteract", throwIfNotFound: true);
         m_GameplayMode_MouseScroll = m_GameplayMode.FindAction("MouseScroll", throwIfNotFound: true);
         m_GameplayMode_MouseDelta = m_GameplayMode.FindAction("MouseDelta", throwIfNotFound: true);
         // BuildingMode
@@ -535,6 +556,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_GameplayMode_Movement;
     private readonly InputAction m_GameplayMode_ToggleBuildMode;
     private readonly InputAction m_GameplayMode_Interact;
+    private readonly InputAction m_GameplayMode_AltInteract;
     private readonly InputAction m_GameplayMode_MouseScroll;
     private readonly InputAction m_GameplayMode_MouseDelta;
     /// <summary>
@@ -564,6 +586,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "GameplayMode/Interact".
         /// </summary>
         public InputAction @Interact => m_Wrapper.m_GameplayMode_Interact;
+        /// <summary>
+        /// Provides access to the underlying input action "GameplayMode/AltInteract".
+        /// </summary>
+        public InputAction @AltInteract => m_Wrapper.m_GameplayMode_AltInteract;
         /// <summary>
         /// Provides access to the underlying input action "GameplayMode/MouseScroll".
         /// </summary>
@@ -610,6 +636,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @AltInteract.started += instance.OnAltInteract;
+            @AltInteract.performed += instance.OnAltInteract;
+            @AltInteract.canceled += instance.OnAltInteract;
             @MouseScroll.started += instance.OnMouseScroll;
             @MouseScroll.performed += instance.OnMouseScroll;
             @MouseScroll.canceled += instance.OnMouseScroll;
@@ -639,6 +668,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @AltInteract.started -= instance.OnAltInteract;
+            @AltInteract.performed -= instance.OnAltInteract;
+            @AltInteract.canceled -= instance.OnAltInteract;
             @MouseScroll.started -= instance.OnMouseScroll;
             @MouseScroll.performed -= instance.OnMouseScroll;
             @MouseScroll.canceled -= instance.OnMouseScroll;
@@ -1204,6 +1236,13 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteract(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "AltInteract" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAltInteract(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "MouseScroll" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

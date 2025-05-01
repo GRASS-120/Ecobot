@@ -1,10 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace GUI.UIFramework.Base
+namespace GUI.UIFramework
 {
-    public abstract class PopupBinder<T> : WindowBinder<T> where T : WindowViewModel
+    /// <summary>
+    /// Абстрактный класс для всплывающих окон, отображающих небольшие элементы интерфейса поверх основного экрана.
+    /// </summary>
+    /// <typeparam name="T">Конкретный ViewModel (унаследован от <see cref="WindowViewModel"/>).</typeparam>
+    public abstract class PopupView<T> : WindowView<T> where T : WindowViewModel
     {
+        [Header("Buttons")]
         [SerializeField] private Button btnClose;
         [SerializeField] private Button btnCloseAlt;
 
