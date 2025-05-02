@@ -53,7 +53,7 @@ namespace Michsky.MUIP
 
                     if (wmTarget.windows.Count != 0)
                     {
-                        if (Application.isPlaying == true) { GUI.enabled = false; }
+                        if (Application.isPlaying == true) {UnityEngine.GUI.enabled = false; }
                         GUILayout.BeginVertical(EditorStyles.helpBox);
 
                         EditorGUILayout.LabelField(new GUIContent("Selected Window:"), customSkin.FindStyle("Text"), GUILayout.Width(120));
@@ -80,7 +80,7 @@ namespace Michsky.MUIP
                             }
                         }
 
-                        GUI.enabled = true;
+                        UnityEngine.GUI.enabled = true;
                         GUILayout.EndVertical();
                     }
 

@@ -98,9 +98,9 @@ namespace Michsky.MUIP
                         GUILayout.BeginVertical(EditorStyles.helpBox);
                         GUILayout.BeginHorizontal();
 
-                        GUI.enabled = false;
+                        UnityEngine.GUI.enabled = false;
                         EditorGUILayout.LabelField(new GUIContent("Selected Item:"), customSkin.FindStyle("Text"), GUILayout.Width(78));
-                        GUI.enabled = true;
+                        UnityEngine.GUI.enabled = true;
 
                         EditorGUILayout.LabelField(new GUIContent(dTarget.items[selectedItemIndex.intValue].itemName), customSkin.FindStyle("Text"));
 
@@ -116,7 +116,7 @@ namespace Michsky.MUIP
                     {
                         GUILayout.BeginVertical(EditorStyles.helpBox);
                         GUILayout.BeginHorizontal();
-                        GUI.enabled = false;
+                        UnityEngine.GUI.enabled = false;
 
                         EditorGUILayout.LabelField(new GUIContent("Current Item:"), customSkin.FindStyle("Text"), GUILayout.Width(74));
                         EditorGUILayout.LabelField(new GUIContent(dTarget.items[dTarget.selectedItemIndex].itemName), customSkin.FindStyle("Text"));
@@ -126,7 +126,7 @@ namespace Michsky.MUIP
 
                         EditorGUILayout.IntSlider(dTarget.index, 0, dTarget.items.Count - 1);
 
-                        GUI.enabled = true;
+                        UnityEngine.GUI.enabled = true;
                         GUILayout.EndVertical();
                     }
 

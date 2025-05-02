@@ -76,7 +76,7 @@ namespace Michsky.MUIP
         {
             MUIPEditorHandler.DrawComponentHeader(customSkin, "IM Top Header");
 
-            Color defaultColor = GUI.color;
+            Color defaultColor = UnityEngine.GUI.color;
 
             GUIContent[] toolbarTabs = new GUIContent[2];
             toolbarTabs[0] = new GUIContent("Content");
@@ -96,8 +96,8 @@ namespace Michsky.MUIP
             var iconLibrary = serializedObject.FindProperty("iconLibrary");
 
             // Custom panel
-            panelStyle = new GUIStyle(GUI.skin.box);
-            panelStyle.normal.textColor = GUI.skin.label.normal.textColor;
+            panelStyle = new GUIStyle(UnityEngine.GUI.skin.box);
+            panelStyle.normal.textColor = UnityEngine.GUI.skin.label.normal.textColor;
             panelStyle.margin = new RectOffset(0, 0, 0, 0);
             panelStyle.padding = new RectOffset(3, 4, 3, 4);
 
@@ -134,9 +134,9 @@ namespace Michsky.MUIP
                         GUILayout.BeginHorizontal();
 
                         EditorGUILayout.LabelField(new GUIContent("Selected Icon"), customSkin.FindStyle("Text"), GUILayout.Width(80));
-                        GUI.enabled = false;
+                        UnityEngine.GUI.enabled = false;
                         EditorGUILayout.PropertyField(selectedIconID, new GUIContent(""));
-                        GUI.enabled = true;
+                        UnityEngine.GUI.enabled = true;
 
                         GUILayout.EndHorizontal();
                         GUILayout.Space(1);
@@ -179,7 +179,7 @@ namespace Michsky.MUIP
                     GUILayout.Space(2);
 
                     // Scroll panel
-                    scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true, GUIStyle.none, GUI.skin.verticalScrollbar, GUILayout.Height(250));
+                    scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true, GUIStyle.none, UnityEngine.GUI.skin.verticalScrollbar, GUILayout.Height(250));
                     GUILayout.BeginVertical(panelStyle);
 
                     if (searchText == null || searchText == "")
@@ -189,7 +189,7 @@ namespace Michsky.MUIP
                             GUILayout.BeginHorizontal(GUILayout.Height(32));
                             GUILayout.Box(imTarget.iconLibrary.icons[i].iconPreview, customSkin.FindStyle("Icon Manager Item"));
 
-                            GUI.skin.button.alignment = TextAnchor.MiddleLeft;
+                            UnityEngine.GUI.skin.button.alignment = TextAnchor.MiddleLeft;
                             if (GUILayout.Button(imTarget.iconLibrary.icons[i].iconTitle, GUILayout.Height(32)))
                             {
                                 sizeList.Clear();
@@ -225,7 +225,7 @@ namespace Michsky.MUIP
                                 GUILayout.BeginHorizontal(GUILayout.Height(32));
                                 GUILayout.Box(imTarget.iconLibrary.icons[i].iconPreview, customSkin.FindStyle("Icon Manager Item"));
 
-                                GUI.skin.button.alignment = TextAnchor.MiddleLeft;
+                                UnityEngine.GUI.skin.button.alignment = TextAnchor.MiddleLeft;
                                 if (GUILayout.Button(imTarget.iconLibrary.icons[i].iconTitle, GUILayout.Height(32)))
                                 {
                                     sizeList.Clear();
@@ -257,15 +257,15 @@ namespace Michsky.MUIP
                     GUILayout.EndVertical();
                     GUILayout.EndScrollView();
 
-                    if (GUI.enabled == true) { Repaint(); }
+                    if (UnityEngine.GUI.enabled == true) { Repaint(); }
                     break;
 
                 case 1:
                     GUILayout.Space(6);
                     GUILayout.Box(new GUIContent(""), customSkin.FindStyle("Options Header"));
 
-                    if (imTarget.iconLibrary == null) { GUI.enabled = false; }
-                    else { GUI.enabled = true; }
+                    if (imTarget.iconLibrary == null) { UnityEngine.GUI.enabled = false; }
+                    else { UnityEngine.GUI.enabled = true; }
 
                     if (GUILayout.Button("Sort Library By Name (A to Z)")) { imTarget.iconLibrary.icons.Sort(SortByNameAtoZ); }
                     if (GUILayout.Button("Sort Library By Name (Z to A)")) { imTarget.iconLibrary.icons.Sort(SortByNameZtoA); }

@@ -78,9 +78,9 @@ namespace Michsky.MUIP
                         GUILayout.BeginVertical(EditorStyles.helpBox);
                         GUILayout.BeginHorizontal();
 
-                        GUI.enabled = false;
+                        UnityEngine.GUI.enabled = false;
                         EditorGUILayout.LabelField(new GUIContent("Selected Item:"), customSkin.FindStyle("Text"), GUILayout.Width(82));
-                        GUI.enabled = true;
+                        UnityEngine.GUI.enabled = true;
 
                         EditorGUILayout.LabelField(new GUIContent(hsTarget.items[defaultIndex.intValue].itemTitle), customSkin.FindStyle("Text"));
 
@@ -96,7 +96,7 @@ namespace Michsky.MUIP
                     {
                         GUILayout.BeginVertical(EditorStyles.helpBox);
                         GUILayout.BeginHorizontal();
-                        GUI.enabled = false;
+                        UnityEngine.GUI.enabled = false;
 
                         EditorGUILayout.LabelField(new GUIContent("Current Item:"), customSkin.FindStyle("Text"), GUILayout.Width(74));
                         EditorGUILayout.LabelField(new GUIContent(hsTarget.items[hsTarget.index].itemTitle), customSkin.FindStyle("Text"));
@@ -106,7 +106,7 @@ namespace Michsky.MUIP
 
                         EditorGUILayout.IntSlider(hsTarget.index, 0, hsTarget.items.Count - 1);
 
-                        GUI.enabled = true;
+                        UnityEngine.GUI.enabled = true;
                         GUILayout.EndVertical();
                     }
 
@@ -171,7 +171,7 @@ namespace Michsky.MUIP
                     invokeAtStart.boolValue = MUIPEditorHandler.DrawToggle(invokeAtStart.boolValue, customSkin, "Invoke At Start");
                     invertAnimation.boolValue = MUIPEditorHandler.DrawToggle(invertAnimation.boolValue, customSkin, "Invert Animation");
                     loopSelection.boolValue = MUIPEditorHandler.DrawToggle(loopSelection.boolValue, customSkin, "Loop Selection");
-                    GUI.enabled = true;
+                    UnityEngine.GUI.enabled = true;
                     
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     GUILayout.Space(-3);

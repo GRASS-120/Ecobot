@@ -221,9 +221,9 @@ namespace Michsky.MUIP
                     MUIPEditorHandler.DrawProperty(fadingMultiplier, customSkin, "Fading Multiplier");
                     MUIPEditorHandler.DrawProperty(doubleClickPeriod, customSkin, "Double Click Period");
                     isInteractable.boolValue = MUIPEditorHandler.DrawToggle(isInteractable.boolValue, customSkin, "Is Interactable");
-                    if (useCustomContent.boolValue == true || enableText.boolValue == false) { GUI.enabled = false; }
+                    if (useCustomContent.boolValue == true || enableText.boolValue == false) { UnityEngine.GUI.enabled = false; }
                     useCustomTextSize.boolValue = MUIPEditorHandler.DrawToggle(useCustomTextSize.boolValue, customSkin, "Use Custom Text Size");
-                    GUI.enabled = true;
+                    UnityEngine.GUI.enabled = true;
                     useCustomContent.boolValue = MUIPEditorHandler.DrawToggle(useCustomContent.boolValue, customSkin, "Use Custom Content");
                     checkForDoubleClick.boolValue = MUIPEditorHandler.DrawToggle(checkForDoubleClick.boolValue, customSkin, "Check For Double Click");
 

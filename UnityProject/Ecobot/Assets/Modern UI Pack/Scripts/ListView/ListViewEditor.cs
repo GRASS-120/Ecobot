@@ -31,7 +31,7 @@ namespace Michsky.MUIP
         {
             MUIPEditorHandler.DrawComponentHeader(customSkin, "LV Top Header");
 
-            Color defaultColor = GUI.color;
+            Color defaultColor = UnityEngine.GUI.color;
 
             GUIContent[] toolbarTabs = new GUIContent[3];
             toolbarTabs[0] = new GUIContent("Content");
@@ -61,8 +61,8 @@ namespace Michsky.MUIP
             GUIStyle foldoutStyle = customSkin.FindStyle("UIM Foldout");
 
             // Custom panel
-            panelStyle = new GUIStyle(GUI.skin.box);
-            panelStyle.normal.textColor = GUI.skin.label.normal.textColor;
+            panelStyle = new GUIStyle(UnityEngine.GUI.skin.box);
+            panelStyle.normal.textColor = UnityEngine.GUI.skin.label.normal.textColor;
             panelStyle.margin = new RectOffset(0, 0, 0, 0);
             panelStyle.padding = new RectOffset(0, 0, 0, 0);
 
@@ -95,7 +95,7 @@ namespace Michsky.MUIP
                         else { tempHeight = 300; }
 
                         // Scroll panel
-                        scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true, GUIStyle.none, GUI.skin.verticalScrollbar, GUILayout.Height(tempHeight));
+                        scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true, GUIStyle.none, UnityEngine.GUI.skin.verticalScrollbar, GUILayout.Height(tempHeight));
                         GUILayout.BeginVertical(panelStyle);
 
                         for (int i = 0; i < lvTarget.listItems.Count; i++)
@@ -216,7 +216,7 @@ namespace Michsky.MUIP
                         // Scroll Panel End
                         GUILayout.EndVertical();
                         GUILayout.EndScrollView();
-                        if (GUI.enabled == true) { Repaint(); }
+                        if (UnityEngine.GUI.enabled == true) { Repaint(); }
                     }
 
                     break;
