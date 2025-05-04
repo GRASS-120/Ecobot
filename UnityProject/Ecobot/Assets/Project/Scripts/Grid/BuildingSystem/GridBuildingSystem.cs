@@ -74,6 +74,8 @@ namespace Grid.BuildingSystem
         
         private void OnEnterBuildingMode_Callback()
         {
+            Debug.Log("OnEnterBuildingMode_Callback");
+
             pointer.SetActive(true);
             gridVisualTiles.SetActive(true);
             
@@ -82,6 +84,7 @@ namespace Grid.BuildingSystem
         
         private void OnExitBuildingMode_Callback()
         {
+            Debug.Log("OnExitBuildingMode_Callback");
             pointer.SetActive(false);
             gridVisualTiles.SetActive(false);
             

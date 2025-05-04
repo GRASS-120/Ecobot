@@ -1,9 +1,7 @@
-using System;
 using FiniteStateMachine;
 using Game.Mods;
 using Game.Mods.Core;
 using GUI.Core;
-using GUI.Main;
 using Player.InputManager;
 using R3;
 using UnityEngine;
@@ -15,69 +13,71 @@ namespace Game
         [SerializeField] private UIManager uiManager;
         [SerializeField] private PlayerInputManager inputManager;
 
-        public ReactiveProperty<GameMode> CurrentMode;
-
-        private StateMachine _stateMachine;
+        public StateMachine FSM { get; private set; }
         public GameplayMode GameplayMode { get; private set; }
         public BuildingMode BuildingMode { get; private set; }
         public MenuMode MenuMode { get; private set; }
         public ProgrammingMode ProgrammingMode { get; private set; }
 
         private ToggleObject<GameMode> _gameplayOrBuilding;
-        
+
         private void Awake()
         {
-            _stateMachine = new StateMachine();
             GameplayMode = new GameplayMode(inputManager);
             BuildingMode = new BuildingMode(inputManager);
             MenuMode = new MenuMode(inputManager);
             ProgrammingMode = new ProgrammingMode(inputManager);
-            
+
             _gameplayOrBuilding = new ToggleObject<GameMode>(GameplayMode, BuildingMode);
+
+            FSM = new StateMachine();
             
             At(GameplayMode, BuildingMode, new FuncPredicate(() => _gameplayOrBuilding.GetState() == BuildingMode));
             At(BuildingMode, GameplayMode, new FuncPredicate(() => _gameplayOrBuilding.GetState() == GameplayMode));
             
-            CurrentMode = new ReactiveProperty<GameMode>(GameplayMode);
-            _stateMachine.SetState(GameplayMode);
-            
+            FSM.SetState(GameplayMode);
+
             uiManager.Init(this);
         }
-    
+
         private void Start()
         {
             inputManager.OnToggleBuildMode += OnToggleBuildMode_Callback;
+
+            FSM.CurrentState.Subscribe(OnCurrentStateChanged).AddTo(this); 
         }
 
         private void Update()
         {
-            _stateMachine.Update();
+            FSM.Update();
         }
 
         private void FixedUpdate()
         {
-            _stateMachine.FixedUpdate();
+            FSM.FixedUpdate();
         }
 
         private void OnToggleBuildMode_Callback()
         {
             _gameplayOrBuilding.Toggle();
-            SetCurrentMode(_gameplayOrBuilding.GetState());
-        }
-
-        private void SetCurrentMode(GameMode mode)
-        {
-            CurrentMode.Value = mode;
+            FSM.SetState(_gameplayOrBuilding.GetState());
         }
 
         private void At(IState from, IState to, IPredicate condition)
         {
-            _stateMachine.AddTransition(from, to, condition);
+            FSM.AddTransition(from, to, condition);
         }
 
         private void Any(IState to, IPredicate condition)
         {
-            _stateMachine.AddAnyTransition(to, condition);
+            FSM.AddAnyTransition(to, condition);
+        }
+
+        private void OnCurrentStateChanged(IState newState)
+        {
+            // Здесь вы можете реагировать на изменение состояния
+            Debug.Log($"State changed to: {newState}");
+            // Обновите UI или другие системы, которые зависят от текущего состояния
         }
     }
 }

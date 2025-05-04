@@ -23,10 +23,10 @@ namespace GUI.UIFramework
         // скрыть... хотя диспозить же не нужно, хм...
         private Dictionary<WindowViewModel, IDisposable> _popupSubscriptions = new();
         
-        public void OpenScreen(WindowViewModel screen)
+        public void OpenOverlay(WindowViewModel overlay)
         {
             _openedScreen.Value?.Dispose();
-            _openedScreen.Value = screen;
+            _openedScreen.Value = overlay;
         }
 
         public void OpenPopup(WindowViewModel popup)

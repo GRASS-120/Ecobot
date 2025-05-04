@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using R3;
 using UnityEngine;
 
 namespace FiniteStateMachine
@@ -7,50 +8,56 @@ namespace FiniteStateMachine
     public class StateMachine
     {
         private StateNode _current;
-        private Dictionary<Type, StateNode> _nodes = new();  // Type - в качестве ключа в словаре используеться тип данных => каждому типу соответствует свой StateNode
-        private HashSet<ITransition> _anyTransitions = new();  // переходы, которые срабатывают независимо от того, в каком состоянии мы находимся
-        
-        public IState CurrentState => _current.State;
-        
+        private Dictionary<Type, StateNode> _nodes = new();
+        private HashSet<ITransition> _anyTransitions = new();
+
+        public ReactiveProperty<IState> CurrentState { get; private set; } = new ();
+        public IState PreviousState { get; private set; }
+
         public void Update()
         {
             var transition = GetTransition();
-            if (transition != null)  // если есть переход, для которого выполнено условие
+            if (transition != null)
             {
                 ChangeState(transition.To);
             }
-            
-            _current.State?.Update();
+
+            CurrentState.Value?.Update();
         }
 
         public void FixedUpdate()
         {
-            _current.State?.FixedUpdate();
+            CurrentState.Value?.FixedUpdate();
         }
 
         public void SetState(IState state)
         {
+            if (state == CurrentState.Value) return;
+
+            PreviousState = CurrentState.Value;
             _current = _nodes[state.GetType()];
-            _current.State?.OnEnter();
+            CurrentState.Value = _current.State;  
+
+            CurrentState.Value?.OnEnter();
         }
 
         private void ChangeState(IState state)
         {
-            if (state == _current.State) return;
+            if (state == CurrentState.Value) return;
 
-            var previousState = _current.State;
-            var nextState = _nodes[state.GetType()].State;
-            
-            previousState?.OnExit();
-            nextState?.OnEnter();
+            PreviousState = CurrentState.Value;
+            CurrentState.Value?.OnExit();
+
             _current = _nodes[state.GetType()];
+            CurrentState.Value = _current.State;
+            CurrentState.Value?.OnEnter();
         }
 
         public void AddTransition(IState from, IState to, IPredicate condition)
         {
             GetOrAddNode(from).AddTransition(GetOrAddNode(to).State, condition);
         }
-        
+
         public void AddAnyTransition(IState to, IPredicate condition)
         {
             _anyTransitions.Add(new Transition(GetOrAddNode(to).State, condition));
@@ -84,6 +91,18 @@ namespace FiniteStateMachine
             return null;
         }
         
+        public void ReturnToPreviousMode()
+        {
+            if (PreviousState != null)
+            {
+                SetState(PreviousState);
+            }
+            else
+            {
+                Debug.LogWarning("No previous state to return to.");
+            }
+        }
+
         private class StateNode
         {
             public IState State { get; }
@@ -92,7 +111,7 @@ namespace FiniteStateMachine
             public StateNode(IState state)
             {
                 State = state;
-                Transitions = new HashSet<ITransition>();  // possible transitions
+                Transitions = new HashSet<ITransition>();
             }
 
             public void AddTransition(IState to, IPredicate condition)

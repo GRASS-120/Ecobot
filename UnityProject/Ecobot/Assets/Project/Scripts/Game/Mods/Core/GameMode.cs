@@ -1,5 +1,6 @@
 ﻿using System;
 using FiniteStateMachine;
+using GUI.Core;
 using Player.InputManager;
 
 namespace Game.Mods.Core
@@ -18,6 +19,11 @@ namespace Game.Mods.Core
         
         protected readonly PlayerInputManager PlayerInputManager;
 
+        protected GameMode(PlayerInputManager playerInputManager)
+        {
+            PlayerInputManager = playerInputManager;
+        }
+        
         public override void OnEnter()
         {
             OnEnterEvent?.Invoke();
@@ -36,11 +42,6 @@ namespace Game.Mods.Core
         public override void OnExit()
         {
             OnExitEvent?.Invoke();
-        }
-
-        protected GameMode(PlayerInputManager playerInputManager)
-        {
-            PlayerInputManager = playerInputManager;
         }
 
         public abstract void ActivateInputMap();

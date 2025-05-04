@@ -21,7 +21,7 @@ namespace GUI.UIFramework
         {
             _subscriptions.Add(viewModel.OpenedScreen.Subscribe(newScreen =>
             {
-                windowsDispatcher.OpenScreen(newScreen);
+                windowsDispatcher.OpenOverlay(newScreen);
             }));
             
             // проверка попапов, которые могли уже быть добавлены до подписки

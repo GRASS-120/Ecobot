@@ -1,5 +1,6 @@
 ﻿using GUI.Core;
 using GUI.Gameplay;
+using GUI.Programming.Windows;
 using GUI.UIFramework;
 using UnityEngine;
 
@@ -15,16 +16,23 @@ namespace GUI.Programming
             rootView.Dispatch(_rootViewModel);
             
             // открываем по умолчанию
-            // OpenScreenGame();
+            // OpenProgrammingOverlay();
         }
 
-        public void OpenProgrammingScreen()
+        public void OpenOverlay()
         {
-            // var viewModel = new Prog(this);
-            //
-            // _rootViewModel.OpenScreen(viewModel);
-            //
-            // return viewModel;
+            var viewModel = new ProgrammingOverlayViewModel(this);
+            
+            _rootViewModel.OpenOverlay(viewModel);
         }
+
+        // private ProgrammingOverlayViewModel OpenProgrammingOverlay()
+        // {
+        //     var viewModel = new ProgrammingOverlayViewModel(this);
+        //     
+        //     _rootViewModel.OpenOverlay(viewModel);
+        //  
+        //     return viewModel;
+        // }
     }
 }

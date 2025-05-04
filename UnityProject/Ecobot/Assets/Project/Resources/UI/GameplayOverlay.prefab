@@ -207,7 +207,7 @@ GameObject:
   - component: {fileID: 352761893371656224}
   - component: {fileID: 4141712165454806748}
   m_Layer: 0
-  m_Name: GameplayScreen
+  m_Name: GameplayOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

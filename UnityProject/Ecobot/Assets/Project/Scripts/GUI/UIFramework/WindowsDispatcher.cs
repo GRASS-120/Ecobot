@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GUI.UIFramework
 {
@@ -11,11 +12,11 @@ namespace GUI.UIFramework
     public class WindowsDispatcher : MonoBehaviour
     {
         [Header("Containers")]
-        [SerializeField] private Transform screensContainer;
+        [SerializeField] private Transform overlayContainer;
         [SerializeField] private Transform popupsContainer;
 
         private readonly Dictionary<WindowViewModel, IWindowView> _openedPopups = new();
-        private IWindowView _openedScreen;
+        private IWindowView _openedOverlay;
 
         public void OpenPopup(WindowViewModel viewModel)
         {
@@ -36,7 +37,7 @@ namespace GUI.UIFramework
             _openedPopups.Remove(viewModel);
         }
         
-        public void OpenScreen(WindowViewModel viewModel)
+        public void OpenOverlay(WindowViewModel viewModel)
         {
             if (viewModel == null)
             {
@@ -45,13 +46,13 @@ namespace GUI.UIFramework
             
             var prefabPath = GetPrefabPath(viewModel);
             var prefab = Resources.Load<GameObject>(prefabPath);
-            var createdScreen = Instantiate(prefab, screensContainer);
-            var view = createdScreen.GetComponent<IWindowView>();
-            
-            _openedScreen?.Close();
+            var createdOverlay = Instantiate(prefab, overlayContainer);
+            var view = createdOverlay.GetComponent<IWindowView>();
+
+            _openedOverlay?.Close();
             
             view.Bind(viewModel);
-            _openedScreen = view;
+            _openedOverlay = view;
         }
 
         private static string GetPrefabPath(WindowViewModel viewModel)

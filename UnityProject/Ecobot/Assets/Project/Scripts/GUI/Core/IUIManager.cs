@@ -6,6 +6,6 @@ namespace GUI.Core
     public interface IUIManager
     {
         public void Init(UIRootView rootView);
-        // public GameMode GameMode { get; }
+        public void OpenOverlay();
     }
 }

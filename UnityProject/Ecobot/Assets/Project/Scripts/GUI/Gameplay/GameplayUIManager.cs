@@ -1,6 +1,7 @@
 ﻿using Game.Mods;
 using Game.Mods.Core;
 using GUI.Core;
+using GUI.Gameplay.Windows;
 using GUI.Main;
 using GUI.UIFramework;
 using UnityEngine;
@@ -19,20 +20,26 @@ namespace GUI.Gameplay
             _rootViewModel = new GameUIRootViewModel();
             rootView.Dispatch(_rootViewModel);
             
-            // открываем по умолчанию
-            // OpenScreenGame();
+            // OpenGameplayOverlay();
         }
-        
-        public GameScreenViewModel OpenScreenGame()
+
+        public void OpenOverlay()
         {
-            // инвентарь, hud и тп
-            
-            var viewModel = new GameScreenViewModel(this);
+            var viewModel = new GameplayOverlayViewModel(this);
            
-            _rootViewModel.OpenScreen(viewModel);
-            
-            return viewModel;
+            _rootViewModel.OpenOverlay(viewModel);
         }
+
+        // private GameplayOverlayViewModel OpenGameplayOverlay()
+        // {
+        //     // инвентарь, hud и тп
+        //     
+        //     var viewModel = new GameplayOverlayViewModel(this);
+        //    
+        //     _rootViewModel.OpenOverlay(viewModel);
+        //     
+        //     return viewModel;
+        // }
         
         public PopupAViewModel OpenPopupA()
         {

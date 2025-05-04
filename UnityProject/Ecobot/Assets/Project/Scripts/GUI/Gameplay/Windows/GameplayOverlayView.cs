@@ -1,19 +1,17 @@
-﻿using System;
-using GUI.UIFramework;
+﻿using GUI.UIFramework;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GUI.Main
+namespace GUI.Gameplay.Windows
 {
-    public class GamelayOverlayView : OverlayView<GameScreenViewModel>
+    public class GameplayOverlayView : OverlayView<GameplayOverlayViewModel>
     {
         [Header("Buttons")]
         [SerializeField] private Button btnPopupA;
         [SerializeField] private Button btnPopupB;
         [SerializeField] private Button btnGoToMainMenu;
 
-        // override OnBind для реализации доп логики
-        protected override void OnBind(GameScreenViewModel model)
+        protected override void OnBind(GameplayOverlayViewModel model)
         {
             base.OnBind(model);
         }

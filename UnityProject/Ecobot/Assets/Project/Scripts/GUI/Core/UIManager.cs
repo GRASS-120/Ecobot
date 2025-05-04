@@ -16,8 +16,8 @@ namespace GUI.Core
         [SerializeField] private UIRootView uiRootView;
 
         [Header("UI Managers")]
-        [SerializeField] private GameplayUIManager gameplayUIManager;
-        [SerializeField] private ProgrammingUIManager programmingUIManager;
+        public GameplayUIManager gameplayUIManager;
+        public ProgrammingUIManager programmingUIManager;
         
         private GameManager _gameManager;
         
