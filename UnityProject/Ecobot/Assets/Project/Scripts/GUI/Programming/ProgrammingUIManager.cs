@@ -1,4 +1,6 @@
-﻿using GUI.Core;
+﻿using Game;
+using Game.Mods.Core;
+using GUI.Core;
 using GUI.Gameplay;
 using GUI.Programming.Windows;
 using GUI.UIFramework;
@@ -8,31 +10,25 @@ namespace GUI.Programming
 {
     public class ProgrammingUIManager : MonoBehaviour, IUIManager
     {
-        private ProgrammingUIRootViewModel _rootViewModel;
+        private GameUIRootViewModel _rootViewModel;
+        private GameMode _mode;
+        private GameManager _gameManager;
 
-        public void Init(UIRootView rootView)
+        // virtual
+        public void Init(GameUIRootViewModel rootViewModel, GameMode mode, GameManager gameManager)
         {
-            _rootViewModel = new ProgrammingUIRootViewModel();
-            rootView.Dispatch(_rootViewModel);
+            _gameManager = gameManager;
+            _rootViewModel = rootViewModel;
+            _mode = mode;
             
-            // открываем по умолчанию
-            // OpenProgrammingOverlay();
+            _mode.OnEnterEvent += OpenOverlay;
         }
 
         public void OpenOverlay()
         {
-            var viewModel = new ProgrammingOverlayViewModel(this);
+            var viewModel = new ProgrammingOverlayViewModel(_gameManager);
             
             _rootViewModel.OpenOverlay(viewModel);
         }
-
-        // private ProgrammingOverlayViewModel OpenProgrammingOverlay()
-        // {
-        //     var viewModel = new ProgrammingOverlayViewModel(this);
-        //     
-        //     _rootViewModel.OpenOverlay(viewModel);
-        //  
-        //     return viewModel;
-        // }
     }
 }

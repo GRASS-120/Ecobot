@@ -1,4 +1,5 @@
 using Bot.Command;
+using Game;
 using Grid;
 using Grid.Base;
 using GUI.Programming;
@@ -14,22 +15,23 @@ namespace Bot
         [SerializeField] private BotMovementController movementController;
         [SerializeField] private BotCommandController commandController;
 
-        private ProgrammingUIManager _uiManager;
+        private GameManager _gameManager;
         // private 
         
         public BotMovementController MovementController => movementController;
         public BotCommandController CommandController => commandController;
 
-        public void Init(GridMap gridMap, ProgrammingUIManager uiManager)
+        public void Init(GridMap gridMap, GameManager gameManager)
         {
             movementController.Init(this, gridMap);
             commandController.Init(this);
 
-            _uiManager = uiManager;
+            _gameManager = gameManager;
         }
 
         public void Interact(IInteractor interactor)
         {
+            _gameManager.FSM.SetState(_gameManager.ProgrammingMode);
             // _uiManager.OpenProgrammingOverlay();
         }
         

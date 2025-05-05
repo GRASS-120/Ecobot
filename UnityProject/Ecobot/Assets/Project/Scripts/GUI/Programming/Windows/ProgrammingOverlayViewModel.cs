@@ -1,20 +1,21 @@
-﻿using GUI.UIFramework;
+﻿using Game;
+using GUI.UIFramework;
 
 namespace GUI.Programming.Windows
 {
     public class ProgrammingOverlayViewModel : WindowViewModel
     {
-        private readonly ProgrammingUIManager _uiManager;
+        private readonly GameManager _gameManager;
         public override string Id => "ProgrammingOverlay";
 
-        public ProgrammingOverlayViewModel(ProgrammingUIManager uiManager)
+        public ProgrammingOverlayViewModel(GameManager gameManager)
         {
-            _uiManager = uiManager;
+            _gameManager = gameManager;
         }
         
-        // public void RequestOpenPopupA()
-        // {
-        //     _uiManager.OpenPopupA();
-        // }
+        public void RequestCloseOverlay()
+        {
+            _gameManager.FSM.GoToPreviousState();
+        }
     }
 }

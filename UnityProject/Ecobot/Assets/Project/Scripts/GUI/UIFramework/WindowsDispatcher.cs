@@ -20,6 +20,9 @@ namespace GUI.UIFramework
 
         public void OpenPopup(WindowViewModel viewModel)
         {
+            if (popupsContainer == null)
+                Debug.LogError("Popups container is null.");
+            
             var prefabPath = GetPrefabPath(viewModel);
             var prefab = Resources.Load<GameObject>(prefabPath);
             var createdPopup = Instantiate(prefab, popupsContainer);
@@ -39,10 +42,10 @@ namespace GUI.UIFramework
         
         public void OpenOverlay(WindowViewModel viewModel)
         {
-            if (viewModel == null)
-            {
-                return;
-            }
+            if (viewModel == null) return;
+            
+            if (overlayContainer == null)
+                Debug.LogError("Overlay container is null.");
             
             var prefabPath = GetPrefabPath(viewModel);
             var prefab = Resources.Load<GameObject>(prefabPath);
@@ -55,9 +58,6 @@ namespace GUI.UIFramework
             _openedOverlay = view;
         }
 
-        private static string GetPrefabPath(WindowViewModel viewModel)
-        {
-            return $"UI/{viewModel.Id}";
-        }
+        private static string GetPrefabPath(WindowViewModel viewModel) => $"UI/{viewModel.Id}";
     }
 }

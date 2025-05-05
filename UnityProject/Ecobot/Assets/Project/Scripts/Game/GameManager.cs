@@ -2,15 +2,18 @@ using FiniteStateMachine;
 using Game.Mods;
 using Game.Mods.Core;
 using GUI.Core;
+using GUI.Gameplay;
 using Player.InputManager;
 using R3;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utils;
 
 namespace Game
 {
     public class GameManager : MonoBehaviour {
-        [SerializeField] private UIManager uiManager;
+        [Header("Components")]
+        [SerializeField] private GameUIRootView uiRootView;
         [SerializeField] private PlayerInputManager inputManager;
 
         public StateMachine FSM { get; private set; }
@@ -21,30 +24,33 @@ namespace Game
 
         private ToggleObject<GameMode> _gameplayOrBuilding;
 
+        // todo: условия не работают для FSM здесь... почему-то. В целом то и не нужно оно здесь. Но вопрос: зачем тогда переходы?
+        
         private void Awake()
         {
+            FSM = new StateMachine();
+            
             GameplayMode = new GameplayMode(inputManager);
             BuildingMode = new BuildingMode(inputManager);
             MenuMode = new MenuMode(inputManager);
             ProgrammingMode = new ProgrammingMode(inputManager);
-
+            
             _gameplayOrBuilding = new ToggleObject<GameMode>(GameplayMode, BuildingMode);
-
-            FSM = new StateMachine();
             
             At(GameplayMode, BuildingMode, new FuncPredicate(() => _gameplayOrBuilding.GetState() == BuildingMode));
             At(BuildingMode, GameplayMode, new FuncPredicate(() => _gameplayOrBuilding.GetState() == GameplayMode));
+            At(GameplayMode, ProgrammingMode, new FuncPredicate(() => _gameplayOrBuilding.GetState() == ProgrammingMode));
+            At(ProgrammingMode, GameplayMode, new FuncPredicate(() => _gameplayOrBuilding.GetState() == ProgrammingMode));
+            
+            var rootViewModel = new GameUIRootViewModel();
+            uiRootView.Init(this, rootViewModel);
             
             FSM.SetState(GameplayMode);
-
-            uiManager.Init(this);
         }
 
         private void Start()
         {
             inputManager.OnToggleBuildMode += OnToggleBuildMode_Callback;
-
-            FSM.CurrentState.Subscribe(OnCurrentStateChanged).AddTo(this); 
         }
 
         private void Update()
@@ -71,13 +77,6 @@ namespace Game
         private void Any(IState to, IPredicate condition)
         {
             FSM.AddAnyTransition(to, condition);
-        }
-
-        private void OnCurrentStateChanged(IState newState)
-        {
-            // Здесь вы можете реагировать на изменение состояния
-            Debug.Log($"State changed to: {newState}");
-            // Обновите UI или другие системы, которые зависят от текущего состояния
         }
     }
 }

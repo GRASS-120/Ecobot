@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game;
 using Grid;
 using Grid.Base;
 using GUI.Programming;
@@ -12,13 +13,13 @@ namespace Bot
         [SerializeField] private GridMap gridMap;
         [SerializeField] private List<BotBase> bots;
         [SerializeField] private Transform target;
-        [SerializeField] private ProgrammingUIManager uiManager;
+        [SerializeField] private GameManager gameManager;
 
         private void Awake()
         {
             foreach (var bot in bots)
             {
-                bot.Init(gridMap, uiManager);
+                bot.Init(gridMap, gameManager);
             }
         }
 

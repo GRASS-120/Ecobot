@@ -1,4 +1,5 @@
-﻿using Game.Mods;
+﻿using Game;
+using Game.Mods;
 using Game.Mods.Core;
 using GUI.Core;
 using GUI.Gameplay.Windows;
@@ -14,13 +15,15 @@ namespace GUI.Gameplay
     public class GameplayUIManager : MonoBehaviour, IUIManager
     {
         private GameUIRootViewModel _rootViewModel;
+        private GameMode _mode;
+        private GameManager _gameManager;
 
-        public void Init(UIRootView rootView)
+        public void Init(GameUIRootViewModel rootViewModel, GameMode mode, GameManager gameManager)
         {
-            _rootViewModel = new GameUIRootViewModel();
-            rootView.Dispatch(_rootViewModel);
+            _rootViewModel = rootViewModel;
+            _mode = mode;
             
-            // OpenGameplayOverlay();
+            _mode.OnEnterEvent += OpenOverlay;
         }
 
         public void OpenOverlay()
@@ -29,17 +32,6 @@ namespace GUI.Gameplay
            
             _rootViewModel.OpenOverlay(viewModel);
         }
-
-        // private GameplayOverlayViewModel OpenGameplayOverlay()
-        // {
-        //     // инвентарь, hud и тп
-        //     
-        //     var viewModel = new GameplayOverlayViewModel(this);
-        //    
-        //     _rootViewModel.OpenOverlay(viewModel);
-        //     
-        //     return viewModel;
-        // }
         
         public PopupAViewModel OpenPopupA()
         {
@@ -49,7 +41,5 @@ namespace GUI.Gameplay
             
             return viewModel;
         }
-
-        // public GameMode GameMode => new BuildingMode();
     }
 }

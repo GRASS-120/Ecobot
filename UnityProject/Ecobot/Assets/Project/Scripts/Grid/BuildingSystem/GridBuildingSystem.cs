@@ -68,14 +68,15 @@ namespace Grid.BuildingSystem
             OnBuildingPlaced += OnBuildingPlaced_Callback;           
             _currentBuildingItem.Subscribe(CurrentBuildingItem_Callback).AddTo(this);
 
+            // gameManager.GameplayMode.OnEnterEvent += () => { Debug.Log("Game play entered"); };
+            // gameManager.GameplayMode.OnExitEvent += () => { Debug.Log("Game play exited"); };
+
             gameManager.BuildingMode.OnEnterEvent += OnEnterBuildingMode_Callback;
             gameManager.BuildingMode.OnExitEvent += OnExitBuildingMode_Callback;
         }
         
         private void OnEnterBuildingMode_Callback()
         {
-            Debug.Log("OnEnterBuildingMode_Callback");
-
             pointer.SetActive(true);
             gridVisualTiles.SetActive(true);
             
@@ -84,7 +85,6 @@ namespace Grid.BuildingSystem
         
         private void OnExitBuildingMode_Callback()
         {
-            Debug.Log("OnExitBuildingMode_Callback");
             pointer.SetActive(false);
             gridVisualTiles.SetActive(false);
             
