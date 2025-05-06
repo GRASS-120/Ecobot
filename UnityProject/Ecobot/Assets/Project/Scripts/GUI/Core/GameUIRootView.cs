@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace GUI.Core
 {
-    // типо главная панелька
     public class GameUIRootView : UIRootView
     {
         [Header("UI Managers")]
@@ -27,8 +26,8 @@ namespace GUI.Core
 
             // todo: временно. Я В АХУЕ с того, какая это непонятная система, гайд хуйни просто посмотрел... теперь
             // сидеть все переписывать... но это позже
-            gameplayUIManager.Init(rootViewModel, _gameManager.GameplayMode, _gameManager);
-            programmingUIManager.Init(rootViewModel, _gameManager.ProgrammingMode, _gameManager);
+            gameplayUIManager.Init(rootViewModel, _gameManager);
+            programmingUIManager.Init(rootViewModel, _gameManager);
         }
     }
 }

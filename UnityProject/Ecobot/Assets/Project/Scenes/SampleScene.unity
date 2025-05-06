@@ -2121,7 +2121,7 @@ GameObject:
   - component: {fileID: 525184664}
   - component: {fileID: 525184665}
   m_Layer: 0
-  m_Name: UIManager
+  m_Name: UIRootView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8255,7 +8255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d733b185bd963fe45ab2b5f0542e08d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiManager: {fileID: 0}
+  uiRootView: {fileID: 525184665}
   inputManager: {fileID: 1616137094}
 --- !u!1 &1735220449
 GameObject:

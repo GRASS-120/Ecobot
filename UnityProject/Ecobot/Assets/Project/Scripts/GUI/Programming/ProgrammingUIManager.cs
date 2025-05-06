@@ -8,18 +8,18 @@ using UnityEngine;
 
 namespace GUI.Programming
 {
-    public class ProgrammingUIManager : MonoBehaviour, IUIManager
+    public class ProgrammingUIManager : MonoBehaviour
     {
         private GameUIRootViewModel _rootViewModel;
         private GameMode _mode;
         private GameManager _gameManager;
 
-        // virtual
-        public void Init(GameUIRootViewModel rootViewModel, GameMode mode, GameManager gameManager)
+        // virtual + не передавать mode, а его прямо здесь выставлять. то есть биндить тут
+        public void Init(GameUIRootViewModel rootViewModel, GameManager gameManager)
         {
             _gameManager = gameManager;
             _rootViewModel = rootViewModel;
-            _mode = mode;
+            _mode = _gameManager.ProgrammingMode;
             
             _mode.OnEnterEvent += OpenOverlay;
         }

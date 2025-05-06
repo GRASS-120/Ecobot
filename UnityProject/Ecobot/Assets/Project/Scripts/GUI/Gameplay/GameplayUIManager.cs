@@ -12,16 +12,17 @@ namespace GUI.Gameplay
     /// <summary>
     /// Менеджер всех окон, связанных с Gameplay. Создает ViewModel для всех окон
     /// </summary>
-    public class GameplayUIManager : MonoBehaviour, IUIManager
+    public class GameplayUIManager : MonoBehaviour
     {
         private GameUIRootViewModel _rootViewModel;
         private GameMode _mode;
         private GameManager _gameManager;
 
-        public void Init(GameUIRootViewModel rootViewModel, GameMode mode, GameManager gameManager)
+        public void Init(GameUIRootViewModel rootViewModel, GameManager gameManager)
         {
+            _gameManager = gameManager;
             _rootViewModel = rootViewModel;
-            _mode = mode;
+            _mode = _gameManager.GameplayMode;
             
             _mode.OnEnterEvent += OpenOverlay;
         }
