@@ -12,6 +12,8 @@ namespace Grid.PathfindingSystem
         private List<GridNode> _openList;    // ноды, которые считаем
         private List<GridNode> _closedList;  // ноды, которые не считаем (либо прошли, либо isWalkable = false)
 
+        public GridBase<GridNode> Grid => _grid;
+        
         public Pathfinder(GridBase<GridNode> grid) {
             _grid = grid;
         }

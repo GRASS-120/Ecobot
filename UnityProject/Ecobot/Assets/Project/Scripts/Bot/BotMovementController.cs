@@ -14,14 +14,16 @@ namespace Bot
         [SerializeField] private float moveSpeed = 5f;
 
         private BotBase _bot;
+        private GridBase<GridNode> _grid;
         private Pathfinder _pathfinder;
         private BotMovementVisualDebugger _movementVisualDebugger;
-        private int _currentPathIndex = 0;
+        private int _currentPathIndex;
         private List<Vector3> _pathVectorList;
 
         public void Init(BotBase bot, GridMap gridMap)
         {
             _bot = bot;
+            _grid = gridMap.Grid;
             _pathfinder = new Pathfinder(gridMap.Grid);
             _movementVisualDebugger = GetComponent<BotMovementVisualDebugger>();
         }
