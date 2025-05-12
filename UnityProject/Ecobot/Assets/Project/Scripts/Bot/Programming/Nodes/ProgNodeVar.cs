@@ -5,27 +5,19 @@ namespace Bot.Programming.Nodes
 {
     public class ProgNodeVar<T> : ProgNodeBase
     {
-        private T _value;
-
-        public ProgNodeVar(string name, T value) : base(name)
-        {
-            _value = value;
-        }
-
-        public override void Init()
-        {
-            base.Init();
-            NodeName = $"Variable ({typeof(T).Name})";
+        public T Value { get; set; }
         
-            // Добавляем выходной слот для значения
-            OutputDataSlots.Add(new ProgNodeDataSlot("Value", typeof(T)));
+        public ProgNodeVar(string nodeName, T initialValue)
+        {
+            NodeName = nodeName;
+            Value = initialValue;
+            Description = $"Variable of type {typeof(T).Name}";
         }
-    
-        // public override IEnumerator Execute(ProgNodeExecutionContext context, BotProgrammingController controller)
-        // {
-        //     // Устанавливаем значение в выходной слот
-        //     // OutputDataSlots[0].Value = _value;
-        //     yield break;
-        // }
+        
+        public override IEnumerator Execute(BotBase bot, BotProgramExecutor executor)
+        {
+            // Переменные не выполняются сами по себе, они просто хранят значение
+            yield break;
+        }
     }
 }

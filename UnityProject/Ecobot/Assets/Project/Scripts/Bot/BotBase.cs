@@ -38,10 +38,11 @@ namespace Bot
             
             movementController.Init(this, gridMap);
             commandController.Init(this);
-            // programmingController.Init(this);
+            programmingController.Init(this);
 
             _gameManager = gameManager;
             
+            _stateMachine.AddAnyTransition(_stateIdle, new FuncPredicate(() => true));
             _stateMachine.SetState(_stateIdle);
         }
 

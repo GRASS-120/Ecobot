@@ -2,20 +2,18 @@
 
 namespace Bot.Programming.Nodes
 {
-    public class ProgNodeAction : ProgNodeBase
+    public abstract class ProgNodeAction : ProgNodeBase
     {
-        public ProgNodeAction(string name) : base(name)
+        protected ProgNodeStreamSlot successSlot;
+        protected ProgNodeStreamSlot failureSlot;
+        
+        public ProgNodeAction(string nodeName)
         {
+            NodeName = nodeName;
+            successSlot = new ProgNodeStreamSlot("Success", this);
+            failureSlot = new ProgNodeStreamSlot("Failure", this);
+            slots.Add(successSlot);
+            slots.Add(failureSlot);
         }
-
-        // public override void Execute()
-        // {
-        //     throw new System.NotImplementedException();
-        // }
-        //
-        // public override void Next()
-        // {
-        //     throw new System.NotImplementedException();
-        // }
     }
 }

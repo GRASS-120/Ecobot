@@ -3,107 +3,212 @@ using System.Collections;
 using System.Collections.Generic;
 using Bot.Programming.Nodes;
 using Bot.Programming.Nodes.Base;
+using Bot.Programming.Nodes.Concrete;
+using Bot.Programming.Nodes.Slots;
+using Grid.BuildingSystem;
+using Inventory;
 using UnityEngine;
 
 namespace Bot.Programming
 {
-    public struct ProgNodeExecutionCommand
-    {
-        public ProgNodeBase Node;
-        public int OutputSlotIndex; // Индекс выходного слота, из которого произошел вызов
-    }
-    
     public class BotProgrammingController : MonoBehaviour
     {
-        public event Action<ProgNodeBase> OnNodeExecutionStarted;
-        public event Action<ProgNodeBase> OnNodeExecutionCompleted;
-        public event Action OnExecutionCompleted;
+        private BotBase bot;
+        private BotProgramExecutor executor;
+        private ProgNodeBase rootNode;
+        private bool programCreated;
         
-        
-        private BotBase _bot;
-        private ProgNodeBase _entryPoint;
-        private Queue<INodeExecutable> _executionQueue = new ();
-        private Coroutine _executionCoroutine;
-        private bool _isExecuting = false;
-        private ProgNodeExecutionContext _context;
-        
-        // Для отладки и визуализации
-        public ProgNodeBase CurrentlyExecutingNode { get; private set; }
-        
-        public void Init(BotBase bot, INodeExecutable entryPoint)
+        void Update()
         {
-            _bot = bot;
-            //_entryPoint = entryPoint;
-            _context = new ProgNodeExecutionContext { Bot = bot };
-        }
-        
-        public void StartExecution()
-        {
-            if (_isExecuting)
-                return;
-            
-            _executionQueue.Clear();
-            // _executionQueue.Enqueue();
-            _isExecuting = true;
-            _executionCoroutine = StartCoroutine(ExecutionLoop());
-        }
-        
-        public void StopExecution()
-        {
-            if (!_isExecuting)
-                return;
-            
-            if (_executionCoroutine != null)
-                StopCoroutine(_executionCoroutine);
-            
-            _executionQueue.Clear();
-            _isExecuting = false;
-            CurrentlyExecutingNode = null;
-        }
-        
-        public void PauseExecution()
-        {
-            _isExecuting = false;
-            if (_executionCoroutine != null)
-                StopCoroutine(_executionCoroutine);
-        }
-        
-        public void ResumeExecution()
-        {
-            if (_isExecuting || _executionQueue.Count == 0)
-                return;
-                
-            _isExecuting = true;
-            _executionCoroutine = StartCoroutine(ExecutionLoop());
-        }
-        
-        public void EnqueueNode(ProgNodeBase node, int outputSlotIndex = -1)
-        {
-            // _executionQueue.Enqueue(new ProgNodeExecutionCommand { 
-            //     Node = node, 
-            //     OutputSlotIndex = outputSlotIndex 
-            // });
-        }
-        
-        private IEnumerator ExecutionLoop()
-        {
-            while (_isExecuting && _executionQueue.Count > 0)
+            if (Input.GetKeyDown(KeyCode.I))
             {
-                // ProgNodeExecutionCommand command = _executionQueue.Dequeue();
-                // CurrentlyExecutingNode = command.Node;
-                //
-                // OnNodeExecutionStarted?.Invoke(command.Node);
-                //
-                // yield return StartCoroutine(command.Node.Execute(_context, this));
-                //
-                // OnNodeExecutionCompleted?.Invoke(command.Node);
-                
-                yield return null;
+                CreateTestProgram();
+            }
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                RunProgram();
+            }
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                StopProgram();
+            }
+        }
+        
+        public void Init(BotBase bot)
+        {
+            this.bot = bot;
+            executor = new BotProgramExecutor(bot);
+            
+            // Создаем тестовую программу
+            // CreateTestProgram();
+        }
+        
+        private void OnDestroy()
+        {
+            // Очищаем ресурсы при уничтожении компонента
+            if (executor != null)
+            {
+                executor.Cleanup();
+            }
+        }
+        
+        private void CreateTestProgram()
+        {
+            // Проверяем, не создана ли уже программа
+            if (programCreated)
+            {
+                return;
             }
             
-            _isExecuting = false;
-            CurrentlyExecutingNode = null;
-            OnExecutionCompleted?.Invoke();
+            // Создаем ноды для нашей тестовой программы
+            var startIdleNode = new ProgNodeStateIdle();
+            var endIdleNode = new ProgNodeStateIdle(); // Отдельный экземпляр для конца программы
+            
+            var findItemNode = new ProgNodeFindAndPick("Test Item");
+            var findBuildingNode = new ProgNodeFindBuilding("Storage");
+            var moveToItemNode = new ProgNodeMoveTo();
+            var moveToBuildingNode = new ProgNodeMoveTo();
+            var putNode = new ProgNodePut();
+            
+            // Соединяем потоковые слоты (Stream Slots)
+            startIdleNode.Slots[0].Connect(findItemNode); // Start Idle -> FindAndPick
+            
+            findItemNode.Slots[0].Connect(moveToItemNode); // FindAndPick Success -> MoveTo(item)
+            findItemNode.Slots[1].Connect(endIdleNode); // FindAndPick Failure -> End Idle
+            
+            moveToItemNode.Slots[0].Connect(findBuildingNode); // MoveTo(item) Success -> FindBuilding
+            moveToItemNode.Slots[1].Connect(endIdleNode); // MoveTo(item) Failure -> End Idle
+            
+            findBuildingNode.Slots[0].Connect(moveToBuildingNode); // FindBuilding Success -> MoveTo(building)
+            findBuildingNode.Slots[1].Connect(endIdleNode); // FindBuilding Failure -> End Idle
+            
+            moveToBuildingNode.Slots[0].Connect(putNode); // MoveTo(building) Success -> Put
+            moveToBuildingNode.Slots[1].Connect(endIdleNode); // MoveTo(building) Failure -> End Idle
+            
+            putNode.Slots[0].Connect(startIdleNode); // Put Success -> Start Idle (цикл)
+            putNode.Slots[1].Connect(endIdleNode); // Put Failure -> End Idle
+            
+            // Находим слоты данных в нодах
+            ProgNodeDataSlot<InventoryItemData> findItemOutputSlot = null;
+            ProgNodeDataSlot<Building> findBuildingOutputSlot = null;
+            ProgNodeDataSlot<object> moveToItemTargetSlot = null;
+            ProgNodeDataSlot<object> moveToBuildingTargetSlot = null;
+            ProgNodeDataSlot<InventoryItemData> putItemSlot = null;
+            ProgNodeDataSlot<Building> putBuildingSlot = null;
+            
+            // Находим нужные слоты в нодах
+            foreach (var slot in findItemNode.Slots)
+            {
+                if (slot is ProgNodeDataSlot<InventoryItemData> dataSlot && slot.SlotName == "Found Item")
+                {
+                    findItemOutputSlot = dataSlot;
+                    break;
+                }
+            }
+            
+            foreach (var slot in findBuildingNode.Slots)
+            {
+                if (slot is ProgNodeDataSlot<Building> dataSlot && slot.SlotName == "Found Building")
+                {
+                    findBuildingOutputSlot = dataSlot;
+                    break;
+                }
+            }
+            
+            foreach (var slot in moveToItemNode.Slots)
+            {
+                if (slot is ProgNodeDataSlot<object> dataSlot && slot.SlotName == "Target")
+                {
+                    moveToItemTargetSlot = dataSlot;
+                    break;
+                }
+            }
+            
+            foreach (var slot in moveToBuildingNode.Slots)
+            {
+                if (slot is ProgNodeDataSlot<object> dataSlot && slot.SlotName == "Target")
+                {
+                    moveToBuildingTargetSlot = dataSlot;
+                    break;
+                }
+            }
+            
+            foreach (var slot in putNode.Slots)
+            {
+                if (slot is ProgNodeDataSlot<InventoryItemData> dataSlotItem && slot.SlotName == "Item")
+                {
+                    putItemSlot = dataSlotItem;
+                }
+                else if (slot is ProgNodeDataSlot<Building> dataSlotBuilding && slot.SlotName == "Building")
+                {
+                    putBuildingSlot = dataSlotBuilding;
+                }
+            }
+            
+            // Соединяем слоты данных напрямую
+            // Для MoveTo Item нужно преобразовать тип InventoryItemData в object
+            if (findItemOutputSlot != null && moveToItemTargetSlot != null)
+            {
+                // Создаем адаптер для преобразования типов
+                var itemToObjectAdapter = new DataSlotAdapter<InventoryItemData, object>(
+                    findItemOutputSlot,
+                    item => item as object // Преобразование InventoryItemData в object
+                );
+                
+                // Подключаем адаптер к слоту Target
+                moveToItemTargetSlot.SetAdapter(itemToObjectAdapter);
+                Debug.Log("Connected item output to MoveTo target slot through adapter");
+            }
+            
+            // Для MoveTo Building нужно преобразовать тип Building в object
+            if (findBuildingOutputSlot != null && moveToBuildingTargetSlot != null)
+            {
+                // Создаем адаптер для преобразования типов
+                var buildingToObjectAdapter = new DataSlotAdapter<Building, object>(
+                    findBuildingOutputSlot,
+                    building => building as object // Преобразование Building в object
+                );
+                
+                // Подключаем адаптер к слоту Target
+                moveToBuildingTargetSlot.SetAdapter(buildingToObjectAdapter);
+                Debug.Log("Connected building output to MoveTo target slot through adapter");
+            }
+            
+            // Для Put нужно прямое подключение
+            if (findItemOutputSlot != null && putItemSlot != null)
+            {
+                putItemSlot.ConnectToDataSlot(findItemOutputSlot);
+                Debug.Log("Connected item output to Put item slot");
+            }
+            
+            if (findBuildingOutputSlot != null && putBuildingSlot != null)
+            {
+                putBuildingSlot.ConnectToDataSlot(findBuildingOutputSlot);
+                Debug.Log("Connected building output to Put building slot");
+            }
+            
+            // Устанавливаем корневую ноду
+            rootNode = startIdleNode;
+            programCreated = true;
+            
+            Debug.Log("BIBA");
+        }
+        
+        // Метод для запуска программы
+        public void RunProgram()
+        {
+            if (rootNode == null)
+            {
+                Debug.LogWarning("No program to run");
+                return;
+            }
+            
+            StartCoroutine(executor.ExecuteNode(rootNode));
+        }
+        
+        public void StopProgram()
+        {
+            StopAllCoroutines();
         }
     }
 }
