@@ -63,11 +63,6 @@ namespace Player
             }
         }
 
-        public bool IsWalking()
-        {
-            return _isWalking;
-        }
-
         public Vector3 GetMoveDir()
         {
             return _moveDir;

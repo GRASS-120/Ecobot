@@ -38,31 +38,19 @@ namespace Bot.Programming
         {
             this.bot = bot;
             executor = new BotProgramExecutor(bot);
-            
-            // Создаем тестовую программу
-            // CreateTestProgram();
         }
         
         private void OnDestroy()
         {
-            // Очищаем ресурсы при уничтожении компонента
-            if (executor != null)
-            {
-                executor.Cleanup();
-            }
+            executor?.Cleanup();
         }
         
         private void CreateTestProgram()
         {
-            // Проверяем, не создана ли уже программа
-            if (programCreated)
-            {
-                return;
-            }
+            if (programCreated) return;
             
-            // Создаем ноды для нашей тестовой программы
             var startIdleNode = new ProgNodeStateIdle();
-            var endIdleNode = new ProgNodeStateIdle(); // Отдельный экземпляр для конца программы
+            var endIdleNode = new ProgNodeStateIdle(); 
             
             var findItemNode = new ProgNodeFindAndPick("Test Item");
             var findBuildingNode = new ProgNodeFindBuilding("Storage");

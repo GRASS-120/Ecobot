@@ -67,9 +67,9 @@ namespace Bot.Programming.Nodes.Concrete
             
             Debug.Log($"[{NodeName}] Moving to position: {targetPosition}");
             // Создаем и выполняем команду движения
-            // var moveCommand = bot.CommandController.Fabric.CreateMoveCommand(targetPosition);
-            // bot.CommandController.AddCommand(moveCommand);
-            // moveCommand.Execute();
+            var moveCommand = bot.CommandController.Fabric.CreateMoveCommand(targetPosition);
+            bot.CommandController.AddCommand(moveCommand);
+            moveCommand.Execute();
             
             // Симулируем движение для тестирования
             yield return new WaitForSeconds(0.5f);

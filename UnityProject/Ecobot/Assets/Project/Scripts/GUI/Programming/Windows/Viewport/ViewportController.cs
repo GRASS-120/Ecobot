@@ -17,14 +17,14 @@ namespace GUI.Programming.Windows.Viewport
     
         [Header("Drag Settings")]
         [SerializeField] private bool dragWithMiddleMouse = true;
-        [SerializeField] private bool dragWithRightMouse = false;
+        [SerializeField] private bool dragWithRightMouse;
         [SerializeField] private bool clampToBounds = true; // Ограничить перемещение границами видимой области
         
         private Vector2 _lastMousePosition;
         
         public void OnPointerUp(PointerEventData eventData)
         {
-            Debug.Log("OnPointerUp");
+            // Debug.Log("OnPointerUp");
             if ((dragWithMiddleMouse && eventData.button == PointerEventData.InputButton.Middle) ||
                 (dragWithRightMouse && eventData.button == PointerEventData.InputButton.Right))
             {
@@ -35,7 +35,7 @@ namespace GUI.Programming.Windows.Viewport
         
         public void OnPointerDown(PointerEventData eventData)
         {
-            Debug.Log("OnPointerDown");
+            // Debug.Log("OnPointerDown");
             // Проверяем, что нажата нужная кнопка мыши
             if ((dragWithMiddleMouse && eventData.button == PointerEventData.InputButton.Middle) ||
                 (dragWithRightMouse && eventData.button == PointerEventData.InputButton.Right))
@@ -49,7 +49,7 @@ namespace GUI.Programming.Windows.Viewport
 
         public void OnDrag(PointerEventData eventData)
         {
-            Debug.Log("OnDrag");
+            // Debug.Log("OnDrag");
             // Проверяем, что перетаскивание происходит нужной кнопкой мыши
             if ((dragWithMiddleMouse && eventData.button == PointerEventData.InputButton.Middle) ||
                 (dragWithRightMouse && eventData.button == PointerEventData.InputButton.Right))
