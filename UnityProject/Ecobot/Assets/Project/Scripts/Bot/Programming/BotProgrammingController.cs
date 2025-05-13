@@ -134,41 +134,27 @@ namespace Bot.Programming
             }
             
             // Соединяем слоты данных напрямую
-            // Для MoveTo Item нужно преобразовать тип InventoryItemData в object
+            // Для MoveTo Item - прямое подключение с автоматическим преобразованием
             if (findItemOutputSlot != null && moveToItemTargetSlot != null)
             {
-                // Создаем адаптер для преобразования типов
-                var itemToObjectAdapter = new DataSlotAdapter<InventoryItemData, object>(
-                    findItemOutputSlot,
-                    item => item as object // Преобразование InventoryItemData в object
-                );
-                
-                // Подключаем адаптер к слоту Target
-                moveToItemTargetSlot.SetAdapter(itemToObjectAdapter);
-                Debug.Log("Connected item output to MoveTo target slot through adapter");
+                moveToItemTargetSlot.ConnectToDataSlot(findItemOutputSlot);
+                Debug.Log("Connected item output to MoveTo target slot");
             }
-            
-            // Для MoveTo Building нужно преобразовать тип Building в object
+
+            // Для MoveTo Building - прямое подключение с автоматическим преобразованием
             if (findBuildingOutputSlot != null && moveToBuildingTargetSlot != null)
             {
-                // Создаем адаптер для преобразования типов
-                var buildingToObjectAdapter = new DataSlotAdapter<Building, object>(
-                    findBuildingOutputSlot,
-                    building => building as object // Преобразование Building в object
-                );
-                
-                // Подключаем адаптер к слоту Target
-                moveToBuildingTargetSlot.SetAdapter(buildingToObjectAdapter);
-                Debug.Log("Connected building output to MoveTo target slot through adapter");
+                moveToBuildingTargetSlot.ConnectToDataSlot(findBuildingOutputSlot);
+                Debug.Log("Connected building output to MoveTo target slot");
             }
-            
-            // Для Put нужно прямое подключение
+
+            // Для Put - прямое подключение
             if (findItemOutputSlot != null && putItemSlot != null)
             {
                 putItemSlot.ConnectToDataSlot(findItemOutputSlot);
                 Debug.Log("Connected item output to Put item slot");
             }
-            
+
             if (findBuildingOutputSlot != null && putBuildingSlot != null)
             {
                 putBuildingSlot.ConnectToDataSlot(findBuildingOutputSlot);

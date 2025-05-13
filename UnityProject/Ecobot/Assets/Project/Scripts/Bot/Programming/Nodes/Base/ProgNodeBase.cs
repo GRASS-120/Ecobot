@@ -9,7 +9,7 @@ namespace Bot.Programming.Nodes.Base
         public string NodeName { get; protected set; }
         public string Description { get; protected set; }
         
-        protected List<ProgNodeSlotBase> slots = new List<ProgNodeSlotBase>();
+        protected List<ProgNodeSlotBase> slots = new ();
         
         public List<ProgNodeSlotBase> Slots => slots;
         

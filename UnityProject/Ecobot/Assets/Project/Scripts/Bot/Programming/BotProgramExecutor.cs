@@ -42,21 +42,6 @@ namespace Bot.Programming
         // Метод для очистки созданных объектов
         public void Cleanup()
         {
-            foreach (var obj in createdObjects)
-            {
-                if (obj != null)
-                {
-                    if (Application.isPlaying)
-                    {
-                        Object.Destroy(obj);
-                    }
-                    else
-                    {
-                        Object.DestroyImmediate(obj);
-                    }
-                }
-            }
-            
             createdObjects.Clear();
             simulatedItems.Clear();
             simulatedBuildings.Clear();

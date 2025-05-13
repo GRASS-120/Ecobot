@@ -7,30 +7,37 @@ namespace Bot.Programming.Nodes.Slots
     public class ProgNodeDataSlot<T> : ProgNodeSlotBase
     {
         private T value;
-        private ProgNodeDataSlot<T> connectedDataSlot; // Слот, к которому подключен этот слот
-        private object adapter; // Адаптер для преобразования типов
-    
+        private ProgNodeSlotBase connectedSlot; // Может быть слот любого типа
+        private Func<object, T> converter; // Функция конвертации значения из подключенного слота
+
         public T Value 
         { 
             get 
             {
-                // Если есть адаптер, используем его
-                if (adapter != null)
+                // Если слот подключен к другому слоту данных
+                if (connectedSlot != null)
                 {
-                    // Используем рефлексию для вызова GetValue()
-                    var method = adapter.GetType().GetMethod("GetValue");
+                    // Получаем значение из подключенного слота
+                    var method = connectedSlot.GetType().GetMethod("GetValue");
                     if (method != null)
                     {
-                        return (T)method.Invoke(adapter, null);
+                        object sourceValue = method.Invoke(connectedSlot, null);
+                        
+                        // Если есть функция конвертации, используем её
+                        if (converter != null)
+                        {
+                            return converter(sourceValue);
+                        }
+                        
+                        // Если типы совместимы, просто приводим
+                        if (sourceValue is T typedValue)
+                        {
+                            return typedValue;
+                        }
                     }
                 }
-            
-                // Если слот подключен к другому слоту данных, получаем значение из него
-                if (connectedDataSlot != null)
-                {
-                    return connectedDataSlot.value;
-                }
-            
+                
+                // Возвращаем собственное значение, если нет подключения или конвертация не удалась
                 return value;
             }
             set 
@@ -38,26 +45,37 @@ namespace Bot.Programming.Nodes.Slots
                 this.value = value; 
             }
         }
-    
+
         public ProgNodeDataSlot(string slotName, ProgNodeBase owner) : base(slotName, owner) { }
-    
-        // Соединяет этот слот с другим слотом данных
-        public void ConnectToDataSlot(ProgNodeDataSlot<T> otherSlot)
+
+        // Метод для получения значения (используется при подключении)
+        public T GetValue()
         {
-            if (otherSlot != null && otherSlot != this)
+            return Value;
+        }
+
+        // Соединяет этот слот с другим слотом данных
+        public void ConnectToDataSlot<TSource>(ProgNodeDataSlot<TSource> sourceSlot, Func<TSource, T> conversionFunc = null)
+        {
+            if (sourceSlot != null)
             {
-                connectedDataSlot = otherSlot;
-                Debug.Log($"Connected data slot {SlotName} to {otherSlot.SlotName}");
+                connectedSlot = sourceSlot;
+                
+                // Если предоставлена функция конвертации, используем её
+                if (conversionFunc != null)
+                {
+                    converter = (obj) => conversionFunc((TSource)obj);
+                }
+                // Иначе пытаемся использовать прямое приведение типов
+                else if (typeof(TSource).IsAssignableFrom(typeof(T)) || typeof(T).IsAssignableFrom(typeof(TSource)))
+                {
+                    converter = (obj) => (T)obj;
+                }
+                
+                Debug.Log($"Connected data slot {SlotName} to {sourceSlot.SlotName}");
             }
         }
-    
-        // Устанавливает адаптер для преобразования типов
-        public void SetAdapter(object adapter)
-        {
-            this.adapter = adapter;
-            Debug.Log($"Set adapter for data slot {SlotName}");
-        }
-    
+
         public override bool CanConnect(ProgNodeBase node)
         {
             // Этот метод используется для соединения потоковых слотов, а не слотов данных
