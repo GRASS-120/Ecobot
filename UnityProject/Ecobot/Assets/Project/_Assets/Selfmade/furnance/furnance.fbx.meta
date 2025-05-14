@@ -1,9 +1,29 @@
 fileFormatVersion: 2
-guid: 4fbda53ab32b19d4f9f4113db2d5e302
+guid: 41c2afc736ec4324f94a347bc57d291a
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: extra_mat
+    second: {fileID: 2100000, guid: 985ef44ddba64604ea6a1cf41df70a9e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: main_mat
+    second: {fileID: 2100000, guid: eeefe3798bb348b4ca61cc01e37a3057, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Pech texture
+    second: {fileID: 2800000, guid: 4566f29e72728d749a06c893cf64cd74, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: extra_pech_tex
+    second: {fileID: 2800000, guid: 2662cc9374973e64fb18b7381e2e119d, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -97,7 +117,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
