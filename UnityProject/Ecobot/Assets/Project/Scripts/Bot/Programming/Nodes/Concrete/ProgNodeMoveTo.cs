@@ -27,29 +27,33 @@ namespace Bot.Programming.Nodes.Concrete
             
             if (target != null)
             {
-                // Получаем позицию в зависимости от типа объекта
-                if (target is InventoryItemData item)
-                {
-                    // targetPosition = item.transform.position;
-                    targetPosition = new Vector3(5F, 0F, 5F);
+                // bool success = executor.SimulateFindItem();
 
-                    hasTarget = true;
-                }
-                else if (target is Building building)
-                {
-                    targetPosition = building.transform.position;
-                    hasTarget = true;
-                }
-                else if (target is Transform transform)
-                {
-                    targetPosition = transform.position;
-                    hasTarget = true;
-                }
-                else if (target is GameObject gameObject)
-                {
-                    targetPosition = gameObject.transform.position;
-                    hasTarget = true;
-                }
+                
+                // targetPosition = executor.GetItemPosition(target);
+                // // Получаем позицию в зависимости от типа объекта
+                // if (target is InventoryItemData item)
+                // {
+                //     // targetPosition = item.transform.position;
+                //     // targetPosition = new Vector3(5F, 0F, 5F);
+                //
+                //     hasTarget = true;
+                // }
+                // else if (target is Building building)
+                // {
+                //     targetPosition = building.transform.position;
+                //     hasTarget = true;
+                // }
+                // else if (target is Transform transform)
+                // {
+                //     targetPosition = transform.position;
+                //     hasTarget = true;
+                // }
+                // else if (target is GameObject gameObject)
+                // {
+                //     targetPosition = gameObject.transform.position;
+                //     hasTarget = true;
+                // }
             }
             
             if (!hasTarget)
