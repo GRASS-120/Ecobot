@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 455078f5b1c85f647bfcbd177f5ef85e
+guid: 9908f4abd89317f45ad38590cfe8741a
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,38 +7,93 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: "\u043E\u0441\u043D\u043E\u0432\u043D\u043E\u0439"
-    second: {fileID: 2100000, guid: 53a32d34f6bc329439a9794fb0ad96f5, type: 2}
+      name: box
+    second: {fileID: 2100000, guid: 5ab0695835b5ab3498e6cb07790322c3, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: "\u0440\u0443\u0434\u0430"
-    second: {fileID: 2100000, guid: f6cca19a9ef04fd4aa5faf76fe5a01f8, type: 2}
+      name: gas_station
+    second: {fileID: 2100000, guid: 9ea9d46e0fa8c614b9cb6b20f7ccd2a6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hammer
+    second: {fileID: 2100000, guid: 74c56293fd26a6949b12191728f8bb87, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: key
+    second: {fileID: 2100000, guid: 5699877bdb7c3974ca72be36a0dbaf29, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lump
+    second: {fileID: 2100000, guid: 5a473a531f044f044b167cf5f963f30e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: plan
+    second: {fileID: 2100000, guid: adc824f14f5095148bdcdd7f279a97bc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pres
+    second: {fileID: 2100000, guid: ed4d53387c5a44b4faafe4ffd1b80fc4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: table
+    second: {fileID: 2100000, guid: 8332f442cc8c7074c8e518e3a4f769cf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: vernier_calipers
+    second: {fileID: 2100000, guid: 3328851ac8e36f84588a077dba2a8479, type: 2}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
-      name: "\u043A\u0430\u043C\u0435\u043D\u044C \u043C\u0435\u0442\u0430\u043B"
-    second: {fileID: 2800000, guid: e55439f04ec43424bb1d24e890f816eb, type: 3}
+      name: box_tex
+    second: {fileID: 2800000, guid: 3b2a98ffd134c834bbc81b8202699af1, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
-      name: "\u043A\u0430\u043C\u0435\u043D\u044C \u0446\u0432\u0435\u0442"
-    second: {fileID: 2800000, guid: a6d6a665eae727142b2cc41504266d74, type: 3}
+      name: gas_station_tex
+    second: {fileID: 2800000, guid: 4dc41dac6da640348a5a8201eddd7f06, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
-      name: "\u043E\u0441\u043D\u043E\u0432\u0430 \u043C\u0435\u0442\u0430\u043B"
-    second: {fileID: 2800000, guid: 278a5644406c6c944828aefa9171010a, type: 3}
+      name: hammer_tex
+    second: {fileID: 2800000, guid: 85f28d2b3e09bc34db8d4cd46c2a0d05, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
-      name: "\u043E\u0441\u043D\u043E\u0432\u0430 \u0446\u0432\u0435\u0442"
-    second: {fileID: 2800000, guid: d9828423e6cf7994dabca5afd56179a0, type: 3}
+      name: key_tex
+    second: {fileID: 2800000, guid: 6351e80c06e1cda46be6ac3cebcb5e75, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
-      name: "\u043E\u0441\u043D\u043E\u0432\u0430 \u0448\u0435\u0440\u043E\u0445\u043E\u0432\u0430\u0442\u043E\u0441\u0442\u044C"
-    second: {fileID: 2800000, guid: de3931907c34218488f5c27acf2bbf1d, type: 3}
+      name: lump_tex
+    second: {fileID: 2800000, guid: 410cb9035953d3847bf231c89e2e04bf, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: plan
+    second: {fileID: 2800000, guid: 40c27efb77421904d8bc60c5992f0b54, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: pres_tex
+    second: {fileID: 2800000, guid: da5d6cfc0f61c484c89821cba48682fd, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: tex_verstak
+    second: {fileID: 2800000, guid: 9b7a10311207845459f278a80a73a90b, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: vernier_calipers_tex
+    second: {fileID: 2800000, guid: be8068e761ad5b945aabce5154806fc5, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -64,36 +119,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations:
-    - serializedVersion: 16
-      name: "\u0410\u0440\u043C\u0430\u0442\u0443\u0440\u0430|\u0410\u0440\u043C\u0430\u0442\u0443\u0440\u0430Action"
-      takeName: "\u0410\u0440\u043C\u0430\u0442\u0443\u0440\u0430|\u0410\u0440\u043C\u0430\u0442\u0443\u0440\u0430Action"
-      internalID: -6641176737478421468
-      firstFrame: 1
-      lastFrame: 220
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+    clipAnimations: []
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -161,7 +187,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
