@@ -9,6 +9,7 @@ namespace Player
         [Title("Components")]
         [SerializeField] private PlayerInputManager inputManager;
         [SerializeField] private PlayerCameraManager cameraManager;
+        [SerializeField] private PlayerInteractor interactor;
 
         [Title("Params")]
         [SerializeField] private float moveSpeed = 5f;
@@ -26,11 +27,14 @@ namespace Player
             _characterController = GetComponent<CharacterController>();
             _mainCamera = cameraManager.MainCamera; 
             _groundMask = LayerMask.GetMask(Const.GROUND_LAYER);
+            
+            interactor.Init(this);
         }
 
         private void Update() {
             HandleMovement();
             HandleRotation();
+            
             cameraManager.HandleCamera();
         }
 

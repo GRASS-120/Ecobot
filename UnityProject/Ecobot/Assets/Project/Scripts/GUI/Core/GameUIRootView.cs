@@ -23,9 +23,7 @@ namespace GUI.Core
             _gameManager = gameManager;
             
             Dispatch(rootViewModel);
-
-            // todo: временно. Я В АХУЕ с того, какая это непонятная система, гайд хуйни просто посмотрел... теперь
-            // сидеть все переписывать... но это позже
+            
             gameplayUIManager.Init(rootViewModel, _gameManager);
             programmingUIManager.Init(rootViewModel, _gameManager);
         }

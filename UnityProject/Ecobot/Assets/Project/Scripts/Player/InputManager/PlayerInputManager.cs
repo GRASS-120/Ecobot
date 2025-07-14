@@ -2,6 +2,7 @@ using System;
 using Game;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 namespace Player.InputManager
 {
@@ -9,14 +10,14 @@ namespace Player.InputManager
         public event Action OnToggleBuildMode;
         public event Action OnRotateBuilding;
         public event Action OnDemountBuilding;
-        
-        // добавить сюда ивенты для start, cancel и тп?
-        public event Action OnInteract; 
-        public event Action OnAltInteract; 
+        public event Action OnInteract;
+        public event Action OnHoldInteraction;
+        public event Action OnHoldInteractCanceled;
 
         [SerializeField] private GameManager gameManager;
     
         private PlayerInputAction _inputActions;
+        // private 
     
         private void Awake()
         {
@@ -24,8 +25,19 @@ namespace Player.InputManager
             _inputActions.GameplayMode.Enable();
 
             _inputActions.GameplayMode.ToggleBuildMode.performed += ToggleBuildMode_Callback;
-            _inputActions.GameplayMode.Interact.performed += OnInteract_Callback;
-            _inputActions.GameplayMode.AltInteract.performed += OnAltInteract_Callback;
+            
+            _inputActions.GameplayMode.Interact.performed += OnInteractPerformed_Callback;
+
+
+            var a = _inputActions.GameplayMode.Interact.bindings;
+            foreach (var action in a)
+            {
+                // Debug.Log(action.interactions.Contains("Hold"));
+            }
+            
+            // Debug.Log(_inputActions.GameplayMode.Interact.bindings);
+            
+            _inputActions.GameplayMode.Interact.canceled += OnInteractCanceled_Callback;
             
             _inputActions.BuildingMode.RotateBuilding.performed += RotateBuilding_Callback;
             _inputActions.BuildingMode.DemountBuilding.performed += DemountBuilding_Callback;
@@ -69,12 +81,27 @@ namespace Player.InputManager
             OnToggleBuildMode?.Invoke();
         }
         
-        private void OnInteract_Callback(InputAction.CallbackContext context) {
-            OnInteract?.Invoke();
+        private void OnInteractPerformed_Callback(InputAction.CallbackContext context)
+        {
+            switch (context.interaction)
+            {
+                case PressInteraction:
+                    OnInteract?.Invoke();
+                    break;
+                case HoldInteraction:
+                    OnHoldInteraction?.Invoke();
+                    break;
+            }
         }
         
-        private void OnAltInteract_Callback(InputAction.CallbackContext context) {
-            OnAltInteract?.Invoke();
+        // TODO: пока что cancel срабатывает всегда... хз как это исправить
+        // идея - можно на разные action раскидать зажатие и нажатие!
+        private void OnInteractCanceled_Callback(InputAction.CallbackContext context)
+        {
+            if (context.interaction is HoldInteraction)
+            {
+                OnHoldInteractCanceled?.Invoke();
+            }
         }
 
         public Vector2 GetMovementVectorNormalized() {

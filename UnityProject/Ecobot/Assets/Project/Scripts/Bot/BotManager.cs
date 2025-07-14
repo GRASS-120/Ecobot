@@ -23,13 +23,13 @@ namespace Bot
             }
         }
 
-        // private void Start()
-        // {
-        //     foreach (var bot in bots)
-        //     {
-        //         var c = bot.CommandController.Fabric.CreateMoveCommand(target.position);
-        //         bot.CommandController.AddCommand(c);
-        //     }
-        // }
+        private void Start()
+        {
+            foreach (var bot in bots)
+            {
+                var c = bot.CommandController.Fabric.CreateMoveCommand(target.position);
+                bot.CommandController.AddCommand(c);
+            }
+        }
     }
 }

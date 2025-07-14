@@ -1,0 +1,274 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &906060871755860181
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4626569896699835539}
+  - component: {fileID: 8188168263822259689}
+  m_Layer: 0
+  m_Name: CoalOre
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4626569896699835539
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906060871755860181}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.6830128, y: 0.18301243, z: 0.18301235, w: 0.68301284}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5029099754389635499}
+  - {fileID: 5927670447375811514}
+  - {fileID: 7757327859081767566}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8188168263822259689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906060871755860181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5ccd5ccdd4a4d0584da8e982034dfe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 0}
+  currentCapacity:
+    value: 0
+--- !u!1001 &676942543086986685
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4626569896699835539}
+    m_Modifications:
+    - target: {fileID: 7116649752099540787, guid: 77e746d9b14b6934e964667b14b7fee2,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.788715
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116649752099540787, guid: 77e746d9b14b6934e964667b14b7fee2,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.8437288
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116649752099540787, guid: 77e746d9b14b6934e964667b14b7fee2,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.12939656
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116649752099540787, guid: 77e746d9b14b6934e964667b14b7fee2,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116649752099540787, guid: 77e746d9b14b6934e964667b14b7fee2,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116649752099540787, guid: 77e746d9b14b6934e964667b14b7fee2,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116649752099540787, guid: 77e746d9b14b6934e964667b14b7fee2,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116649752099540787, guid: 77e746d9b14b6934e964667b14b7fee2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116649752099540787, guid: 77e746d9b14b6934e964667b14b7fee2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116649752099540787, guid: 77e746d9b14b6934e964667b14b7fee2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116649752099574547, guid: 77e746d9b14b6934e964667b14b7fee2,
+        type: 3}
+      propertyPath: m_Name
+      value: PP_Stone Wall_Veins_03_Iron
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 77e746d9b14b6934e964667b14b7fee2, type: 3}
+--- !u!4 &7757327859081767566 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7116649752099540787, guid: 77e746d9b14b6934e964667b14b7fee2,
+    type: 3}
+  m_PrefabInstance: {fileID: 676942543086986685}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7209712750596698640
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4626569896699835539}
+    m_Modifications:
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572893578, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_Name
+      value: PP_Stone Wall_Veins_01_Iron (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0d518bda19e3e204d8670b88876f23c6, type: 3}
+--- !u!4 &5927670447375811514 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 7209712750596698640}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8324808001200795649
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4626569896699835539}
+    m_Modifications:
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.5055223
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.4953778
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.96592593
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.000000059604638
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.000000059604638
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.2588186
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912884058572893578, guid: 0d518bda19e3e204d8670b88876f23c6,
+        type: 3}
+      propertyPath: m_Name
+      value: PP_Stone Wall_Veins_01_Iron
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0d518bda19e3e204d8670b88876f23c6, type: 3}
+--- !u!4 &5029099754389635499 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3912884058572534186, guid: 0d518bda19e3e204d8670b88876f23c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 8324808001200795649}
+  m_PrefabAsset: {fileID: 0}

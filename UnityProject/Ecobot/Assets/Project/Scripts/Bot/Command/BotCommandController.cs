@@ -24,7 +24,7 @@ namespace Bot.Command
             _commands.Add(command);
         }
 
-        // [Button("Click me")]
+        [Button("Click me")]
         public void Play()
         {
             foreach (var command in _commands.ToList())

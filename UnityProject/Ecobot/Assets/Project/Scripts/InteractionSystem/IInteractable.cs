@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Collections;
+using FiniteStateMachine;
 
 namespace InteractionSystem
 {
     public interface IInteractable
     {
-        // public event Action<IInteractable> OnInteractionComplete;
+        public virtual void Interact(IInteractor interactor) {}
 
-        // + hold interaction
-        
-        // public void StartInteraction(IInteractor interactor);
-        // public void StopInteraction(IInteractor interactor);
-        
-        public void Interact(IInteractor interactor);
-        public void AltInteract(IInteractor interactor);
+        public virtual IEnumerator HoldInteract(IInteractor interactor)
+        {
+            yield return null;
+        }
+
+        public virtual void HoldInteractionCancel(IInteractor interactor) {}
     }
 }

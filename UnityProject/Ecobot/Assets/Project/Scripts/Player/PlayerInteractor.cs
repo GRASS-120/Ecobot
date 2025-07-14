@@ -1,38 +1,42 @@
-﻿using InteractionSystem;
-using Player.InputManager;
+﻿using System;
+using System.Collections;
+using InteractionSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
-
-// пока через инпуты, но потом нужно сделать так, чтобы и роботы наверное могли nteract делать... но как?
+using UnityEngine.InputSystem;
+using PlayerInputManager = Player.InputManager.PlayerInputManager;
 
 namespace Player
 {
     public class PlayerInteractor : MonoBehaviour, IInteractor
     {
-        [Title("Components")]
+        [Header("Components")]
         [SerializeField] private Transform interactorSource;
         
-        [Title("Interaction Params")]
-        [SerializeField] private float interactionRange = 10f;
+        [Header("Interaction Params")]
+        [SerializeField] private float interactionRange = 20f;
         
         public Transform InteractorSource { get; set; }
-        
-        private PlayerManager _player;
+        public bool IsHoldInteracting { get; set; }
+
         private PlayerInputManager _input;
         
-        private void Awake()
+        private IInteractable _currentInteractable;
+        
+        public void Init(PlayerManager player)
         {
-            _player = GetComponent<PlayerManager>();
-            _input = _player.Input;
+            _input = player.Input;
             InteractorSource = interactorSource;
             
-            _input.OnInteract += HandleInteractions;
-            _input.OnAltInteract += HandleAltInteractions;
-
+            _input.OnInteract += HandleInteraction;
+            _input.OnHoldInteraction += HandleHoldInteraction;
+            _input.OnHoldInteractCanceled += HandleHoldInteractionCanceled;
         }
         
-        public void HandleInteractions()
+        public void HandleInteraction()
         {
+            Debug.Log("HandleInteraction");
+            
             var r = new Ray(InteractorSource.position, InteractorSource.forward);
             if (Physics.Raycast(r, out RaycastHit hit, interactionRange))
             {
@@ -42,28 +46,34 @@ namespace Player
                 }
             }
         }
-        
-        public void HandleAltInteractions()
+
+        public void HandleHoldInteraction()
         {
             var r = new Ray(InteractorSource.position, InteractorSource.forward);
             if (Physics.Raycast(r, out RaycastHit hit, interactionRange))
             {
                 if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
                 {
-                    interactable.AltInteract(this);
+                    _currentInteractable = interactable;
+                    IsHoldInteracting = true;
+                    
+                    StartCoroutine(interactable.HoldInteract(this));
                 }
             }
         }
 
-        // private void StartInteraction(IInteractable interactable)
-        // {
-        //     // interactable.Interact(this, out bool success);
-        //     IsInteracting = true;
-        // }
-        //
-        // void EndInteraction()
-        // {
-        //     IsInteracting = false;
-        // }
+        public void HandleHoldInteractionCanceled()
+        {
+            if (_currentInteractable == null) return;
+            
+            Debug.Log("HandleHoldInteractionCanceled");
+            
+            StopCoroutine(_currentInteractable.HoldInteract(this));
+            
+            _currentInteractable.HoldInteractionCancel(this);
+            
+            IsHoldInteracting = true;
+            _currentInteractable = null;
+        }
     }
 }
