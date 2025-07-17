@@ -11,10 +11,5 @@ namespace GUI.Gameplay.Windows
         {
             _uiManager = uiManager;
         }
-        
-        public void RequestOpenPopupA()
-        {
-            _uiManager.OpenPopupA();
-        }
     }
 }

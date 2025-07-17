@@ -13,7 +13,7 @@ namespace Inventory.UI
 
             if (inventoryHolder != null)
             {
-                inventorySystem = inventoryHolder.PrimaryInventorySystem;
+                // inventorySystem = inventoryHolder.PrimaryInventorySystem;
                 inventorySystem.OnInventorySlotChanged += UpdateSlot;  // ???? почему добавили? (при добавлении рюкзака)
             }
             else Debug.LogWarning($"No inv assigned to {this.gameObject}");

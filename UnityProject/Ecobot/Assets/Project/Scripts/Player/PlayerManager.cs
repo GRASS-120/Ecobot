@@ -1,3 +1,4 @@
+using Inventory;
 using Player.InputManager;
 using Player.PlayerCamera;
 using Sirenix.OdinInspector;
@@ -10,6 +11,7 @@ namespace Player
         [SerializeField] private PlayerInputManager inputManager;
         [SerializeField] private PlayerCameraManager cameraManager;
         [SerializeField] private PlayerInteractor interactor;
+        [SerializeField] private PlayerInventoryHolder inventory;
 
         [Title("Params")]
         [SerializeField] private float moveSpeed = 5f;
@@ -29,6 +31,7 @@ namespace Player
             _groundMask = LayerMask.GetMask(Const.GROUND_LAYER);
             
             interactor.Init(this);
+            inventory.Init(this);
         }
 
         private void Update() {

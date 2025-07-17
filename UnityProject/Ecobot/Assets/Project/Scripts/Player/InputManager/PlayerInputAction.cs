@@ -153,6 +153,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""626d1025-de1f-4fb8-b69d-728383dbac7a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -285,6 +294,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""AltInteract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""796cda7e-8e5b-420a-9820-a2d93599c4a9"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -462,6 +482,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_GameplayMode_AltInteract = m_GameplayMode.FindAction("AltInteract", throwIfNotFound: true);
         m_GameplayMode_MouseScroll = m_GameplayMode.FindAction("MouseScroll", throwIfNotFound: true);
         m_GameplayMode_MouseDelta = m_GameplayMode.FindAction("MouseDelta", throwIfNotFound: true);
+        m_GameplayMode_Inventory = m_GameplayMode.FindAction("Inventory", throwIfNotFound: true);
         // BuildingMode
         m_BuildingMode = asset.FindActionMap("BuildingMode", throwIfNotFound: true);
         m_BuildingMode_DemountBuilding = m_BuildingMode.FindAction("DemountBuilding", throwIfNotFound: true);
@@ -570,6 +591,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_GameplayMode_AltInteract;
     private readonly InputAction m_GameplayMode_MouseScroll;
     private readonly InputAction m_GameplayMode_MouseDelta;
+    private readonly InputAction m_GameplayMode_Inventory;
     /// <summary>
     /// Provides access to input actions defined in input action map "GameplayMode".
     /// </summary>
@@ -609,6 +631,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "GameplayMode/MouseDelta".
         /// </summary>
         public InputAction @MouseDelta => m_Wrapper.m_GameplayMode_MouseDelta;
+        /// <summary>
+        /// Provides access to the underlying input action "GameplayMode/Inventory".
+        /// </summary>
+        public InputAction @Inventory => m_Wrapper.m_GameplayMode_Inventory;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -656,6 +682,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @MouseDelta.started += instance.OnMouseDelta;
             @MouseDelta.performed += instance.OnMouseDelta;
             @MouseDelta.canceled += instance.OnMouseDelta;
+            @Inventory.started += instance.OnInventory;
+            @Inventory.performed += instance.OnInventory;
+            @Inventory.canceled += instance.OnInventory;
         }
 
         /// <summary>
@@ -688,6 +717,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @MouseDelta.started -= instance.OnMouseDelta;
             @MouseDelta.performed -= instance.OnMouseDelta;
             @MouseDelta.canceled -= instance.OnMouseDelta;
+            @Inventory.started -= instance.OnInventory;
+            @Inventory.performed -= instance.OnInventory;
+            @Inventory.canceled -= instance.OnInventory;
         }
 
         /// <summary>
@@ -1268,6 +1300,13 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMouseDelta(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Inventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventory(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "BuildingMode" which allows adding and removing callbacks.

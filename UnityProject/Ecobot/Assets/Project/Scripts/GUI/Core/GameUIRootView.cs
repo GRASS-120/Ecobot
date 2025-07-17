@@ -2,6 +2,7 @@
 using GUI.Gameplay;
 using GUI.Programming;
 using GUI.UIFramework;
+using Player;
 using UnityEngine;
 
 namespace GUI.Core
@@ -11,21 +12,15 @@ namespace GUI.Core
         [Header("UI Managers")]
         public GameplayUIManager gameplayUIManager;
         public ProgrammingUIManager programmingUIManager;
-        
-        private GameManager _gameManager;
-        
-        // concrete active manager depends on game mode
-        // и все? -> в целом можно использовать UIManager для переброса инфы между манагерами + проброс в них
-        // данных
 
-        public void Init(GameManager gameManager, GameUIRootViewModel rootViewModel)
+        public void Init(GameManager gameManager, PlayerManager player)
         {
-            _gameManager = gameManager;
+            var rootViewModel = new GameUIRootViewModel();
             
             Dispatch(rootViewModel);
             
-            gameplayUIManager.Init(rootViewModel, _gameManager);
-            programmingUIManager.Init(rootViewModel, _gameManager);
+            gameplayUIManager.Init(rootViewModel, gameManager, player);
+            programmingUIManager.Init(rootViewModel, gameManager);
         }
     }
 }

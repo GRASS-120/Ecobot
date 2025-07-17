@@ -1,4 +1,5 @@
 ﻿using System;
+using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -7,9 +8,8 @@ namespace Inventory
 {
     public class PlayerInventoryHolder : MonoBehaviour, IInventoryHolder
     {
-        // todo: убрать нахуй статик
-        public static Action<InventorySystem> OnPlayerBackpackDisplayRequested;
-        public static Action<InventorySystem> OnDynamicInventoryDisplayRequested;  // ! remake -> на event Action<>
+        // public event Action OnMainInventoryDisplayRequested;
+        // public event Action OnDynamicInventoryDisplayRequested; 
 
         [Header("Main Inventory")]
         [SerializeField] protected int mainInventorySize;
@@ -27,18 +27,17 @@ namespace Inventory
 
         public InventorySystem HotbarInventorySystem => hotbarInventorySystem;
         
-        private void Awake()
+        public void Init(PlayerManager player)
         {
             hotbarInventorySystem = new InventorySystem(hotbarInventorySize);
             mainInventorySystem = new InventorySystem(mainInventorySize);
+
+            player.Input.OnOpenInventory += HandleInventory;
         }
-        
-        private void Update()
+
+        private void HandleInventory()
         {
-            if (Keyboard.current.bKey.wasPressedThisFrame)
-            {
-                OnPlayerBackpackDisplayRequested?.Invoke(mainInventorySystem);
-            }
+            // load panel
         }
 
         public bool TryAddToInventory(InventoryItemData data, int amount)

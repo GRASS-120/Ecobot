@@ -18,14 +18,14 @@ namespace Inventory.UI
 
         private void OnEnable()
         {
-            IInventoryHolder.OnDynamicInventoryDisplayRequested += DisplayInventory;
-            PlayerInventoryHolder.OnPlayerBackpackDisplayRequested += DisplayPlayerBackpack;
+            // IInventoryHolder.OnDynamicInventoryDisplayRequested += DisplayInventory;
+            // PlayerInventoryHolder.OnPlayerBackpackDisplayRequested += DisplayPlayerBackpack;
         }
 
         private void OnDisable()
         {
-            IInventoryHolder.OnDynamicInventoryDisplayRequested -= DisplayInventory;
-            PlayerInventoryHolder.OnPlayerBackpackDisplayRequested -= DisplayPlayerBackpack;
+            // IInventoryHolder.OnDynamicInventoryDisplayRequested -= DisplayInventory;
+            // PlayerInventoryHolder.OnPlayerBackpackDisplayRequested -= DisplayPlayerBackpack;
 
         }
 

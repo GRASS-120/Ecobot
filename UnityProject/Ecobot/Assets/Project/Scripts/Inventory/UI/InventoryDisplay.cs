@@ -9,7 +9,6 @@ namespace Inventory.UI
 {
     public abstract class InventoryDisplay : MonoBehaviour
     {
-        [SerializeField] private GameManager gameManager;
         [SerializeField] private MouseInventoryItem mouseInventoryItem;
         
         protected InventorySystem inventorySystem;

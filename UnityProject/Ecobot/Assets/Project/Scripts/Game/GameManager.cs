@@ -3,6 +3,7 @@ using Game.Mods;
 using Game.Mods.Core;
 using GUI.Core;
 using GUI.Gameplay;
+using Player;
 using Player.InputManager;
 using R3;
 using UnityEngine;
@@ -11,8 +12,10 @@ using Utils;
 
 namespace Game
 {
-    public class GameManager : MonoBehaviour {
-        [Header("Components")]
+    public class GameManager : MonoBehaviour
+    {
+        [Header("Components")] 
+        [SerializeField] private PlayerManager player;
         [SerializeField] private GameUIRootView uiRootView;
         [SerializeField] private PlayerInputManager inputManager;
 
@@ -42,8 +45,7 @@ namespace Game
             At(GameplayMode, ProgrammingMode, new FuncPredicate(() => _gameplayOrBuilding.GetState() == ProgrammingMode));
             At(ProgrammingMode, GameplayMode, new FuncPredicate(() => _gameplayOrBuilding.GetState() == ProgrammingMode));
             
-            var rootViewModel = new GameUIRootViewModel();
-            uiRootView.Init(this, rootViewModel);
+            uiRootView.Init(this, player);
             
             FSM.SetState(GameplayMode);
         }

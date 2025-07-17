@@ -5,6 +5,7 @@ using GUI.Core;
 using GUI.Gameplay.Windows;
 using GUI.Main;
 using GUI.UIFramework;
+using Player;
 using UnityEngine;
 
 namespace GUI.Gameplay
@@ -17,30 +18,23 @@ namespace GUI.Gameplay
         private GameUIRootViewModel _rootViewModel;
         private GameMode _mode;
         private GameManager _gameManager;
+        private PlayerManager _player;
 
-        public void Init(GameUIRootViewModel rootViewModel, GameManager gameManager)
+        public void Init(GameUIRootViewModel rootViewModel, GameManager gameManager, PlayerManager player)
         {
             _gameManager = gameManager;
             _rootViewModel = rootViewModel;
             _mode = _gameManager.GameplayMode;
+            _player = player;
             
             _mode.OnEnterEvent += OpenOverlay;
         }
-
+        
         public void OpenOverlay()
         {
             var viewModel = new GameplayOverlayViewModel(this);
            
             _rootViewModel.OpenOverlay(viewModel);
-        }
-        
-        public PopupAViewModel OpenPopupA()
-        {
-            var viewModel = new PopupAViewModel();
-            
-            _rootViewModel.OpenPopup(viewModel);
-            
-            return viewModel;
         }
     }
 }

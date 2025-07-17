@@ -10,6 +10,7 @@ namespace Player.InputManager
         public event Action OnToggleBuildMode;
         public event Action OnRotateBuilding;
         public event Action OnDemountBuilding;
+        public event Action OnOpenInventory;
         public event Action OnInteract;
         public event Action OnHoldInteraction;
         public event Action OnHoldInteractCanceled;
@@ -17,7 +18,6 @@ namespace Player.InputManager
         [SerializeField] private GameManager gameManager;
     
         private PlayerInputAction _inputActions;
-        // private 
     
         private void Awake()
         {
@@ -25,18 +25,8 @@ namespace Player.InputManager
             _inputActions.GameplayMode.Enable();
 
             _inputActions.GameplayMode.ToggleBuildMode.performed += ToggleBuildMode_Callback;
-            
+            _inputActions.GameplayMode.Inventory.performed += OnOpenInventory_Callback;
             _inputActions.GameplayMode.Interact.performed += OnInteractPerformed_Callback;
-
-
-            var a = _inputActions.GameplayMode.Interact.bindings;
-            foreach (var action in a)
-            {
-                // Debug.Log(action.interactions.Contains("Hold"));
-            }
-            
-            // Debug.Log(_inputActions.GameplayMode.Interact.bindings);
-            
             _inputActions.GameplayMode.Interact.canceled += OnInteractCanceled_Callback;
             
             _inputActions.BuildingMode.RotateBuilding.performed += RotateBuilding_Callback;
@@ -75,6 +65,11 @@ namespace Player.InputManager
 
         private void RotateBuilding_Callback(InputAction.CallbackContext obj) {
             OnRotateBuilding?.Invoke();
+        }
+
+        private void OnOpenInventory_Callback(InputAction.CallbackContext obj)
+        {
+            OnOpenInventory?.Invoke();
         }
 
         private void ToggleBuildMode_Callback(InputAction.CallbackContext context) {
