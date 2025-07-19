@@ -26,9 +26,9 @@ namespace GUI.Programming
 
         public void OpenOverlay()
         {
-            var viewModel = new ProgrammingOverlayController(_gameManager);
+            var controller = new ProgrammingOverlayController(_gameManager);
             
-            _rootController.OpenOverlay(viewModel);
+            _rootController.OpenOverlay(controller);
         }
     }
 }

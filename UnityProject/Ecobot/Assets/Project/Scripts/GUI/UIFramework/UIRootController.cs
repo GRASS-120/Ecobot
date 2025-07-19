@@ -13,17 +13,17 @@ namespace GUI.UIFramework
     /// </summary>
     public abstract class UIRootController : IDisposable
     {
-        public ReadOnlyReactiveProperty<WindowController> OpenedOverlay => _openedOverlay;
-        public IObservableCollection<WindowController> OpenedPopups => _openedPopups;
+        public ReadOnlyReactiveProperty<IWindowController> OpenedOverlay => _openedOverlay;
+        public IObservableCollection<IWindowController> OpenedPopups => _openedPopups;
         
-        private ReactiveProperty<WindowController> _openedOverlay = new();
-        private ObservableList<WindowController> _openedPopups = new();
+        private ReactiveProperty<IWindowController> _openedOverlay = new();
+        private ObservableList<IWindowController> _openedPopups = new();
         
         // todo: при помощи этого словаря по идее можно реализовать cached - услово, те окна, что не показываются, можно
         // скрыть... хотя диспозить же не нужно, хм...
-        private Dictionary<WindowController, IDisposable> _popupSubscriptions = new();
+        private Dictionary<IWindowController, IDisposable> _popupSubscriptions = new();
         
-        public void OpenOverlay(WindowController overlay)
+        public void OpenOverlay(IWindowController overlay)
         {
             overlay.Close();
             
@@ -33,7 +33,7 @@ namespace GUI.UIFramework
             overlay.Open();
         }
 
-        public void OpenPopup(WindowController popup)
+        public void OpenPopup(IWindowController popup)
         {
             if (_openedPopups.Contains(popup))
             {
@@ -41,7 +41,7 @@ namespace GUI.UIFramework
                 return;
             }
 
-            var sub = popup.OnClose.Subscribe(ClosePopup);
+            var sub = popup.OnCloseEvent.Subscribe(ClosePopup);
             _popupSubscriptions[popup] = sub;
             
             _openedPopups.Add(popup);
@@ -49,7 +49,7 @@ namespace GUI.UIFramework
             popup.Open();
         }
 
-        public void ClosePopup(WindowController popup)
+        public void ClosePopup(IWindowController popup)
         {
             if (_openedPopups.Contains(popup))
             {

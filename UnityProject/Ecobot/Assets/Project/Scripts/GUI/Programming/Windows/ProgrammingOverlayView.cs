@@ -1,27 +1,17 @@
-﻿using GUI.UIFramework;
+﻿using System;
+using GUI.UIFramework;
+using R3;
 using UnityEngine;
 using UnityEngine.UI;
+using Observable = UnityEngine.InputSystem.Utilities.Observable;
 
 namespace GUI.Programming.Windows
 {
-    public class ProgrammingOverlayView : OverlayView<ProgrammingOverlayController>
+    public class ProgrammingOverlayView : OverlayView
     {
         [Header("UI Elements")]
         [SerializeField] private Button btnClose;
         
-        private void OnEnable()
-        {
-            btnClose.onClick.AddListener(OnCloseBtn_Clicked);
-        }
-        
-        private void OnDisable()
-        {
-            btnClose.onClick.RemoveListener(OnCloseBtn_Clicked);
-        }
-        
-        private void OnCloseBtn_Clicked()
-        {
-            Controller.RequestCloseOverlay();
-        }
+        public Button BtnClose => btnClose;
     }
 }

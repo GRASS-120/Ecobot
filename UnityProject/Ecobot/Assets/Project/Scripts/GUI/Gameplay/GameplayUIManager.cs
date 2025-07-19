@@ -32,9 +32,9 @@ namespace GUI.Gameplay
         
         public void OpenOverlay()
         {
-            var viewModel = new GameplayOverlayController(this);
+            var controller = new GameplayOverlayController(this);
            
-            _rootController.OpenOverlay(viewModel);
+            _rootController.OpenOverlay(controller);
         }
     }
 }

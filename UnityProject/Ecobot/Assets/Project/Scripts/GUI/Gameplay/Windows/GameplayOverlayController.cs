@@ -2,7 +2,7 @@
 
 namespace GUI.Gameplay.Windows
 {
-    public class GameplayOverlayController : WindowController
+    public class GameplayOverlayController : WindowController<GameplayOverlayView>
     {
         private readonly GameplayUIManager _uiManager;
         public override string Id => "GameplayOverlay";

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace GUI.Gameplay.Windows
 {
-    public class GameplayOverlayView : OverlayView<GameplayOverlayController>
+    public class GameplayOverlayView : OverlayView
     {
         [Header("Inventory")]
         [SerializeField] private InventoryUIController inventoryController;

@@ -7,17 +7,8 @@ namespace GUI.UIFramework
     /// Обеспечивает механизм привязки модели представления к окну и стандартное закрытие окна.
     /// </summary>
     /// <typeparam name="T">Тип модели представления, наследуемой от <see cref="WindowController"/>.</typeparam>
-    public abstract class WindowView<T> : MonoBehaviour, IWindowView where T : WindowController
+    public abstract class WindowView : MonoBehaviour
     {
-        protected T Controller;
-
-        public void Bind(WindowController controller)
-        {
-            Controller = (T)controller;
-
-            // OnOpen(Controller);
-        }
-
         public void Open()
         {
             OnOpen();
