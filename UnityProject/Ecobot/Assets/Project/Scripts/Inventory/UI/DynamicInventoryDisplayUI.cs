@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using R3;
 using UnityEngine;
 
 namespace Inventory.UI
@@ -8,6 +9,8 @@ namespace Inventory.UI
     public class DynamicInventoryDisplayUI : InventoryDisplay
     {
         [SerializeField] protected InventorySlotUI slotUITemplate;
+        
+        private CompositeDisposable _disposables = new CompositeDisposable();
         
         protected override void Start()
         {
@@ -18,7 +21,8 @@ namespace Inventory.UI
         {
             ClearSlots();
             inventorySystem = invSystem;
-            if (inventorySystem != null) inventorySystem.OnInventorySlotChanged += UpdateSlot;
+            if (inventorySystem != null)
+                inventorySystem.OnInventorySlotChanged.Subscribe(UpdateSlot).AddTo(_disposables);
             ConnectSlots(invSystem);
         }
 
@@ -52,7 +56,8 @@ namespace Inventory.UI
 
         private void OnDisable()
         {
-            if (inventorySystem != null) inventorySystem.OnInventorySlotChanged -= UpdateSlot;
+            if (inventorySystem != null)
+                _disposables.Clear();
         }
     }
 }

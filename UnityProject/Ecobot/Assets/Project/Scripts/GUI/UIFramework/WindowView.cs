@@ -6,24 +6,32 @@ namespace GUI.UIFramework
     /// Базовый абстрактный класс для всех оконных представлений UI.
     /// Обеспечивает механизм привязки модели представления к окну и стандартное закрытие окна.
     /// </summary>
-    /// <typeparam name="T">Тип модели представления, наследуемой от <see cref="WindowViewModel"/>.</typeparam>
-    public abstract class WindowView<T> : MonoBehaviour, IWindowView where T : WindowViewModel
+    /// <typeparam name="T">Тип модели представления, наследуемой от <see cref="WindowController"/>.</typeparam>
+    public abstract class WindowView<T> : MonoBehaviour, IWindowView where T : WindowController
     {
-        protected T ViewModel;
+        protected T Controller;
 
-        public void Bind(WindowViewModel viewModel)
+        public void Bind(WindowController controller)
         {
-            ViewModel = (T)viewModel;
+            Controller = (T)controller;
 
-            OnBind(ViewModel);
+            // OnOpen(Controller);
         }
 
-        public virtual void Close()
+        public void Open()
+        {
+            OnOpen();
+        }
+
+        public void Close()
         {
             // Сначала уничтожаем, затем делаем анимации на закрытие
+            OnClose();
+            
             Destroy(gameObject);
         }
         
-        protected virtual void OnBind(T viewModel) { }
+        protected virtual void OnOpen() { }
+        protected virtual void OnClose() { }
     }
 }

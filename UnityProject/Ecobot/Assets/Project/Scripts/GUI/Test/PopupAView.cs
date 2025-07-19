@@ -2,12 +2,12 @@
 
 namespace GUI.Main
 {
-    public class PopupAView : PopupView<PopupAViewModel>
+    public class PopupAView : PopupView<PopupAController>
     {
         // override OnBind для реализации доп логики
-        protected override void OnBind(PopupAViewModel model)
+        protected override void OnOpen()
         {
-            base.OnBind(model);
+            base.OnOpen();
         }
     }
 }

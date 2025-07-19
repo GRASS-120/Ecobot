@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using R3;
 using UnityEngine;
 
 namespace Inventory.UI
@@ -14,7 +15,7 @@ namespace Inventory.UI
             if (inventoryHolder != null)
             {
                 // inventorySystem = inventoryHolder.PrimaryInventorySystem;
-                inventorySystem.OnInventorySlotChanged += UpdateSlot;  // ???? почему добавили? (при добавлении рюкзака)
+                inventorySystem.OnInventorySlotChanged.Subscribe(UpdateSlot).AddTo(this);  // ???? почему добавили? (при добавлении рюкзака)
             }
             else Debug.LogWarning($"No inv assigned to {this.gameObject}");
             

@@ -2,7 +2,7 @@
 
 namespace GUI.Main
 {
-    public class PopupAViewModel : WindowViewModel
+    public class PopupAController : WindowController
     {
         public override string Id => "PopupA";
     }

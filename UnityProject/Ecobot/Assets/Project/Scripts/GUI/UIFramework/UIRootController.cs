@@ -11,25 +11,29 @@ namespace GUI.UIFramework
     /// Базовая модель представления для корневого UI.
     /// Хранит текущие открытые окна, предоставляет методы для работы с ними
     /// </summary>
-    public abstract class UIRootViewModel : IDisposable
+    public abstract class UIRootController : IDisposable
     {
-        public ReadOnlyReactiveProperty<WindowViewModel> OpenedScreen => _openedScreen;
-        public IObservableCollection<WindowViewModel> OpenedPopups => _openedPopups;
+        public ReadOnlyReactiveProperty<WindowController> OpenedOverlay => _openedOverlay;
+        public IObservableCollection<WindowController> OpenedPopups => _openedPopups;
         
-        private ReactiveProperty<WindowViewModel> _openedScreen = new();
-        private ObservableList<WindowViewModel> _openedPopups = new();
+        private ReactiveProperty<WindowController> _openedOverlay = new();
+        private ObservableList<WindowController> _openedPopups = new();
         
         // todo: при помощи этого словаря по идее можно реализовать cached - услово, те окна, что не показываются, можно
         // скрыть... хотя диспозить же не нужно, хм...
-        private Dictionary<WindowViewModel, IDisposable> _popupSubscriptions = new();
+        private Dictionary<WindowController, IDisposable> _popupSubscriptions = new();
         
-        public void OpenOverlay(WindowViewModel overlay)
+        public void OpenOverlay(WindowController overlay)
         {
-            _openedScreen.Value?.Dispose();
-            _openedScreen.Value = overlay;
+            overlay.Close();
+            
+            _openedOverlay.Value?.Dispose();
+            _openedOverlay.Value = overlay;
+            
+            overlay.Open();
         }
 
-        public void OpenPopup(WindowViewModel popup)
+        public void OpenPopup(WindowController popup)
         {
             if (_openedPopups.Contains(popup))
             {
@@ -37,13 +41,15 @@ namespace GUI.UIFramework
                 return;
             }
 
-            var sub = popup.CloseRequested.Subscribe(ClosePopup);
+            var sub = popup.OnClose.Subscribe(ClosePopup);
             _popupSubscriptions[popup] = sub;
             
             _openedPopups.Add(popup);
+            
+            popup.Open();
         }
 
-        public void ClosePopup(WindowViewModel popup)
+        public void ClosePopup(WindowController popup)
         {
             if (_openedPopups.Contains(popup))
             {
@@ -73,7 +79,7 @@ namespace GUI.UIFramework
         public void Dispose()
         {
             CloseAllPopups();
-            _openedScreen.Value?.Dispose();
+            _openedOverlay.Value?.Dispose();
         }
     }
 }

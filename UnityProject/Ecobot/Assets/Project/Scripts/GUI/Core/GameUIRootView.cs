@@ -15,7 +15,7 @@ namespace GUI.Core
 
         public void Init(GameManager gameManager, PlayerManager player)
         {
-            var rootViewModel = new GameUIRootViewModel();
+            var rootViewModel = new GameUIRootController();
             
             Dispatch(rootViewModel);
             

@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Inventory
 {
-    // это нужно, чтобы слот отображался в редакторе при том, что скрипт ни к чему не прикреплен
-    [System.Serializable]
+    [Serializable]
     public class InventorySlot
     {
         [SerializeField] private InventoryItemData itemData;

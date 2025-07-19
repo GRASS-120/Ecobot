@@ -15,15 +15,15 @@ namespace GUI.Gameplay
     /// </summary>
     public class GameplayUIManager : MonoBehaviour
     {
-        private GameUIRootViewModel _rootViewModel;
+        private GameUIRootController _rootController;
         private GameMode _mode;
         private GameManager _gameManager;
         private PlayerManager _player;
 
-        public void Init(GameUIRootViewModel rootViewModel, GameManager gameManager, PlayerManager player)
+        public void Init(GameUIRootController rootController, GameManager gameManager, PlayerManager player)
         {
             _gameManager = gameManager;
-            _rootViewModel = rootViewModel;
+            _rootController = rootController;
             _mode = _gameManager.GameplayMode;
             _player = player;
             
@@ -32,9 +32,9 @@ namespace GUI.Gameplay
         
         public void OpenOverlay()
         {
-            var viewModel = new GameplayOverlayViewModel(this);
+            var viewModel = new GameplayOverlayController(this);
            
-            _rootViewModel.OpenOverlay(viewModel);
+            _rootController.OpenOverlay(viewModel);
         }
     }
 }

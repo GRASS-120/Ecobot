@@ -26,7 +26,6 @@ namespace Inventory.UI
         {
             // IInventoryHolder.OnDynamicInventoryDisplayRequested -= DisplayInventory;
             // PlayerInventoryHolder.OnPlayerBackpackDisplayRequested -= DisplayPlayerBackpack;
-
         }
 
         private void Update()

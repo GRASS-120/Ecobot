@@ -613,7 +613,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -257.16666}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8399945840597861724
@@ -628,7 +628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5b7ac08932b4a28b11c4215e1eb2327, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
   mouseInventoryItem: {fileID: 6595060992453530407}
   slotsUI:
   - {fileID: 8545002059598966540}
@@ -768,9 +767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f52f611dcae4357a4bc859c16124078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  btnPopupA: {fileID: 0}
-  btnPopupB: {fileID: 0}
-  btnGoToMainMenu: {fileID: 0}
+  inventoryController: {fileID: 1729664166150120300}
 --- !u!1 &1715146442960347898
 GameObject:
   m_ObjectHideFlags: 0
@@ -1905,7 +1902,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5971345238437304626
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1923,7 +1920,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 175, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 215, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8359778694411952102
 CanvasRenderer:
@@ -1945,7 +1942,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d4bb21dd647409fb4d868f33691c226, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
   mouseInventoryItem: {fileID: 6595060992453530407}
   slotUITemplate: {fileID: 0}
 --- !u!114 &2295744996885332315
@@ -2657,7 +2653,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2524407303926293819
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2675,7 +2671,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: -175, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 203, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5241580468061727626
 CanvasRenderer:
@@ -2697,7 +2693,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d4bb21dd647409fb4d868f33691c226, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
   mouseInventoryItem: {fileID: 6595060992453530407}
   slotUITemplate: {fileID: 0}
 --- !u!114 &7319691293894004464
@@ -3507,7 +3502,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 960, y: 540}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1729664166150120300

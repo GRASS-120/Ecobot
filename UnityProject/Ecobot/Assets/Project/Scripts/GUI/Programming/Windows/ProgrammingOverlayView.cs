@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace GUI.Programming.Windows
 {
-    public class ProgrammingOverlayView : OverlayView<ProgrammingOverlayViewModel>
+    public class ProgrammingOverlayView : OverlayView<ProgrammingOverlayController>
     {
         [Header("UI Elements")]
         [SerializeField] private Button btnClose;
@@ -21,7 +21,7 @@ namespace GUI.Programming.Windows
         
         private void OnCloseBtn_Clicked()
         {
-            ViewModel.RequestCloseOverlay();
+            Controller.RequestCloseOverlay();
         }
     }
 }

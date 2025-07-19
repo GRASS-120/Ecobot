@@ -10,15 +10,15 @@ namespace GUI.Programming
 {
     public class ProgrammingUIManager : MonoBehaviour
     {
-        private GameUIRootViewModel _rootViewModel;
+        private GameUIRootController _rootController;
         private GameMode _mode;
         private GameManager _gameManager;
 
         // virtual + не передавать mode, а его прямо здесь выставлять. то есть биндить тут
-        public void Init(GameUIRootViewModel rootViewModel, GameManager gameManager)
+        public void Init(GameUIRootController rootController, GameManager gameManager)
         {
             _gameManager = gameManager;
-            _rootViewModel = rootViewModel;
+            _rootController = rootController;
             _mode = _gameManager.ProgrammingMode;
             
             _mode.OnEnterEvent += OpenOverlay;
@@ -26,9 +26,9 @@ namespace GUI.Programming
 
         public void OpenOverlay()
         {
-            var viewModel = new ProgrammingOverlayViewModel(_gameManager);
+            var viewModel = new ProgrammingOverlayController(_gameManager);
             
-            _rootViewModel.OpenOverlay(viewModel);
+            _rootController.OpenOverlay(viewModel);
         }
     }
 }

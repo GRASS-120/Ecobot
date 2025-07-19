@@ -15,49 +15,50 @@ namespace GUI.UIFramework
         [SerializeField] private Transform overlayContainer;
         [SerializeField] private Transform popupsContainer;
 
-        private readonly Dictionary<WindowViewModel, IWindowView> _openedPopups = new();
+        private readonly Dictionary<WindowController, IWindowView> _openedPopups = new();
         private IWindowView _openedOverlay;
 
-        public void OpenPopup(WindowViewModel viewModel)
+        public void OpenPopup(WindowController controller)
         {
             if (popupsContainer == null)
                 Debug.LogError("Popups container is null.");
             
-            var prefabPath = GetPrefabPath(viewModel);
+            var prefabPath = GetPrefabPath(controller);
             var prefab = Resources.Load<GameObject>(prefabPath);
             var createdPopup = Instantiate(prefab, popupsContainer);
             var view = createdPopup.GetComponent<IWindowView>();
             
-            view.Bind(viewModel);
-            _openedPopups.Add(viewModel, view);
+            view.Bind(controller);
+            
+            _openedPopups.Add(controller, view);
         }
 
-        public void ClosePopup(WindowViewModel viewModel)
+        public void ClosePopup(WindowController controller)
         {
-            var view = _openedPopups[viewModel];
+            var view = _openedPopups[controller];
             
             view?.Close();
-            _openedPopups.Remove(viewModel);
+            _openedPopups.Remove(controller);
         }
         
-        public void OpenOverlay(WindowViewModel viewModel)
+        public void OpenOverlay(WindowController controller)
         {
-            if (viewModel == null) return;
+            if (controller == null) return;
             
             if (overlayContainer == null)
                 Debug.LogError("Overlay container is null.");
             
-            var prefabPath = GetPrefabPath(viewModel);
+            var prefabPath = GetPrefabPath(controller);
             var prefab = Resources.Load<GameObject>(prefabPath);
             var createdOverlay = Instantiate(prefab, overlayContainer);
             var view = createdOverlay.GetComponent<IWindowView>();
 
             _openedOverlay?.Close();
             
-            view.Bind(viewModel);
+            view.Bind(controller);
             _openedOverlay = view;
         }
 
-        private static string GetPrefabPath(WindowViewModel viewModel) => $"UI/{viewModel.Id}";
+        private static string GetPrefabPath(WindowController controller) => $"UI/{controller.Id}";
     }
 }

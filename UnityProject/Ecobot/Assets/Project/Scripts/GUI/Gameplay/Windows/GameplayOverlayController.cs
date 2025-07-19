@@ -2,12 +2,12 @@
 
 namespace GUI.Gameplay.Windows
 {
-    public class GameplayOverlayViewModel : WindowViewModel
+    public class GameplayOverlayController : WindowController
     {
         private readonly GameplayUIManager _uiManager;
         public override string Id => "GameplayOverlay";
 
-        public GameplayOverlayViewModel(GameplayUIManager uiManager)
+        public GameplayOverlayController(GameplayUIManager uiManager)
         {
             _uiManager = uiManager;
         }

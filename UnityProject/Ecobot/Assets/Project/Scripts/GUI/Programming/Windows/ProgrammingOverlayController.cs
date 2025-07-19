@@ -3,12 +3,12 @@ using GUI.UIFramework;
 
 namespace GUI.Programming.Windows
 {
-    public class ProgrammingOverlayViewModel : WindowViewModel
+    public class ProgrammingOverlayController : WindowController
     {
         private readonly GameManager _gameManager;
         public override string Id => "ProgrammingOverlay";
 
-        public ProgrammingOverlayViewModel(GameManager gameManager)
+        public ProgrammingOverlayController(GameManager gameManager)
         {
             _gameManager = gameManager;
         }

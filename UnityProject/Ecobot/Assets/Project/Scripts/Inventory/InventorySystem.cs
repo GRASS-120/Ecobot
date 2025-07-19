@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using R3;
 using UnityEngine;
 
 namespace Inventory
@@ -8,7 +9,7 @@ namespace Inventory
     [Serializable]
     public class InventorySystem
     {
-        public event Action<InventorySlot> OnInventorySlotChanged;
+        public Subject<InventorySlot> OnInventorySlotChanged = new Subject<InventorySlot>();
         
         [SerializeField] private List<InventorySlot> inventorySlots;
         
@@ -38,7 +39,7 @@ namespace Inventory
                     
                     slot.AddToStack(amount);
                     
-                    OnInventorySlotChanged?.Invoke(slot);
+                    OnInventorySlotChanged.OnNext(slot);
                     return true;
                 }
             }
@@ -47,7 +48,7 @@ namespace Inventory
             if (HasFreeSlot(out InventorySlot freeSlot)) 
             {
                 freeSlot.UpdateSlot(item, amount);
-                OnInventorySlotChanged?.Invoke(freeSlot);
+                OnInventorySlotChanged.OnNext(freeSlot);
                 
                 return true;
             }
