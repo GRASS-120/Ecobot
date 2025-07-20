@@ -17,7 +17,7 @@ namespace Inventory.UI
         public InventorySystem InventorySystem => inventorySystem;
         public Dictionary<InventorySlotUI, InventorySlot> SlotDict => slotDict;
 
-        protected virtual void Start()
+        protected virtual void Init(InventorySystem inventorySystem)
         {
             
         }
@@ -28,9 +28,9 @@ namespace Inventory.UI
         {
             foreach (var (key, value) in slotDict)
             {
-                if (value == slot)  // logic slot
+                if (value == slot) 
                 {
-                    key.UpdateSlotUI(slot);  // ui slot
+                    key.UpdateSlotUI(slot);  
                 }
             }
         }

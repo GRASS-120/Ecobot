@@ -9,11 +9,6 @@ namespace GUI.UIFramework
     /// <typeparam name="T">Тип модели представления, наследуемой от <see cref="WindowController"/>.</typeparam>
     public abstract class WindowView : MonoBehaviour
     {
-        public void Open()
-        {
-            OnOpen();
-        }
-
         public void Close()
         {
             // Сначала уничтожаем, затем делаем анимации на закрытие
@@ -22,7 +17,6 @@ namespace GUI.UIFramework
             Destroy(gameObject);
         }
         
-        protected virtual void OnOpen() { }
         protected virtual void OnClose() { }
     }
 }

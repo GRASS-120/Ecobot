@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Inventory.UI
 {
-    public class DynamicInventoryDisplayUI : InventoryDisplay
+    public class MainInventoryDisplayUI : InventoryDisplay
     {
         [SerializeField] protected InventorySlotUI slotUITemplate;
         

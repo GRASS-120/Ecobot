@@ -16,9 +16,7 @@ namespace GUI.Programming.Windows
 
         public override void OnOpen()
         {
-            base.OnOpen();
-            
-            View.BtnClose.OnClickAsObservable().Subscribe(_ => RequestCloseOverlay());
+            View.BtnClose.OnClickAsObservable().Subscribe(_ => RequestCloseOverlay()).AddTo(Subs);
         }
 
         private void RequestCloseOverlay()

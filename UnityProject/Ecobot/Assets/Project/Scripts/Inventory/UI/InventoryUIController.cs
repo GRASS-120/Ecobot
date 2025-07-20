@@ -7,14 +7,14 @@ namespace Inventory.UI
 {
     public class InventoryUIController : MonoBehaviour
     {
-        public DynamicInventoryDisplayUI storagePanel;
-        public DynamicInventoryDisplayUI playerBackpackPanel;
+        [SerializeField] private MainInventoryDisplayUI storagePanel;
+        [SerializeField] private MainInventoryDisplayUI playerBackpackPanel;
 
-        private void Awake()
-        {
-            storagePanel.gameObject.SetActive(false);
-            playerBackpackPanel.gameObject.SetActive(false);
-        }
+        // private void Awake()
+        // {
+        //     storagePanel.gameObject.SetActive(false);
+        //     playerBackpackPanel.gameObject.SetActive(false);
+        // }
 
         private void OnEnable()
         {

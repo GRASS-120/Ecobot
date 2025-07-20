@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Inventory.UI
 {
-    public class InventoryDisplayUI : InventoryDisplay
+    public class HotbarDisplayUI : InventoryDisplay
     {
         [SerializeField] private IInventoryHolder inventoryHolder;
         [SerializeField] private InventorySlotUI[] slotsUI;
