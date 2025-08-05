@@ -8,6 +8,8 @@ namespace GUI.Gameplay.Windows
     public class GameplayOverlayView : OverlayView
     {
         [Header("Inventory")]
-        [SerializeField] private InventoryUIController inventoryController;
+        [SerializeField] private HotbarDisplayUI hotbarDisplay; 
+
+        public HotbarDisplayUI HotbarDisplay => hotbarDisplay; 
     }
 }

@@ -6,33 +6,53 @@ namespace Inventory.UI
 {
     public class HotbarDisplayUI : InventoryDisplay
     {
-        [SerializeField] private IInventoryHolder inventoryHolder;
         [SerializeField] private InventorySlotUI[] slotsUI;
-        protected override void Start()
+        public void Init(InventorySystem hotbarInvSystem, CompositeDisposable disposables)
         {
-            base.Start();
-
-            if (inventoryHolder != null)
+            inventorySystem = hotbarInvSystem;
+            
+            if (inventorySystem != null)
             {
-                // inventorySystem = inventoryHolder.PrimaryInventorySystem;
-                inventorySystem.OnInventorySlotChanged.Subscribe(UpdateSlot).AddTo(this);  // ???? почему добавили? (при добавлении рюкзака)
+                // Подписка добавляется в CompositeDisposable контроллера
+                inventorySystem.OnInventorySlotChanged.Subscribe(UpdateSlot).AddTo(disposables);
             }
-            else Debug.LogWarning($"No inv assigned to {this.gameObject}");
+            else
+            {
+                Debug.LogWarning($"Hotbar InventorySystem is null on {this.gameObject}");
+            }
             
             ConnectSlots(inventorySystem);
         }
         
-        // ! если нужно будет спавинть UI, то нужно добавить object pooling 
         public override void ConnectSlots(InventorySystem invToDisplay)
         {
             slotDict = new Dictionary<InventorySlotUI, InventorySlot>();
 
-            if (slotsUI.Length != inventorySystem.InventorySize) Debug.Log($"inv slots out of sync on {this.gameObject}");
-            
-            for (int i = 0; i < inventorySystem.InventorySize; i++)
+            if (invToDisplay == null)
             {
-                slotDict.Add(slotsUI[i], inventorySystem.InventorySlots[i]);
-                slotsUI[i].Init(inventorySystem.InventorySlots[i]);
+                Debug.LogError("InventorySystem for HotbarDisplay is null.");
+                return;
+            }
+
+            if (slotsUI.Length != invToDisplay.InventorySize)
+            {
+                Debug.LogWarning($"Hotbar slots UI count ({slotsUI.Length}) out of sync with InventorySystem size ({invToDisplay.InventorySize}) on {this.gameObject}");
+            }
+            
+            for (int i = 0; i < invToDisplay.InventorySize; i++)
+            {
+                // Убедимся, что индексы не выходят за пределы массива slotsUI
+                if (i < slotsUI.Length)
+                {
+                    slotDict.Add(slotsUI[i], invToDisplay.InventorySlots[i]);
+                    slotsUI[i].Init(invToDisplay.InventorySlots[i]);
+                    slotsUI[i].UpdateSlotUI(); // Обновляем UI при инициализации
+                }
+                else
+                {
+                    Debug.LogError($"Not enough Hotbar UI slots assigned for inventory size {invToDisplay.InventorySize}. Missing slot for index {i}.");
+                    break; 
+                }
             }
         }
     }

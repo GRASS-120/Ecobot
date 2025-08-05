@@ -9968,7 +9968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d733b185bd963fe45ab2b5f0542e08d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1457998935}
   uiRootView: {fileID: 525184665}
   inputManager: {fileID: 1616137094}
 --- !u!1 &1735220449

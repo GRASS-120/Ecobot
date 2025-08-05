@@ -596,7 +596,7 @@ RectTransform:
   m_GameObject: {fileID: 1419427075847073127}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6855676324232784077}
@@ -609,11 +609,11 @@ RectTransform:
   - {fileID: 7440891174545060399}
   - {fileID: 3369113614234604402}
   - {fileID: 7196323670150571188}
-  m_Father: {fileID: 9101279367928852598}
+  m_Father: {fileID: 352761893371656224}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 465}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8399945840597861724
@@ -747,6 +747,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2377215779057587351}
   - {fileID: 9101279367928852598}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -767,7 +768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f52f611dcae4357a4bc859c16124078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryController: {fileID: 1729664166150120300}
+  hotbarDisplay: {fileID: 8399945840597861724}
 --- !u!1 &1715146442960347898
 GameObject:
   m_ObjectHideFlags: 0
@@ -3481,7 +3482,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9101279367928852598
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3494,7 +3495,6 @@ RectTransform:
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2377215779057587351}
   - {fileID: 2524407303926293819}
   - {fileID: 5971345238437304626}
   - {fileID: 2549933529851779776}

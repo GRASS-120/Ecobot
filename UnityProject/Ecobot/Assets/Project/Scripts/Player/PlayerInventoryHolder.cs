@@ -1,5 +1,8 @@
 ﻿using System;
+using InteractionSystem;
+using Inventory.LootSystem;
 using Player;
+using R3;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -17,21 +20,25 @@ namespace Inventory
         
         [Header("Hot Bar Inventory")]
         [SerializeField] private int hotbarInventorySize;
-        [SerializeField] protected InventorySystem hotbarInventorySystem;
-
+        
+        private InventorySystem _hotbarInventorySystem;
+        
         public int MainInventorySize => mainInventorySize;
         public InventorySystem MainInventory => mainInventorySystem;
         
         private int _inventorySize;
         private InventorySystem _mainInventory;
 
-        public InventorySystem HotbarInventorySystem => hotbarInventorySystem;
+        public InventorySystem HotbarInventorySystem => _hotbarInventorySystem;
+
+        private void Awake()
+        {
+            _hotbarInventorySystem = new InventorySystem(hotbarInventorySize);
+            mainInventorySystem = new InventorySystem(mainInventorySize);
+        }
         
         public void Init(PlayerManager player)
         {
-            hotbarInventorySystem = new InventorySystem(hotbarInventorySize);
-            mainInventorySystem = new InventorySystem(mainInventorySize);
-
             player.Input.OnOpenInventory += HandleInventory;
         }
 
@@ -42,7 +49,7 @@ namespace Inventory
 
         public bool TryAddToInventory(InventoryItemData data, int amount)
         {
-            if (hotbarInventorySystem.TryAddToInventory(data, amount))
+            if (_hotbarInventorySystem.TryAddToInventory(data, amount))
             {
                 return true;
             }
@@ -53,6 +60,13 @@ namespace Inventory
             }
             
             return false;
+        }
+
+        public void HandleLoot(ILootProvider lootProvider)
+        {
+            lootProvider.OnGiveLoot
+                .Subscribe(loot => TryAddToInventory(loot.Item, loot.Amount))
+                .AddTo(this);
         }
     }
 }

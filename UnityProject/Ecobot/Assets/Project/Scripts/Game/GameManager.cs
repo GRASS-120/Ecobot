@@ -44,6 +44,9 @@ namespace Game
             At(BuildingMode, GameplayMode, new FuncPredicate(() => _gameplayOrBuilding.GetState() == GameplayMode));
             At(GameplayMode, ProgrammingMode, new FuncPredicate(() => _gameplayOrBuilding.GetState() == ProgrammingMode));
             At(ProgrammingMode, GameplayMode, new FuncPredicate(() => _gameplayOrBuilding.GetState() == ProgrammingMode));
+
+            player.Init();
+            GameplayMode.OnUpdate += player.ManualUpdate;
             
             uiRootView.Init(this, player);
             

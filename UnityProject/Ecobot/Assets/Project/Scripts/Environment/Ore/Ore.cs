@@ -2,6 +2,8 @@
 using System.Collections;
 using FiniteStateMachine;
 using InteractionSystem;
+using Inventory;
+using Inventory.LootSystem;
 using Player;
 using R3;
 using Sirenix.OdinInspector;
@@ -9,18 +11,17 @@ using UnityEngine;
 
 namespace environment.Ore
 {
-    public class Ore : MonoBehaviour, IInteractable
+    public class Ore : MonoBehaviour, IInteractable, ILootProvider
     {
-        // нужно чтобы игрок мог взаимодействовать войдя в тригер, в область
-        
         public event Action OnMiningStart;
         public event Action OnMiningEnd;
+        public Observable<LootQuery> OnGiveLoot => _onGiveLoot;
         
         [SerializeField] private OreData data;
         [ReadOnly][SerializeField] private SerializableReactiveProperty<float> currentCapacity;
         
+        private Subject<LootQuery> _onGiveLoot = new Subject<LootQuery>();
         private Coroutine _miningCoroutine;
-        private PlayerManager _player;
 
         private void Awake()
         {
@@ -33,12 +34,16 @@ namespace environment.Ore
         {
             Debug.Log("Starting Mining");
             OnMiningStart?.Invoke();
+
+            var loot = new LootQuery(data.OreItem, 1);
             
             while (currentCapacity.Value >= 0)
             {
                 yield return new WaitForSeconds(data.MiningTime);
                 
-                currentCapacity.Value--;  // нужно еще дабавлять шмотку в инвентарь
+                currentCapacity.Value--;
+                
+                _onGiveLoot.OnNext(loot);
                 
                 yield return null;
             }
@@ -56,13 +61,6 @@ namespace environment.Ore
         
         public IEnumerator HoldInteract(IInteractor interactor)
         {
-            // не работает
-            // if (interactor is PlayerInteractor playerInteractor)
-            // {
-            //     _player = playerInteractor.Player;
-            //     Debug.Log("player: " + _player);
-            // }
-            
             _miningCoroutine = StartCoroutine(StartMining());
 
             yield return new WaitWhile(() => interactor.IsHoldInteracting);

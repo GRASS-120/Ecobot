@@ -5,6 +5,7 @@ using GUI.Core;
 using GUI.Gameplay.Windows;
 using GUI.Main;
 using GUI.UIFramework;
+using Inventory;
 using Player;
 using UnityEngine;
 
@@ -18,21 +19,21 @@ namespace GUI.Gameplay
         private GameUIRootController _rootController;
         private GameMode _mode;
         private GameManager _gameManager;
-        private PlayerManager _player;
+        private PlayerInventoryHolder _invHolder;
 
         public void Init(GameUIRootController rootController, GameManager gameManager, PlayerManager player)
         {
             _gameManager = gameManager;
             _rootController = rootController;
             _mode = _gameManager.GameplayMode;
-            _player = player;
+            _invHolder = player.Inventory;
             
             _mode.OnEnterEvent += OpenOverlay;
         }
         
         public void OpenOverlay()
         {
-            var controller = new GameplayOverlayController(this);
+            var controller = new GameplayOverlayController(this, _invHolder);
            
             _rootController.OpenOverlay(controller);
         }

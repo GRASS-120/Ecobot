@@ -12,10 +12,10 @@ namespace Inventory.UI
         
         private CompositeDisposable _disposables = new CompositeDisposable();
         
-        protected override void Start()
-        {
-            base.Start();
-        }
+        // protected override void Start()
+        // {
+        //     base.Start();
+        // }
 
         public void RefreshDynamicInventory(InventorySystem invSystem)
         {

@@ -24,8 +24,9 @@ namespace Player
         private bool _isWalking;
         
         public PlayerInputManager Input => inputManager;
+        public PlayerInventoryHolder Inventory => inventory;
 
-        private void Awake() {
+        public void Init() {
             _characterController = GetComponent<CharacterController>();
             _mainCamera = cameraManager.MainCamera; 
             _groundMask = LayerMask.GetMask(Const.GROUND_LAYER);
@@ -34,7 +35,7 @@ namespace Player
             inventory.Init(this);
         }
 
-        private void Update() {
+        public void ManualUpdate() {
             HandleMovement();
             HandleRotation();
             
