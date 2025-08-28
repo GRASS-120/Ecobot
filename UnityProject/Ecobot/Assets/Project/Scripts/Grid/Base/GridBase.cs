@@ -30,14 +30,13 @@ namespace Grid.Base
         }
 
         public Vector3 GetWorldPosition(Vector2Int cell) {
-            // + _originPosition чтобы учитывал смещение если оно есть
             return new Vector3(cell.x, 0, cell.y) * CellSize + _originPosition;
         }
 
         public Vector2Int GetGridPosition(Vector3 worldPosition) {
-            // - _originPosition чтобы не было смещения в расчетах
             int xGrid = Mathf.FloorToInt((worldPosition - _originPosition).x / CellSize);
             int yGrid =  Mathf.FloorToInt((worldPosition - _originPosition).z / CellSize);
+            
             return new Vector2Int(xGrid, yGrid);
         }
 
