@@ -9,19 +9,21 @@ namespace Inventory
     [Serializable]
     public class InventorySystem
     {
-        public Subject<InventorySlot> OnInventorySlotChanged = new Subject<InventorySlot>();
-        
         [SerializeField] private List<InventorySlot> inventorySlots;
         
         public List<InventorySlot> InventorySlots => inventorySlots;
         public int InventorySize => inventorySlots.Count;
+        public InventoryOperationsService InventoryOperationsService => _operationService;
+        public Subject<InventorySlot> OnInventorySlotChanged = new Subject<InventorySlot>();
         
         private int _inventorySize;
+        private InventoryOperationsService _operationService;
 
         public InventorySystem(int size)
         {
             inventorySlots = new List<InventorySlot>(size);
-
+            _operationService = new InventoryOperationsService();
+            
             for (int i = 0; i < size; i++)
             {
                 inventorySlots.Add(new InventorySlot());
@@ -39,7 +41,8 @@ namespace Inventory
                     
                     slot.AddToStack(amount);
                     
-                    OnInventorySlotChanged.OnNext(slot);
+                    NotifySlotChanged(IndexOf(slot));
+                    // _onInventorySlotChanged.OnNext(slot);
                     return true;
                 }
             }
@@ -48,7 +51,8 @@ namespace Inventory
             if (HasFreeSlot(out InventorySlot freeSlot)) 
             {
                 freeSlot.UpdateSlot(item, amount);
-                OnInventorySlotChanged.OnNext(freeSlot);
+                
+                NotifySlotChanged(IndexOf(freeSlot));
                 
                 return true;
             }
@@ -59,8 +63,32 @@ namespace Inventory
         public bool ContainsItem(InventoryItemData item, out List<InventorySlot> matchedSlots)
         {
             matchedSlots = inventorySlots.Where(i => i.ItemData == item).ToList();
-            return matchedSlots != null;
+            return matchedSlots.Count > 0;
         }
+
+        public InventorySlot GetSlot(int index) => inventorySlots[index];
+
+        public void NotifySlotChanged(int index)
+        {
+            Debug.Log($"[NotifySlotChanged] inv={GetHashCode()} idx={index}");
+            OnInventorySlotChanged.OnNext(inventorySlots[index]);
+        }
+
+        public bool TryGetFreeSlotIndex(out int index)
+        {
+            index = -1;
+            for (int i = 0; i < inventorySlots.Count; i++)
+            {
+                if (inventorySlots[i].ItemData == null)
+                {
+                    index = i;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public int IndexOf(InventorySlot slot) => inventorySlots.IndexOf(slot);
 
         public bool HasFreeSlot(out InventorySlot slot)
         {

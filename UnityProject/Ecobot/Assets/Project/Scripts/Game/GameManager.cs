@@ -49,12 +49,12 @@ namespace Game
             GameplayMode.OnUpdate += player.ManualUpdate;
             
             uiRootView.Init(this, player);
-            
-            FSM.SetState(GameplayMode);
         }
 
         private void Start()
         {
+            FSM.SetState(GameplayMode);
+            
             inputManager.OnToggleBuildMode += OnToggleBuildMode_Callback;
         }
 

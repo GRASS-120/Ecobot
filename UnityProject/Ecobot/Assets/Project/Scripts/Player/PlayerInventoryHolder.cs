@@ -1,44 +1,40 @@
-﻿using System;
-using InteractionSystem;
-using Inventory.LootSystem;
-using Player;
+﻿using InteractionSystem;
+using Inventory;
 using R3;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
-namespace Inventory
+namespace Player
 {
     public class PlayerInventoryHolder : MonoBehaviour, IInventoryHolder
     {
-        // public event Action OnMainInventoryDisplayRequested;
-        // public event Action OnDynamicInventoryDisplayRequested; 
-
         [Header("Main Inventory")]
-        [SerializeField] protected int mainInventorySize;
-        [SerializeField] protected InventorySystem mainInventorySystem;
-        
-        [Header("Hot Bar Inventory")]
-        [SerializeField] private int hotbarInventorySize;
-        
-        private InventorySystem _hotbarInventorySystem;
-        
-        public int MainInventorySize => mainInventorySize;
-        public InventorySystem MainInventory => mainInventorySystem;
-        
-        private int _inventorySize;
-        private InventorySystem _mainInventory;
+        [Min(1)]
+        [SerializeField] protected int mainInventorySize = 20;
 
+        [Header("Hot Bar Inventory")]
+        [Min(1)]
+        [SerializeField] private int hotbarInventorySize = 10;
+
+        private InventorySystem _mainInventorySystem;
+        private InventorySystem _hotbarInventorySystem;
+
+        public int MainInventorySize => mainInventorySize;
+        public InventorySystem MainInventory => _mainInventorySystem;
         public InventorySystem HotbarInventorySystem => _hotbarInventorySystem;
 
         private void Awake()
         {
-            _hotbarInventorySystem = new InventorySystem(hotbarInventorySize);
-            mainInventorySystem = new InventorySystem(mainInventorySize);
+            // _hotbarInventorySystem = new InventorySystem(hotbarInventorySize);
+            // _mainInventorySystem = new InventorySystem(mainInventorySize);
         }
-        
+
         public void Init(PlayerManager player)
         {
+            _hotbarInventorySystem = new InventorySystem(hotbarInventorySize);
+            _mainInventorySystem = new InventorySystem(mainInventorySize);
+            
+            Debug.Log($"[Holder Awake] hotbar={_hotbarInventorySystem.GetHashCode()} main={_mainInventorySystem.GetHashCode()}");
+            
             player.Input.OnOpenInventory += HandleInventory;
         }
 
@@ -49,16 +45,8 @@ namespace Inventory
 
         public bool TryAddToInventory(InventoryItemData data, int amount)
         {
-            if (_hotbarInventorySystem.TryAddToInventory(data, amount))
-            {
-                return true;
-            }
-            
-            if (mainInventorySystem.TryAddToInventory(data, amount))
-            {
-                return true;
-            }
-            
+            if (_hotbarInventorySystem.TryAddToInventory(data, amount)) return true;
+            if (_mainInventorySystem.TryAddToInventory(data, amount)) return true;
             return false;
         }
 

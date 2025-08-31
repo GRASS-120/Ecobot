@@ -1,4 +1,5 @@
 ﻿using System;
+using Player;
 using UnityEngine;
 
 namespace Inventory
@@ -17,15 +18,16 @@ namespace Inventory
             _collider.radius = pickUpRadius;
         }
 
-        private void OnTriggerEnter(Collider other)  // ! remake
+        private void OnTriggerEnter(Collider other)
         {
-            // var inventory = other.GetComponent<PlayerInventoryHolder>();
-            // if (!inventory) return;
-            //
-            // if (inventory.TryAddToInventory(itemData, 1))
-            // {
-            //     Destroy(this.gameObject);
-            // }
+            var inventory = other.GetComponent<PlayerInventoryHolder>();
+            if (!inventory) return;
+            
+            if (inventory.TryAddToInventory(itemData, 1))
+            {
+                Debug.Log($"[Pickup] add -> hotbar={inventory.HotbarInventorySystem.GetHashCode()} main={inventory.MainInventory.GetHashCode()}");
+                Destroy(this.gameObject);
+            }
         }
     }
 }

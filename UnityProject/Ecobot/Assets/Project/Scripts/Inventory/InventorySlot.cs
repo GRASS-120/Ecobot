@@ -26,9 +26,9 @@ namespace Inventory
         public void ClearSlot()
         {
             itemData = null;
-            stackSize = -1;
+            stackSize = 0;
         }
-
+        
         public void UpdateSlot(InventoryItemData item, int amount)
         {
             itemData = item;
@@ -37,26 +37,20 @@ namespace Inventory
 
         public bool CanAddInStack(int amountToAdd, out int amountRemaining)
         {
+            if (itemData == null)
+            {
+                amountRemaining = 0;
+                return false;
+            }
             amountRemaining = itemData.maxStackValue - stackSize;
             return CanAddInStack(amountToAdd);
         }
 
-        public bool CanAddInStack(int amountToAdd) => stackSize + amountToAdd <= itemData.maxStackValue;
+        public bool CanAddInStack(int amountToAdd) =>
+            itemData != null && (stackSize + amountToAdd) <= itemData.maxStackValue;
 
         public void AddToStack(int amount) => stackSize += amount;
-
         public void RemoveFromStack(int amount) => stackSize -= amount;
-
-        public void ReassignItem(InventorySlot slot)  // ! rename
-        {
-            if (itemData == slot.itemData) AddToStack(slot.stackSize);
-            else  // rewrite slot
-            {
-                itemData = slot.itemData;
-                stackSize = 0;
-                AddToStack(slot.stackSize);
-            }
-        }
 
         public bool TrySplitStack(out InventorySlot slittedStack)
         {
@@ -66,9 +60,8 @@ namespace Inventory
                 return false;
             }
 
-            int halfStack = Mathf.RoundToInt(stackSize / 2);
+            int halfStack = stackSize / 2;
             RemoveFromStack(halfStack);
-
             slittedStack = new InventorySlot(itemData, halfStack);
             return true;
         }

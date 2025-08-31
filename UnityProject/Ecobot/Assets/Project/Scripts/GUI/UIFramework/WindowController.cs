@@ -16,7 +16,7 @@ namespace GUI.UIFramework
         public abstract string Id { get; } 
         
         protected T View { get; private set; }
-        protected CompositeDisposable Subs { get; } = new CompositeDisposable();
+        protected CompositeDisposable Subs { get; private set; } = new CompositeDisposable();
         
         private readonly Subject<IWindowController> _closeRequested = new();
         private readonly Subject<IWindowController> _openRequested = new();
@@ -31,12 +31,17 @@ namespace GUI.UIFramework
             OnClose();
             _closeRequested.OnNext(this);
             
-            Subs.Dispose();
+            Subs?.Dispose();
+            Subs = null;
         }
         
         public void Open()
         {
+            Subs?.Dispose();
+            Subs = new CompositeDisposable();
+            
             OnOpen();
+            
             _openRequested.OnNext(this);
         }
         
