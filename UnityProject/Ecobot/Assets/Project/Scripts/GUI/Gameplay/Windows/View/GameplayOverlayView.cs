@@ -1,11 +1,8 @@
 ﻿using GUI.UIFramework;
-using Inventory;
 using Inventory.UI;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
-namespace GUI.Gameplay.Windows
+namespace GUI.Gameplay.Windows.View
 {
     public class GameplayOverlayView : OverlayView
     {

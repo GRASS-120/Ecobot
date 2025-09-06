@@ -36,16 +36,12 @@ namespace Inventory.UI
             _ops = ops;
             _disposables = disposables;
             _quickMoveTarget = quickMoveTarget;
-
-            // Refresh();
         }
 
         public void Refresh()
         {
             var slot = _inventory.GetSlot(_index);
             
-            Debug.Log($"[SlotUI] inv={_inventory.GetHashCode()} idx={_index} item={(slot.ItemData ? slot.ItemData.name : "null")} cnt={slot.StackSize}");
-
             if (slot.ItemData == null)
             {
                 image.enabled = false;
@@ -114,8 +110,10 @@ namespace Inventory.UI
         public void OnEndDrag(PointerEventData eventData)
         {
             SetDraggingVisual(false);
+            
             // Если бросили не на слот (мимо), возвращаем назад в исходный слот
             if (_mouseUI.IsEmpty()) return; // уже куда-то положили
+            
             // Если курсор над UI, но не над слотом — просто вернем назад
             _mouseUI.ReturnBack(_inventory, _index);
         }
@@ -150,6 +148,7 @@ namespace Inventory.UI
                 if (t.ItemData == src.ItemData && t.CanAddInStack(1))
                     return i;
             }
+            
             // 2) Потом пустой
             if (target.TryGetFreeSlotIndex(out int freeIndex))
                 return freeIndex;

@@ -8,7 +8,7 @@ namespace GUI.UIFramework
     /// Абстрактный класс для всплывающих окон, отображающих небольшие элементы интерфейса поверх основного экрана.
     /// </summary>
     /// <typeparam name="T">Конкретный ViewModel (унаследован от <see cref="WindowController"/>).</typeparam>
-    public abstract class PopupView<T> : WindowView
+    public abstract class PopupView : WindowView
     {
         
     }

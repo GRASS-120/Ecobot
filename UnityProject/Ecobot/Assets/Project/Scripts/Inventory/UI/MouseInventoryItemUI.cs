@@ -52,6 +52,7 @@ namespace Inventory.UI
         public void Refresh()
         {
             var slot = _mouseInv.GetSlot(0);
+            
             if (slot.ItemData == null)
             {
                 SetVisible(false);
@@ -69,6 +70,7 @@ namespace Inventory.UI
         public void PickUpAll(InventorySystem fromInv, int fromIndex)
         {
             if (!IsEmpty()) return;
+            
             var moved = _ops.Move(fromInv, fromIndex, _mouseInv, 0, int.MaxValue);
             if (moved > 0) Refresh();
         }
@@ -103,6 +105,7 @@ namespace Inventory.UI
         public void PlaceOne(InventorySystem toInv, int toIndex)
         {
             if (IsEmpty()) return;
+            
             var moved = _ops.Move(_mouseInv, 0, toInv, toIndex, 1);
             if (moved > 0) Refresh();
         }
@@ -110,13 +113,16 @@ namespace Inventory.UI
         public void ReturnBack(InventorySystem toInv, int toIndex)
         {
             if (IsEmpty()) return;
+            
             var moved = _ops.Move(_mouseInv, 0, toInv, toIndex, int.MaxValue);
+            
             if (moved > 0) Refresh();
         }
 
         private void SetVisible(bool visible)
         {
             if (!canvasGroup) return;
+            
             canvasGroup.alpha = visible ? 1f : 0f;
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;

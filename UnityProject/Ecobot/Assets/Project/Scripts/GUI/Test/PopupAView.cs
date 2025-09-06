@@ -2,7 +2,7 @@
 
 namespace GUI.Main
 {
-    public class PopupAView : PopupView<PopupAController>
+    public class PopupAView : PopupView
     {
         
     }

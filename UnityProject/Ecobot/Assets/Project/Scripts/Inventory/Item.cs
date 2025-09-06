@@ -25,8 +25,7 @@ namespace Inventory
             
             if (inventory.TryAddToInventory(itemData, 1))
             {
-                Debug.Log($"[Pickup] add -> hotbar={inventory.HotbarInventorySystem.GetHashCode()} main={inventory.MainInventory.GetHashCode()}");
-                Destroy(this.gameObject);
+                Destroy(gameObject);
             }
         }
     }

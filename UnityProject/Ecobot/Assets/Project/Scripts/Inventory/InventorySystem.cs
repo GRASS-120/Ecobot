@@ -42,7 +42,7 @@ namespace Inventory
                     slot.AddToStack(amount);
                     
                     NotifySlotChanged(IndexOf(slot));
-                    // _onInventorySlotChanged.OnNext(slot);
+                    
                     return true;
                 }
             }
@@ -70,7 +70,6 @@ namespace Inventory
 
         public void NotifySlotChanged(int index)
         {
-            Debug.Log($"[NotifySlotChanged] inv={GetHashCode()} idx={index}");
             OnInventorySlotChanged.OnNext(inventorySlots[index]);
         }
 
