@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using R3;
 using UnityEditor.PackageManager.UI;
 
@@ -14,6 +15,8 @@ namespace GUI.UIFramework
         
         // Id == название префаба, который кладем в Resources!
         public abstract string Id { get; } 
+        public WindowType WindowType { get; private set; }
+        public bool IsOpen { get; private set; }
         
         protected T View { get; private set; }
         protected CompositeDisposable Subs { get; private set; } = new CompositeDisposable();
@@ -21,6 +24,16 @@ namespace GUI.UIFramework
         private readonly Subject<IWindowController> _closeRequested = new();
         private readonly Subject<IWindowController> _openRequested = new();
 
+        protected WindowController()
+        {
+            // как обращаться к атрибуту
+            var attribute = GetType().GetCustomAttribute<WindowAttribute>();
+            
+            // todo: add prefab path
+            if (attribute != null)
+                WindowType = attribute.WindowType;
+        }
+        
         public void Bind(WindowView windowView)
         {
             View = (T)windowView;
@@ -31,6 +44,7 @@ namespace GUI.UIFramework
             OnClose();
             _closeRequested.OnNext(this);
             
+            IsOpen = false;
             Subs?.Dispose();
             Subs = null;
         }
@@ -42,6 +56,7 @@ namespace GUI.UIFramework
             
             OnOpen();
             
+            IsOpen = true;
             _openRequested.OnNext(this);
         }
         

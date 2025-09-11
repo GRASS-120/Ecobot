@@ -1,4 +1,6 @@
-﻿using InteractionSystem;
+﻿using GUI.Gameplay.Windows.Controller;
+using GUI.UIFramework;
+using InteractionSystem;
 using Inventory;
 using R3;
 using UnityEngine;
@@ -15,32 +17,34 @@ namespace Player
         [Min(1)]
         [SerializeField] private int hotbarInventorySize = 10;
 
-        private InventorySystem _mainInventorySystem;
-        private InventorySystem _hotbarInventorySystem;
-
-        public int MainInventorySize => mainInventorySize;
         public InventorySystem MainInventory => _mainInventorySystem;
         public InventorySystem HotbarInventorySystem => _hotbarInventorySystem;
 
-        private void Awake()
-        {
-            // _hotbarInventorySystem = new InventorySystem(hotbarInventorySize);
-            // _mainInventorySystem = new InventorySystem(mainInventorySize);
-        }
+        private PlayerManager _player;
+        private InventorySystem _mainInventorySystem;
+        private InventorySystem _hotbarInventorySystem;
 
         public void Init(PlayerManager player)
         {
             _hotbarInventorySystem = new InventorySystem(hotbarInventorySize);
             _mainInventorySystem = new InventorySystem(mainInventorySize);
             
-            Debug.Log($"[Holder Awake] hotbar={_hotbarInventorySystem.GetHashCode()} main={_mainInventorySystem.GetHashCode()}");
+            _player = player;
             
-            player.Input.OnOpenInventory += HandleInventory;
+            _player.Input.OnOpenInventory += HandleInventory;
         }
 
         private void HandleInventory()
         {
-            // load panel
+            var inventoryUI = _player.WindowManager.GetController<InventoryWindowController>();
+            if (inventoryUI.IsOpen)
+            {
+                _player.WindowManager.CloseWindow<InventoryWindowController>();
+            }
+            else
+            {
+                _player.WindowManager.OpenWindow<InventoryWindowController>();
+            }
         }
 
         public bool TryAddToInventory(InventoryItemData data, int amount)

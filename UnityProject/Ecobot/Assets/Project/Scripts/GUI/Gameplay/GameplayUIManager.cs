@@ -17,15 +17,15 @@ namespace GUI.Gameplay
     /// </summary>
     public class GameplayUIManager : MonoBehaviour
     {
-        private GameUIRootController _rootController;
+        private WindowManager _windowManager;
         private GameMode _mode;
         private GameManager _gameManager;
         private PlayerInventoryHolder _inventoryHolder;
 
-        public void Init(GameUIRootController rootController, GameManager gameManager, PlayerManager player)
+        public void Init(WindowManager windowManager, GameManager gameManager, PlayerManager player)
         {
             _gameManager = gameManager;
-            _rootController = rootController;
+            _windowManager = windowManager;
             _mode = _gameManager.GameplayMode;
             _inventoryHolder = player.Inventory;
             
@@ -34,24 +34,10 @@ namespace GUI.Gameplay
         
         public void OpenOverlay()
         {
-            var controller = new GameplayOverlayController(_inventoryHolder);
-           
-            _rootController.OpenOverlay(controller);
-        }
-
-        public void OpenPlayerInventory()
-        {
-            var controller = new InventoryWindowController(_inventoryHolder);
-            
-            // ok, этот функционал стоит оставить, так как может понадобиться для случаев, когда неважно какое окно
-            // например, закрыть последний popup или открыть overlay
-            
-            _rootController.OpenPopup(controller);
-            
-            // два способа закрыть...
-            // _rootController.ClosePopup(controller);
-            //
-            // _rootController.OpenedOverlay.CurrentValue.Close();
+            _windowManager.OpenWindow<GameplayOverlayController>(controller =>
+            {
+                controller.Init(_inventoryHolder, _windowManager);
+            });
         }
     }
 }

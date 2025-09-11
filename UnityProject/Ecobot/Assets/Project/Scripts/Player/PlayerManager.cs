@@ -1,3 +1,4 @@
+using GUI.UIFramework;
 using Inventory;
 using Player.InputManager;
 using Player.PlayerCamera;
@@ -8,6 +9,7 @@ namespace Player
 {
     public class PlayerManager : MonoBehaviour {
         [Title("Components")]
+        [SerializeField] private WindowManager windowManager;
         [SerializeField] private PlayerInputManager inputManager;
         [SerializeField] private PlayerCameraManager cameraManager;
         [SerializeField] private PlayerInteractor interactor;
@@ -25,6 +27,7 @@ namespace Player
         
         public PlayerInputManager Input => inputManager;
         public PlayerInventoryHolder Inventory => inventory;
+        public WindowManager WindowManager => windowManager;
 
         public void Init() {
             _characterController = GetComponent<CharacterController>();

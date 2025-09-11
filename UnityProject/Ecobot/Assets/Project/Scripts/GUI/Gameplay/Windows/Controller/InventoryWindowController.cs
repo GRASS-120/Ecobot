@@ -1,27 +1,68 @@
-﻿using GUI.Gameplay.Windows.View;
+﻿using System.Collections.Generic;
+using GUI.Gameplay.Windows.View;
 using GUI.UIFramework;
+using Inventory;
+using Inventory.UI;
 using Player;
+using R3;
+using UnityEngine;
 
 namespace GUI.Gameplay.Windows.Controller
 {
+    [Window(WindowType.Popup, "PlayerInventoryWindow")]
     public class InventoryWindowController : WindowController<InventoryWindowView>
     {
-        public override string Id => "InventoryWindow";
+        public override string Id => "PlayerInventoryWindow";
 
-        private readonly PlayerInventoryHolder _inventoryHolder; 
+        private MouseInventoryItemUI _mouseUI;
+        private InventorySystem _quickMoveTarget;
+        private InventorySystem _inventory;
+        private List<InventorySlotUI> _slots = new List<InventorySlotUI>();
         
-        public InventoryWindowController(PlayerInventoryHolder inventoryHolder)
+        public void Init(
+            InventorySystem inventorySystem, 
+            MouseInventoryItemUI mouseUI, 
+            InventorySystem quickMoveTarget = null)
         {
-            _inventoryHolder = inventoryHolder;
+            _inventory = inventorySystem;
+            _mouseUI = mouseUI;
+            _quickMoveTarget = quickMoveTarget;
         }
         
         public override void OnOpen()
         {
-            View.PlayerInventoryUI.Init(
-                _inventoryHolder.MainInventory, 
-                View.MouseInventoryItemUI, 
-                Subs,
-                quickMoveTarget: _inventoryHolder.HotbarInventorySystem);
+            Clear();
+            for (int i = 0; i < _inventory.InventorySize; i++)
+            {
+                var slot = View.CreateSlotVisual();
+                
+                slot.Init(_inventory, i, _mouseUI, _inventory.InventoryOperationsService, Subs, _quickMoveTarget);
+                _slots.Add(slot);
+            }
+
+            RefreshAll();
+
+            _inventory.OnInventorySlotChanged
+                .Subscribe(changedSlot =>
+                {
+                    int idx = _inventory.IndexOf(changedSlot);
+                    
+                    if (idx >= 0 && idx < _slots.Count)
+                        _slots[idx].Refresh();
+                })
+                .AddTo(Subs);
+        }
+
+        private void RefreshAll()
+        {
+            for (int i = 0; i < _slots.Count; i++)
+                _slots[i].Refresh();
+        }
+
+        private void Clear()
+        {
+            View.ClearVisual();
+            _slots.Clear();
         }
     }
 }

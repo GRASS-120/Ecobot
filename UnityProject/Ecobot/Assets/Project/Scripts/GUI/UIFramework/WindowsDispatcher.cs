@@ -11,6 +11,9 @@ namespace GUI.UIFramework
     /// </summary>
     public class WindowsDispatcher : MonoBehaviour
     {
+        // add cach
+        [SerializeField] private WindowManager windowManager;
+        
         [Header("Containers")]
         [SerializeField] private Transform overlayContainer;
         [SerializeField] private Transform popupsContainer;
@@ -21,24 +24,28 @@ namespace GUI.UIFramework
         public void OpenPopup(IWindowController controller)
         {
             if (popupsContainer == null)
+            {
                 Debug.LogError("Popups container is null.");
+                return;
+            }
             
-            var prefabPath = GetPrefabPath(controller);
-            var prefab = Resources.Load<GameObject>(prefabPath);
-            var createdPopup = Instantiate(prefab, popupsContainer);
-            var view = createdPopup.GetComponent<WindowView>();
+            var prefabPath = windowManager.GetPrefabPath(controller);
+            var view = CreateWindow(prefabPath, popupsContainer);
             
-            controller.Bind(view);
-            
-            _openedPopups.Add(controller, view);
+            if (view != null)
+            {
+                controller.Bind(view);
+                _openedPopups.Add(controller, view);
+            }
         }
-
+        
         public void ClosePopup(IWindowController controller)
         {
-            var view = _openedPopups[controller];
-            
-            view?.Close();
-            _openedPopups.Remove(controller);
+            if (_openedPopups.TryGetValue(controller, out var view))
+            {
+                view?.Close();
+                _openedPopups.Remove(controller);
+            }
         }
         
         public void OpenOverlay(IWindowController controller)
@@ -46,19 +53,42 @@ namespace GUI.UIFramework
             if (controller == null) return;
             
             if (overlayContainer == null)
+            {
                 Debug.LogError("Overlay container is null.");
+                return;
+            }
             
-            var prefabPath = GetPrefabPath(controller);
-            var prefab = Resources.Load<GameObject>(prefabPath);
-            var createdOverlay = Instantiate(prefab, overlayContainer);
-            var view = createdOverlay.GetComponent<WindowView>();
-
-            _openedOverlay?.Close();
+            var prefabPath = windowManager.GetPrefabPath(controller);
+            var view = CreateWindow(prefabPath, overlayContainer);
             
-            controller.Bind(view);
-            _openedOverlay = view;
+            if (view != null)
+            {
+                _openedOverlay?.Close();
+                controller.Bind(view);
+                _openedOverlay = view;
+            }
         }
-
-        private static string GetPrefabPath(IWindowController controller) => $"UI/{controller.Id}";
+        
+        private WindowView CreateWindow(string prefabPath, Transform container)
+        {
+            var prefab = Resources.Load<GameObject>($"UI/{prefabPath}");
+            if (prefab == null)
+            {
+                Debug.LogError($"Failed to load prefab at path: UI/{prefabPath}");
+                return null;
+            }
+            
+            var instance = Instantiate(prefab, container);
+            var view = instance.GetComponent<WindowView>();
+            
+            if (view == null)
+            {
+                Debug.LogError($"Prefab {prefabPath} doesn't have WindowView component");
+                Destroy(instance);
+                return null;
+            }
+            
+            return view;
+        }
     }
 }

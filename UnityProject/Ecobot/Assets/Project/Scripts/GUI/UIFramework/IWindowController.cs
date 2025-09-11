@@ -10,6 +10,7 @@ namespace GUI.UIFramework
         public Observable<IWindowController> OnOpenEvent { get; }
         
         public string Id { get; } 
+        public WindowType WindowType { get; }
         
         public void Bind(WindowView windowView){}
         public void Close(){}

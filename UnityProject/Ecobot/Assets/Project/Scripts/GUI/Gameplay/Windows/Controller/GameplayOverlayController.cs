@@ -6,15 +6,24 @@ using UnityEngine;
 
 namespace GUI.Gameplay.Windows.Controller
 {
+    [Window(WindowType.Overlay, "GameplayOverlay")]
     public class GameplayOverlayController : WindowController<GameplayOverlayView>
     {
         public override string Id => "GameplayOverlay";
         
-        private readonly PlayerInventoryHolder _inventoryHolder; 
+        private PlayerInventoryHolder _inventoryHolder;
+        private WindowManager _windowManager;
         
-        public GameplayOverlayController(PlayerInventoryHolder inventoryHolder)
+        // todo: DI
+        // public GameplayOverlayController(PlayerInventoryHolder inventoryHolder)
+        // {
+        //     _inventoryHolder = inventoryHolder;
+        // }
+
+        public void Init(PlayerInventoryHolder inventoryHolder, WindowManager windowManager)
         {
             _inventoryHolder = inventoryHolder;
+            _windowManager = windowManager;
         }
 
         public override void OnOpen()
@@ -27,12 +36,18 @@ namespace GUI.Gameplay.Windows.Controller
                 Subs,
                 quickMoveTarget: _inventoryHolder.MainInventory);
 
+            var inventoryWindowController = _windowManager.GetController<InventoryWindowController>();
+            inventoryWindowController.Init(
+                _inventoryHolder.MainInventory,
+                View.MouseInventoryItemUI,
+                _inventoryHolder.HotbarInventorySystem);
+
             // View.PlayerInventoryUI.Init(
             //     _inventoryHolder.MainInventory, 
             //     View.MouseInventoryItemUI, 
             //     Subs,
             //     quickMoveTarget: _inventoryHolder.HotbarInventorySystem);
-            
+
             // View.StorageInventoryUI.Init(_playerInventoryHolder.HotbarInventorySystem, Subs);
         }
     }

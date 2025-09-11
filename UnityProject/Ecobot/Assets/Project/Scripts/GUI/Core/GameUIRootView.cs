@@ -9,9 +9,12 @@ namespace GUI.Core
 {
     public class GameUIRootView : UIRootView
     {
+        [Header("Components")] 
+        [SerializeField] private WindowManager windowManager;
+        
         [Header("UI Managers")]
-        public GameplayUIManager gameplayUIManager;
-        public ProgrammingUIManager programmingUIManager;
+        [SerializeField] private GameplayUIManager gameplayUIManager;
+        [SerializeField] private ProgrammingUIManager programmingUIManager;
 
         public void Init(GameManager gameManager, PlayerManager player)
         {
@@ -19,7 +22,10 @@ namespace GUI.Core
             
             Dispatch(rootViewModel);
             
-            gameplayUIManager.Init(rootViewModel, gameManager, player);
+            windowManager.Init(rootViewModel);
+            gameplayUIManager.Init(windowManager, gameManager, player);
+            
+            
             programmingUIManager.Init(rootViewModel, gameManager);
         }
     }
