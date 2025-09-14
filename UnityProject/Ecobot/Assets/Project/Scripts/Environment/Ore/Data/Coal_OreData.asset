@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 146720af79904ed47995021be5adf49e, type: 3}
-  m_Name: Test
+  m_Script: {fileID: 11500000, guid: 2d38deca8be44980998ac8857a5701ea, type: 3}
+  m_Name: Coal_OreData
   m_EditorClassIdentifier: 
-  id: 0
-  displayName: test item 1
-  description: lorem ipsum
-  icon: {fileID: 21300000, guid: 83d4c0e3d19d65146ad1dc996a82dc81, type: 3}
-  maxStackValue: 5
+  oreItem: {fileID: 11400000, guid: b83c0ea004e8e4343933e877b71fcdf7, type: 2}
+  miningTime: 0.75
+  capacity: 50

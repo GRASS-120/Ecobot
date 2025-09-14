@@ -8,6 +8,7 @@ using Player;
 using R3;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using WUI;
 
 namespace environment.Ore
 {
@@ -19,6 +20,9 @@ namespace environment.Ore
         
         [Header("Settings")]
         [SerializeField] private OreData data;
+        
+        [Header("UI")]
+        [SerializeField] private ProgressBar progressBar;
         
         [Header("Debug")]
         [ReadOnly][SerializeField] private SerializableReactiveProperty<float> currentCapacity;
@@ -33,6 +37,12 @@ namespace environment.Ore
             currentCapacity = new SerializableReactiveProperty<float>(data.Capacity);
             
             currentCapacity.Subscribe(value => Debug.Log(value)).AddTo(this);
+            
+            // Инициализируем progress bar
+            if (progressBar != null)
+            {
+                progressBar.Init(data.MiningTime);
+            }
         }
         
         private IEnumerator StartMining()
@@ -40,14 +50,26 @@ namespace environment.Ore
             Debug.Log("Starting Mining");
             _onMiningStart?.OnNext(Unit.Default);
             
+            // Показываем прогресс бар один раз в начале добычи
+            progressBar?.ShowProgressBar();
+            
             while (currentCapacity.Value >= 0)
             {
+                // Запускаем прогресс для одной единицы добычи
+                progressBar?.StartSingleProgress();
+                
                 yield return new WaitForSeconds(data.MiningTime);
                 
                 currentCapacity.Value--;
                 
                 _onProvideLoot.OnNext(new LootQuery(data.OreItem, 1));
+                
+                // Завершаем текущий прогресс (сбрасываем до 0)
+                progressBar?.CompleteSingleProgress();
             }
+            
+            // Полностью скрываем прогресс бар только когда добыча завершена
+            progressBar?.HideProgressBar();
             
             _onMiningEnd.OnNext(Unit.Default);
             
@@ -59,6 +81,9 @@ namespace environment.Ore
         {
             Debug.Log("Stopping Mining");
             _onMiningEnd?.OnNext(Unit.Default);
+            
+                // Скрываем прогресс бар при остановке
+            progressBar?.HideProgressBar();
             
             StopCoroutine(_miningCoroutine);
         }
