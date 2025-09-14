@@ -51,19 +51,5 @@ namespace Inventory
 
         public void AddToStack(int amount) => stackSize += amount;
         public void RemoveFromStack(int amount) => stackSize -= amount;
-
-        // public bool TrySplitStack(out InventorySlot slittedStack)
-        // {
-        //     if (stackSize <= 1)
-        //     {
-        //         slittedStack = null;
-        //         return false;
-        //     }
-        //
-        //     int halfStack = stackSize / 2;
-        //     RemoveFromStack(halfStack);
-        //     slittedStack = new InventorySlot(itemData, halfStack);
-        //     return true;
-        // }
     }
 }

@@ -13,12 +13,6 @@ namespace GUI.Gameplay.Windows.Controller
         
         private PlayerInventoryHolder _inventoryHolder;
         private WindowManager _windowManager;
-        
-        // todo: DI
-        // public GameplayOverlayController(PlayerInventoryHolder inventoryHolder)
-        // {
-        //     _inventoryHolder = inventoryHolder;
-        // }
 
         public void Init(PlayerInventoryHolder inventoryHolder, WindowManager windowManager)
         {
@@ -41,12 +35,6 @@ namespace GUI.Gameplay.Windows.Controller
                 _inventoryHolder.MainInventory,
                 View.MouseInventoryItemUI,
                 _inventoryHolder.HotbarInventorySystem);
-
-            // View.PlayerInventoryUI.Init(
-            //     _inventoryHolder.MainInventory, 
-            //     View.MouseInventoryItemUI, 
-            //     Subs,
-            //     quickMoveTarget: _inventoryHolder.HotbarInventorySystem);
 
             // View.StorageInventoryUI.Init(_playerInventoryHolder.HotbarInventorySystem, Subs);
         }

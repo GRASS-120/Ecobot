@@ -13,29 +13,32 @@ namespace environment.Ore
 {
     public class Ore : MonoBehaviour, IInteractable, ILootProvider
     {
-        public event Action OnMiningStart;
-        public event Action OnMiningEnd;
-        public Observable<LootQuery> OnGiveLoot => _onGiveLoot;
+        public Observable<Unit> OnMiningStart => _onMiningStart;
+        public Observable<Unit> OnMiningEnd => _onMiningEnd;
+        public Observable<LootQuery> OnProvideLoot => _onProvideLoot;
         
+        [Header("Settings")]
         [SerializeField] private OreData data;
+        
+        [Header("Debug")]
         [ReadOnly][SerializeField] private SerializableReactiveProperty<float> currentCapacity;
         
-        private Subject<LootQuery> _onGiveLoot = new Subject<LootQuery>();
+        private readonly Subject<LootQuery> _onProvideLoot = new();
+        private readonly Subject<Unit> _onMiningStart = new();
+        private readonly Subject<Unit> _onMiningEnd = new();
         private Coroutine _miningCoroutine;
 
         private void Awake()
         {
             currentCapacity = new SerializableReactiveProperty<float>(data.Capacity);
             
-            currentCapacity.Subscribe(value => Debug.Log(value));
+            currentCapacity.Subscribe(value => Debug.Log(value)).AddTo(this);
         }
         
         private IEnumerator StartMining()
         {
             Debug.Log("Starting Mining");
-            OnMiningStart?.Invoke();
-
-            var loot = new LootQuery(data.OreItem, 1);
+            _onMiningStart?.OnNext(Unit.Default);
             
             while (currentCapacity.Value >= 0)
             {
@@ -43,18 +46,19 @@ namespace environment.Ore
                 
                 currentCapacity.Value--;
                 
-                _onGiveLoot.OnNext(loot);
-                
-                yield return null;
+                _onProvideLoot.OnNext(new LootQuery(data.OreItem, 1));
             }
             
+            _onMiningEnd.OnNext(Unit.Default);
+            
             currentCapacity.Dispose();
+            _onProvideLoot.OnCompleted();
         }
 
         private void StopMining()
         {
             Debug.Log("Stopping Mining");
-            OnMiningEnd?.Invoke();
+            _onMiningEnd?.OnNext(Unit.Default);
             
             StopCoroutine(_miningCoroutine);
         }

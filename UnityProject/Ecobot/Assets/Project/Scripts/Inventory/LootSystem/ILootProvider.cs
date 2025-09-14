@@ -1,11 +1,9 @@
-﻿using Inventory;
-using Inventory.LootSystem;
-using R3;
+﻿using R3;
 
-namespace InteractionSystem
+namespace Inventory.LootSystem
 {
     public interface ILootProvider
     {
-        public Observable<LootQuery> OnGiveLoot { get; }
+        public Observable<LootQuery> OnProvideLoot { get; }
     }
 }

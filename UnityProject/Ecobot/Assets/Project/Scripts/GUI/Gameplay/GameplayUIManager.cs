@@ -4,7 +4,6 @@ using Game.Mods.Core;
 using GUI.Core;
 using GUI.Gameplay.Windows;
 using GUI.Gameplay.Windows.Controller;
-using GUI.Main;
 using GUI.UIFramework;
 using Inventory;
 using Player;

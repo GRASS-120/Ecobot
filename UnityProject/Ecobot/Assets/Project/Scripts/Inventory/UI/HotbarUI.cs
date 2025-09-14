@@ -28,22 +28,18 @@ namespace Inventory.UI
                 _slots.Add(slot);
             }
 
-            // Первичное обновление
             RefreshAll();
 
-            // Подписка на изменения
             _inventory.OnInventorySlotChanged
                 .Subscribe(changedSlot =>
                 {
                     int idx = _inventory.IndexOf(changedSlot);
-                    Debug.Log($"[{name}] UI SUB EVENT inv={_inventory.GetHashCode()} idx={idx} item={(changedSlot.ItemData ? changedSlot.ItemData.displayName : "null")} cnt={changedSlot.StackSize}");
                     if (idx >= 0 && idx < _slots.Count)
                         _slots[idx].Refresh();
                 })
                 .AddTo(disposables);
-            Debug.Log($"[{name}] UI SUB START inv={_inventory.GetHashCode()}");
             
-            _inventory.NotifySlotChanged(0); // должен прилететь "UI SUB EVENT" с idx=0
+            _inventory.NotifySlotChanged(0); 
         }
 
         private void RefreshAll()

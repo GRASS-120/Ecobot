@@ -34,7 +34,7 @@ namespace Player
             _mainCamera = cameraManager.MainCamera; 
             _groundMask = LayerMask.GetMask(Const.GROUND_LAYER);
             
-            interactor.Init(this);
+            interactor.Init(this, inventory);
             inventory.Init(this);
         }
 

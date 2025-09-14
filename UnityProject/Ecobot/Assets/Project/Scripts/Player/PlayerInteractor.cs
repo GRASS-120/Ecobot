@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using InteractionSystem;
+using Inventory.LootSystem;
+using R3;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,12 +23,14 @@ namespace Player
         public bool IsHoldInteracting { get; set; }
 
         private PlayerInputManager _input;
-        
         private IInteractable _currentInteractable;
+        private ILootReceiver _lootReceiver;     
+        private readonly CompositeDisposable _lootSubscription = new (); 
         
-        public void Init(PlayerManager player)
+        public void Init(PlayerManager player, ILootReceiver lootReceiver)
         {
             _input = player.Input;
+            _lootReceiver = lootReceiver;
             InteractorSource = interactorSource;
             
             _input.OnInteract += HandleInteraction;
@@ -35,8 +40,6 @@ namespace Player
         
         public void HandleInteraction()
         {
-            Debug.Log("HandleInteraction");
-            
             var r = new Ray(InteractorSource.position, InteractorSource.forward);
             if (Physics.Raycast(r, out RaycastHit hit, interactionRange))
             {
@@ -57,6 +60,16 @@ namespace Player
                     _currentInteractable = interactable;
                     IsHoldInteracting = true;
                     
+                    // Если цель производит лут — подпишемся и складываем в lootReceiver (если он есть)
+                    if (interactable is ILootProvider provider)
+                    {
+                        _lootSubscription.Clear();
+                        provider.OnProvideLoot.Subscribe(loot =>
+                        {
+                            _lootReceiver.TryReceive(loot);
+                        }).AddTo(_lootSubscription);
+                    }
+                    
                     StartCoroutine(interactable.HoldInteract(this));
                 }
             }
@@ -65,8 +78,6 @@ namespace Player
         public void HandleHoldInteractionCanceled()
         {
             if (_currentInteractable == null) return;
-            
-            Debug.Log("HandleHoldInteractionCanceled");
             
             StopCoroutine(_currentInteractable.HoldInteract(this));
             

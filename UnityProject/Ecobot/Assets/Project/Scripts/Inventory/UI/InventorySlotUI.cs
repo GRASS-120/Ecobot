@@ -92,7 +92,6 @@ namespace Inventory.UI
             }
         }
 
-        // Drag & Drop
         public void OnBeginDrag(PointerEventData eventData)
         {
             if (_mouseUI.IsEmpty())

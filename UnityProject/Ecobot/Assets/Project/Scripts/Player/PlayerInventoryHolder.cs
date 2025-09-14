@@ -2,12 +2,13 @@
 using GUI.UIFramework;
 using InteractionSystem;
 using Inventory;
+using Inventory.LootSystem;
 using R3;
 using UnityEngine;
 
 namespace Player
 {
-    public class PlayerInventoryHolder : MonoBehaviour, IInventoryHolder
+    public class PlayerInventoryHolder : MonoBehaviour, IInventoryHolder, ILootReceiver
     {
         [Header("Main Inventory")]
         [Min(1)]
@@ -54,11 +55,9 @@ namespace Player
             return false;
         }
 
-        public void HandleLoot(ILootProvider lootProvider)
+        public bool TryReceive(LootQuery loot)
         {
-            lootProvider.OnGiveLoot
-                .Subscribe(loot => TryAddToInventory(loot.Item, loot.Amount))
-                .AddTo(this);
+            return TryAddToInventory(loot.Item, loot.Amount);
         }
     }
 }
