@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SingularityGroup.HotReload.DTO;
+using UnityEngine;
 
 namespace SingularityGroup.HotReload.Editor {
     internal static class EditorIndicationState {
@@ -20,6 +21,8 @@ namespace SingularityGroup.HotReload.Editor {
             CompileErrors,
             ActivationFailed,
             FinishRegistration,
+            Undetected,
+            Paused,
         }
 
         internal static readonly string greyIconPath = "grey";
@@ -29,11 +32,13 @@ namespace SingularityGroup.HotReload.Editor {
             // grey icon:
             { IndicationStatus.FinishRegistration, greyIconPath },
             { IndicationStatus.Stopped, greyIconPath },
+            { IndicationStatus.Paused, greyIconPath },
             // green icon:
             { IndicationStatus.Started, greenIconPath },
             // log icons:
             { IndicationStatus.Reloaded, HotReloadTimelineHelper.alertIconString[AlertType.AppliedChange] },
             { IndicationStatus.Unsupported, HotReloadTimelineHelper.alertIconString[AlertType.UnsupportedChange] },
+            { IndicationStatus.Undetected, HotReloadTimelineHelper.alertIconString[AlertType.UndetectedChange] },
             { IndicationStatus.PartiallySupported, HotReloadTimelineHelper.alertIconString[AlertType.PartiallySupportedChange] },
             { IndicationStatus.CompileErrors, HotReloadTimelineHelper.alertIconString[AlertType.CompileError] },
             // spinner:
@@ -58,6 +63,7 @@ namespace SingularityGroup.HotReload.Editor {
             { IndicationStatus.Started, "Waiting for code changes" },
             { IndicationStatus.Stopping, "Stopping Hot Reload" },
             { IndicationStatus.Stopped, "Hot Reload inactive" },
+            { IndicationStatus.Paused, "Hot Reload paused" },
             { IndicationStatus.Installing, "Installing" },
             { IndicationStatus.Starting, "Starting Hot Reload" },
             { IndicationStatus.Reloaded, "Reload finished" },
@@ -68,6 +74,7 @@ namespace SingularityGroup.HotReload.Editor {
             { IndicationStatus.CompileErrors, "Scripts have compile errors" },
             { IndicationStatus.ActivationFailed, "Activation failed" },
             { IndicationStatus.Loading, "Loading" },
+            { IndicationStatus.Undetected, "No changes applied"},
         };
 
         private const int MinSpinnerDuration = 200;
@@ -76,8 +83,21 @@ namespace SingularityGroup.HotReload.Editor {
         private static bool SpinnerCompletedMinDuration => DateTime.UtcNow - spinnerStartedAt > TimeSpan.FromMilliseconds(MinSpinnerDuration);
         private static IndicationStatus GetIndicationStatus() {
             var status = GetIndicationStatusCore();
-            var newStatusIsSpinner = SpinnerIndications.Contains(status);
-            var latestStatusIsSpinner = SpinnerIndications.Contains(latestStatus);
+            
+            // Note: performance sensitive code, don't use Link
+            bool newStatusIsSpinner = false;
+            for (var i = 0; i < SpinnerIndications.Length; i++) {
+                if (SpinnerIndications[i] == status) {
+                    newStatusIsSpinner = true;
+                }
+            }
+            bool latestStatusIsSpinner = false;
+            for (var i = 0; i < SpinnerIndications.Length; i++) {
+                if (SpinnerIndications[i] == latestStatus) {
+                    newStatusIsSpinner = true;
+                }
+            }
+            
             if (status == latestStatus) {
                 return status;
             } else if (latestStatusIsSpinner) {
@@ -111,6 +131,8 @@ namespace SingularityGroup.HotReload.Editor {
                 return IndicationStatus.Compiling;
             if (EditorCodePatcher.Starting && !EditorCodePatcher.Stopping)
                 return IndicationStatus.Starting;
+            if (!Application.isPlaying && HotReloadPrefs.PauseHotReloadInEditMode)
+                return IndicationStatus.Paused;
             if (!EditorCodePatcher.Running)
                 return IndicationStatus.Stopped;
             if (EditorCodePatcher.Status?.isLicensed != true && EditorCodePatcher.Status?.isFree != true && EditorCodePatcher.Status?.freeSessionFinished == true)
@@ -132,6 +154,9 @@ namespace SingularityGroup.HotReload.Editor {
                     }
                     if (EditorCodePatcher._appliedPartially) {
                         return IndicationStatus.PartiallySupported;
+                    }
+                    if (EditorCodePatcher._appliedUndetected) {
+                        return IndicationStatus.Undetected;
                     }
                     return IndicationStatus.Reloaded;
                 case PatchStatus.Patching:     return IndicationStatus.Patching;
