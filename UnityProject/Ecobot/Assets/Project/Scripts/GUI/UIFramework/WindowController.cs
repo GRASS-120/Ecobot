@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using R3;
-using UnityEditor.PackageManager.UI;
 
 namespace GUI.UIFramework
 {

@@ -991,6 +991,16 @@ PrefabInstance:
       propertyPath: rotationOffset.y
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 7923786201973145569, guid: a35f150ade99dd546bf91e93802407aa,
+        type: 3}
+      propertyPath: CollisionModule.radiusScale
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7923786201973145569, guid: a35f150ade99dd546bf91e93802407aa,
+        type: 3}
+      propertyPath: CollisionModule.collidesWith.m_Bits
+      value: 1050359
+      objectReference: {fileID: 0}
     - target: {fileID: 9094503506226515026, guid: a35f150ade99dd546bf91e93802407aa,
         type: 3}
       propertyPath: m_Name
