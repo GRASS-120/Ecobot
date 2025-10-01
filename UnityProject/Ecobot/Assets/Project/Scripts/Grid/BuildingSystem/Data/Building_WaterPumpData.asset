@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
-  m_Name: ElectricityPole
+  m_Name: Building_WaterPumpData
   m_EditorClassIdentifier: 
   id: 0
   displayName: 
   description: 
-  icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 0}
   maxStackValue: 0
-  prefab: {fileID: 6904764275240585304, guid: dd79612bae05ea540ae979b3c17e1cf2, type: 3}
-  width: 1
-  height: 1
+  prefab: {fileID: 6139819573181346870, guid: f182214e9379e6640ad452e71c7d082a, type: 3}
+  width: 7
+  height: 3

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
-  m_Name: SolarPanel
+  m_Name: Building_SolarPanelData
   m_EditorClassIdentifier: 
   id: 0
   displayName: 

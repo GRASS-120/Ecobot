@@ -1,3 +1,4 @@
+using Grid.BuildingSystem.Buildings;
 using Inventory;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -5,8 +6,8 @@ using UnityEngine;
 namespace Grid.BuildingSystem
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Building System/Building SO", order = 0)]
-    public class BuildingSO : InventoryItemData {
-        public Transform prefab;
+    public class BuildingAssetData : InventoryItemData {
+        public BuildingBase prefab;
         public int width;
         public int height;
 

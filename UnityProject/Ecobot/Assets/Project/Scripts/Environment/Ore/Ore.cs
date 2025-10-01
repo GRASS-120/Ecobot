@@ -38,7 +38,6 @@ namespace environment.Ore
             
             currentCapacity.Subscribe(value => Debug.Log(value)).AddTo(this);
             
-            // Инициализируем progress bar
             if (progressBar != null)
             {
                 progressBar.Init(data.MiningTime);
@@ -50,12 +49,10 @@ namespace environment.Ore
             Debug.Log("Starting Mining");
             _onMiningStart?.OnNext(Unit.Default);
             
-            // Показываем прогресс бар один раз в начале добычи
             progressBar?.ShowProgressBar();
             
-            while (currentCapacity.Value >= 0)
+            while (currentCapacity.Value > 0)
             {
-                // Запускаем прогресс для одной единицы добычи
                 progressBar?.StartSingleProgress();
                 
                 yield return new WaitForSeconds(data.MiningTime);
@@ -64,11 +61,9 @@ namespace environment.Ore
                 
                 _onProvideLoot.OnNext(new LootQuery(data.OreItem, 1));
                 
-                // Завершаем текущий прогресс (сбрасываем до 0)
                 progressBar?.CompleteSingleProgress();
             }
             
-            // Полностью скрываем прогресс бар только когда добыча завершена
             progressBar?.HideProgressBar();
             
             _onMiningEnd.OnNext(Unit.Default);
@@ -82,7 +77,6 @@ namespace environment.Ore
             Debug.Log("Stopping Mining");
             _onMiningEnd?.OnNext(Unit.Default);
             
-                // Скрываем прогресс бар при остановке
             progressBar?.HideProgressBar();
             
             StopCoroutine(_miningCoroutine);

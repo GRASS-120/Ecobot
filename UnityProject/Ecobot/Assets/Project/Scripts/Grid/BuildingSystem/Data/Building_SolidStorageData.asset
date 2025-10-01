@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
-  m_Name: SolidStorage
+  m_Name: Building_SolidStorageData
   m_EditorClassIdentifier: 
   id: 0
-  displayName: 
+  displayName: Solid Storage
   description: 
   icon: {fileID: 0}
   maxStackValue: 0
-  prefab: {fileID: 6229405301260836530, guid: d128d596df95ef042ac4c6071c7ec135, type: 3}
+  prefab: {fileID: 1106146429286659400, guid: 61f638097cd970643ada512f918a9be1, type: 3}
   width: 1
   height: 1

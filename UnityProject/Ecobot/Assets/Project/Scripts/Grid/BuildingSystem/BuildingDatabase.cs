@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Grid.BuildingSystem.Buildings;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -8,39 +9,39 @@ namespace Grid.BuildingSystem
 {
     public class BuildingDatabase
     {
-        public Dictionary<BuildingSO, List<Building>> BuildingsData; 
+        public Dictionary<BuildingAssetData, List<BuildingBase>> BuildingsData; 
         
-        public BuildingDatabase (BuildingListSO buildingListSO)
+        public BuildingDatabase (BuildingListConfig buildingListConfig)
         {
-            var buildingTypes = buildingListSO.buildings;
+            var buildingTypes = buildingListConfig.buildings;
             
-            BuildingsData = new Dictionary<BuildingSO, List<Building>>();
+            BuildingsData = new Dictionary<BuildingAssetData, List<BuildingBase>>();
 
             foreach (var buildingType in buildingTypes)
             {
-                BuildingsData[buildingType] = new List<Building>();
+                BuildingsData[buildingType] = new List<BuildingBase>();
             }
         }
 
-        public void Append(Building building)
+        public void Append(BuildingBase building)
         {
-            if (!BuildingsData.ContainsKey(building.BuildingSO))
+            if (!BuildingsData.ContainsKey(building.BuildingAssetData))
             {
-                BuildingsData.Add(building.BuildingSO, new List<Building>());
+                BuildingsData.Add(building.BuildingAssetData, new List<BuildingBase>());
             }
             
-            BuildingsData[building.BuildingSO].Add(building);
+            BuildingsData[building.BuildingAssetData].Add(building);
         }
 
-        public void Remove(Building building)
+        public void Remove(BuildingBase building)
         {
-            if (!BuildingsData.ContainsKey(building.BuildingSO)) return;
+            if (!BuildingsData.ContainsKey(building.BuildingAssetData)) return;
             
-            BuildingsData[building.BuildingSO].Remove(building);
+            BuildingsData[building.BuildingAssetData].Remove(building);
 
-            if (BuildingsData[building.BuildingSO].Count == 0)
+            if (BuildingsData[building.BuildingAssetData].Count == 0)
             {
-                BuildingsData.Remove(building.BuildingSO);
+                BuildingsData.Remove(building.BuildingAssetData);
             }
         }
     }

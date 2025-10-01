@@ -10,10 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
-  m_Name: BotWorkbanch
+  m_Name: Building_WindTurbineData
   m_EditorClassIdentifier: 
-  buildingName: Bot Workbanch
-  prefab: {fileID: 2666604040511000049, guid: a23605ca4a6bec84f93ced42fd2c1dc4, type: 3}
-  visual: {fileID: 0}
+  id: 0
+  displayName: Wind Generator
+  description: 
+  icon: {fileID: 0}
+  maxStackValue: 0
+  prefab: {fileID: 9012627248208520254, guid: 4d1c4fc51081e32458f3c987a76f08ac, type: 3}
   width: 3
   height: 3

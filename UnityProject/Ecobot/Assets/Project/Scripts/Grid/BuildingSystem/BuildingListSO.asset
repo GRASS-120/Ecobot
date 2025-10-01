@@ -14,10 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildings:
   - {fileID: 11400000, guid: e3e50360834fd144a9f115c8d47a980d, type: 2}
-  - {fileID: 11400000, guid: a6c5ef06b677a7f4b8e4a5773a6142dc, type: 2}
-  - {fileID: 11400000, guid: 1bb5d4d613da66e4fa3764eaeb4f9ca1, type: 2}
-  - {fileID: 11400000, guid: b0192ebdca4c5e4468544d4eb2d26fac, type: 2}
-  - {fileID: 11400000, guid: c1c6e992264b43a4b86bde566338f526, type: 2}
   - {fileID: 11400000, guid: f40db8ce0f662f54aac129513369ca52, type: 2}
-  - {fileID: 11400000, guid: b2dfdeb326e174a4eb4d9b0f5a23c262, type: 2}
+  - {fileID: 11400000, guid: 1bb5d4d613da66e4fa3764eaeb4f9ca1, type: 2}
   - {fileID: 11400000, guid: fdca845ffde649644a464410f67816ab, type: 2}
+  - {fileID: 11400000, guid: a6c5ef06b677a7f4b8e4a5773a6142dc, type: 2}

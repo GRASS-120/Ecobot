@@ -6,6 +6,7 @@ using Bot.Programming.Nodes.Base;
 using Bot.Programming.Nodes.Concrete;
 using Bot.Programming.Nodes.Slots;
 using Grid.BuildingSystem;
+using Grid.BuildingSystem.Buildings;
 using Inventory;
 using UnityEngine;
 
@@ -78,11 +79,11 @@ namespace Bot.Programming
             
             // Находим слоты данных в нодах
             ProgNodeDataSlot<InventoryItemData> findItemOutputSlot = null;
-            ProgNodeDataSlot<Building> findBuildingOutputSlot = null;
+            ProgNodeDataSlot<BuildingBase> findBuildingOutputSlot = null;
             ProgNodeDataSlot<object> moveToItemTargetSlot = null;
             ProgNodeDataSlot<object> moveToBuildingTargetSlot = null;
             ProgNodeDataSlot<InventoryItemData> putItemSlot = null;
-            ProgNodeDataSlot<Building> putBuildingSlot = null;
+            ProgNodeDataSlot<BuildingBase> putBuildingSlot = null;
             
             // Находим нужные слоты в нодах
             foreach (var slot in findItemNode.Slots)
@@ -96,7 +97,7 @@ namespace Bot.Programming
             
             foreach (var slot in findBuildingNode.Slots)
             {
-                if (slot is ProgNodeDataSlot<Building> dataSlot && slot.SlotName == "Found Building")
+                if (slot is ProgNodeDataSlot<BuildingBase> dataSlot && slot.SlotName == "Found Building")
                 {
                     findBuildingOutputSlot = dataSlot;
                     break;
@@ -127,7 +128,7 @@ namespace Bot.Programming
                 {
                     putItemSlot = dataSlotItem;
                 }
-                else if (slot is ProgNodeDataSlot<Building> dataSlotBuilding && slot.SlotName == "Building")
+                else if (slot is ProgNodeDataSlot<BuildingBase> dataSlotBuilding && slot.SlotName == "Building")
                 {
                     putBuildingSlot = dataSlotBuilding;
                 }

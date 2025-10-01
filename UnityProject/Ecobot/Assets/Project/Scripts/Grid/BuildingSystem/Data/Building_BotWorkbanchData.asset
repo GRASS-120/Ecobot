@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
-  m_Name: GazCollector
+  m_Name: Building_BotWorkbanchData
   m_EditorClassIdentifier: 
   id: 0
   displayName: 
   description: 
   icon: {fileID: 0}
   maxStackValue: 0
-  prefab: {fileID: 3463779334572308051, guid: 713f81183c34fd847a02cd41dac39719, type: 3}
-  width: 5
-  height: 5
+  prefab: {fileID: 6938769516500563999, guid: ee6df62059ba9c74a96bd0c406038699, type: 3}
+  width: 3
+  height: 3

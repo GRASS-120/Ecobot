@@ -47,6 +47,7 @@ namespace Game
 
             player.Init();
             GameplayMode.OnUpdate += player.ManualUpdate;
+            BuildingMode.OnUpdate += player.ManualUpdate;
             
             uiRootView.Init(this, player);
         }

@@ -18,7 +18,7 @@ namespace Grid.BuildingSystem.BuildingPreview
         private BuildingPreview _buildingPreview;
         private Transform _visual;
         private Transform _plane;
-        private BuildingSO _buildingSo;
+        private BuildingAssetData _buildingAssetData;
         private Vector3 _targetPosition = Vector3.zero;
         private Vector3 _planeSize = Vector3.zero;
 
@@ -32,7 +32,7 @@ namespace Grid.BuildingSystem.BuildingPreview
         private void Start()
         {
             _buildingPreview.CanBuildByCollision.Subscribe(HandleVisual).AddTo(this);
-            _buildingPreview.BuildingItem.Subscribe(item => _buildingSo = item).AddTo(this);
+            _buildingPreview.BuildingItem.Subscribe(item => _buildingAssetData = item).AddTo(this);
         }
 
         public void HandleVisual(bool canBuildByCollision)
@@ -70,9 +70,9 @@ namespace Grid.BuildingSystem.BuildingPreview
                 _plane = null;
             };
 
-            if (_buildingSo == null) return;
+            if (_buildingAssetData == null) return;
 
-            _visual = Instantiate(_buildingSo.prefab, _targetPosition, Quaternion.identity);
+            _visual = Instantiate(_buildingAssetData.prefab, _targetPosition, Quaternion.identity).transform;
             _visual.GetComponent<Collider>().enabled = false;
             _visual.parent = transform;
             _visual.localPosition = Vector3.zero;

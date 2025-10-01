@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Bot.Programming.Nodes.Base;
 using Grid.BuildingSystem;
+using Grid.BuildingSystem.Buildings;
 using Inventory;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Bot.Programming
     {
         private BotBase bot;
         private Dictionary<string, InventoryItemData> simulatedItems = new Dictionary<string, InventoryItemData>();
-        private Dictionary<string, Building> simulatedBuildings = new Dictionary<string, Building>();
+        private Dictionary<string, BuildingBase> simulatedBuildings = new Dictionary<string, BuildingBase>();
         private Dictionary<InventoryItemData, Vector3> itemPositions = new Dictionary<InventoryItemData, Vector3>();
         // Добавим список созданных объектов для последующего удаления
         private List<Object> createdObjects = new List<Object>();
@@ -34,7 +35,7 @@ namespace Bot.Programming
             createdObjects.Add(testItem);
             
             var testBuildingObject = new GameObject("Test Building");
-            var testBuilding = testBuildingObject.AddComponent<Building>();
+            var testBuilding = testBuildingObject.AddComponent<BuildingBase>();
             simulatedBuildings["Storage"] = testBuilding;
             createdObjects.Add(testBuildingObject);
         }
@@ -71,7 +72,7 @@ namespace Bot.Programming
             return false;
         }
         
-        public bool SimulateFindBuilding(string buildingType, out Building building)
+        public bool SimulateFindBuilding(string buildingType, out BuildingBase building)
         {
             if (simulatedBuildings.TryGetValue(buildingType, out building))
             {
@@ -82,7 +83,7 @@ namespace Bot.Programming
             return false;
         }
         
-        public bool SimulatePutItem(InventoryItemData item, Building building)
+        public bool SimulatePutItem(InventoryItemData item, BuildingBase building)
         {
             // Простая симуляция успешного размещения
             return true;

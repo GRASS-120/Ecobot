@@ -1,4 +1,5 @@
 using Grid.BuildingSystem;
+using Grid.BuildingSystem.Buildings;
 using UnityEngine;
 
 //! наверное все же нужно разделить ноды: сделать общую ноду и от нее наследовать
@@ -10,14 +11,14 @@ namespace Grid.Base
         public int HCost;  // расстояние до конца
         public int FCost;  // g + h
         public bool IsWalkable;
-        public Building Building;
+        public BuildingBase BuildingBase;
         public GridNode CameFromNode;
         
         private readonly GridBase<GridNode> _grid;
 
         public GridNode(GridBase<GridNode> grid, Vector2Int cell) {
             _grid = grid;
-            Building = null;
+            BuildingBase = null;
             Cell = cell;
             IsWalkable = true;
         }
@@ -27,24 +28,24 @@ namespace Grid.Base
         }
 
         public bool CanBuild() {
-            return Building == null;
+            return BuildingBase == null;
         }
 
-        public void SetBuilding(Building building) {
-            Building = building;
+        public void SetBuilding(BuildingBase building) {
+            BuildingBase = building;
             IsWalkable = false;
             
             _grid.TriggerGridObjectChanged(Cell);
         }
 
         public void ClearBuilding() {
-            Building = null;
+            BuildingBase = null;
             
             _grid.TriggerGridObjectChanged(Cell);
         }
 
         public override string ToString() {
-            return $"({Cell.x}, {Cell.y} | {Building})";
+            return $"({Cell.x}, {Cell.y} | {BuildingBase})";
         }
     }
 }

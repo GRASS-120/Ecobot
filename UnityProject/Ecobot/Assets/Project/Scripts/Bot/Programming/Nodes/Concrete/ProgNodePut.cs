@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Bot.Programming.Nodes.Slots;
 using Grid.BuildingSystem;
+using Grid.BuildingSystem.Buildings;
 using Inventory;
 using UnityEngine;
 
@@ -9,13 +10,13 @@ namespace Bot.Programming.Nodes.Concrete
     public class ProgNodePut : ProgNodeAction
     {
         private ProgNodeDataSlot<InventoryItemData> itemSlot;
-        private ProgNodeDataSlot<Building> buildingSlot;
+        private ProgNodeDataSlot<BuildingBase> buildingSlot;
         
         public ProgNodePut() : base("Put")
         {
             Description = "Put the specified item into the specified building";
             itemSlot = new ProgNodeDataSlot<InventoryItemData>("Item", this);
-            buildingSlot = new ProgNodeDataSlot<Building>("Building", this);
+            buildingSlot = new ProgNodeDataSlot<BuildingBase>("Building", this);
             slots.Add(itemSlot);
             slots.Add(buildingSlot);
         }
@@ -35,7 +36,7 @@ namespace Bot.Programming.Nodes.Concrete
             }
             
             InventoryItemData item = itemSlot.Value;
-            Building building = buildingSlot.Value;
+            BuildingBase building = buildingSlot.Value;
             
             Debug.Log($"[{NodeName}] Putting item {item.displayName} into building");
             

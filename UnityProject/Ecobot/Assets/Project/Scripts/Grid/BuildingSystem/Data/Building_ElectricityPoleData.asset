@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
-  m_Name: Furnance
+  m_Name: Building_ElectricityPoleData
   m_EditorClassIdentifier: 
   id: 0
-  displayName: 
+  displayName: Electricity pole
   description: 
   icon: {fileID: 0}
   maxStackValue: 0
-  prefab: {fileID: 6812049487021635185, guid: 388d4365841706b4a881c08c89df3139, type: 3}
-  width: 7
-  height: 3
+  prefab: {fileID: 990970971903724875, guid: ad4b29aa0894d2848b526eabab9be05f, type: 3}
+  width: 1
+  height: 1

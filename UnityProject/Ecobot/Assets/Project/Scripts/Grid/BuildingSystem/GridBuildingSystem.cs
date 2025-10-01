@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using Game;
 using Game.Mods;
 using Grid.Base;
+using Grid.BuildingSystem.Buildings;
 using Player;
 using R3;
 using Sirenix.OdinInspector;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.InputSystem;
@@ -15,7 +17,7 @@ namespace Grid.BuildingSystem
 {
     public class GridBuildingSystem : SerializedMonoBehaviour
     {
-        public event Action<Building> OnBuildingPlaced;
+        public event Action<BuildingBase> OnBuildingPlaced;
         public event Action OnBuildingPositionChanged;
 
         [Title("Components")]
@@ -23,40 +25,40 @@ namespace Grid.BuildingSystem
         [SerializeField] private PlayerManager player;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private BuildingPreview.BuildingPreview buildingPreview;
-        [SerializeField] private BuildingListSO buildingListSO;
+        [FormerlySerializedAs("buildingListSO")] [SerializeField] private BuildingListConfig buildingListConfig;
         
         [Title("Visual")]
         [SerializeField] private GameObject pointer;
         [SerializeField] private GameObject gridVisualTiles;
         
         [Title("Data")][ReadOnly]
-        [SerializeField] private Dictionary<BuildingSO, List<Building>> buildings;
+        [SerializeField] private Dictionary<BuildingAssetData, List<BuildingBase>> buildings;
 
-        private ReactiveProperty<BuildingSO> _currentBuildingItem;
+        private ReactiveProperty<BuildingAssetData> _currentBuildingItem;
         private ReactiveProperty<bool> _canBuildByGrid;
         private BuildingDatabase _buildingDatabase;
         private GridBase<GridNode> _grid;
-        private BuildingSO.Dir _dir;
-        private Building _currentBuilding;
+        private BuildingAssetData.Dir _dir;
+        private BuildingBase _currentBuildingBase;
         private Vector3 _mousePosition;
         private LayerMask _groundMask;
-        private List<BuildingSO> _buildingTypeList;
+        private List<BuildingAssetData> _buildingTypeList;
 
         public GridBase<GridNode> Grid => _grid;
-        public BuildingSO.Dir Dir => _dir;
+        public BuildingAssetData.Dir Dir => _dir;
         public GameManager GameManager => gameManager;
         public PlayerManager Player => player;
         
-        public ReadOnlyReactiveProperty<BuildingSO> CurrentBuildingItem => _currentBuildingItem;
+        public ReadOnlyReactiveProperty<BuildingAssetData> CurrentBuildingItem => _currentBuildingItem;
 
         private void Awake()
         {
             _grid = GetComponentInParent<GridMap>().Grid;
             _canBuildByGrid = new ReactiveProperty<bool>(true);
-            _currentBuildingItem = new ReactiveProperty<BuildingSO>();
+            _currentBuildingItem = new ReactiveProperty<BuildingAssetData>();
             
-            _buildingTypeList = buildingListSO.buildings;
-            _buildingDatabase = new BuildingDatabase(buildingListSO);
+            _buildingTypeList = buildingListConfig.buildings;
+            _buildingDatabase = new BuildingDatabase(buildingListConfig);
             buildings = _buildingDatabase.BuildingsData;
         }
 
@@ -91,17 +93,17 @@ namespace Grid.BuildingSystem
             ClearBuildingItem();  
         }
 
-        private void OnBuildingPlaced_Callback(Building obj)
+        private void OnBuildingPlaced_Callback(BuildingBase obj)
         {
             _buildingDatabase.Append(obj);
         }
         
         private void ResetDir()
         {
-            _dir = BuildingSO.Dir.Down;
+            _dir = BuildingAssetData.Dir.Down;
         }
 
-        private void CurrentBuildingItem_Callback(BuildingSO so)
+        private void CurrentBuildingItem_Callback(BuildingAssetData assetData)
         {
             ResetDir();
             pointer.SetActive(false);
@@ -115,7 +117,7 @@ namespace Grid.BuildingSystem
         private void OnDemountBuilding_Callback()
         {
             GridNode gridNode = _grid.GetGridObject(_mousePosition);
-            Building building = gridNode.Building;
+            BuildingBase building = gridNode.BuildingBase;
 
             if (building == null) return;
             
@@ -130,7 +132,25 @@ namespace Grid.BuildingSystem
 
         private void OnRotateBuilding_Callback()
         {
-            _dir = BuildingSO.GetNextDir(_dir);
+            _dir = BuildingAssetData.GetNextDir(_dir);
+        }
+
+        private BuildingBase CreateBuilding(
+            Vector3 worldPosition,
+            Vector2Int origin,
+            BuildingAssetData.Dir dir,
+            BuildingAssetData buildingAssetData) 
+        {        
+            var buildingTransform = Instantiate(
+                buildingAssetData.prefab,
+                worldPosition,
+                Quaternion.Euler(0, buildingAssetData.GetRotationAngle(dir), 0)
+            );
+
+            var building = buildingTransform.AddComponent<BuildingBase>();
+            building.Init(buildingAssetData, origin, player.WindowManager, dir);
+
+            return building;
         }
         
         public void HandleBuilding() {
@@ -158,7 +178,7 @@ namespace Grid.BuildingSystem
                 
                 if (_canBuildByGrid.Value && buildingPreview.CanBuildByCollision.Value) {
                     Vector3 buildingWorldPosition = _grid.GetWorldPosition(mouseGridPosition);
-                    Building building = Building.Create(buildingWorldPosition, mouseGridPosition, _dir, _currentBuildingItem.Value);
+                    BuildingBase building = CreateBuilding(buildingWorldPosition, mouseGridPosition, _dir, _currentBuildingItem.Value);
 
                     foreach (Vector2Int gridPosition in gridPositionMatrix) {
                         _grid.GetGridObject(gridPosition).SetBuilding(building);
@@ -171,7 +191,6 @@ namespace Grid.BuildingSystem
                 _canBuildByGrid.Value = true;
             }
 
-            // ! remake
             bool hasBuildingChanged = false;
 
             if (Input.GetKeyDown(KeyCode.Alpha1)) {_currentBuildingItem.Value = _buildingTypeList[0];

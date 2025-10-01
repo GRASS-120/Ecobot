@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
-  m_Name: WaterPump
+  m_Name: Building_FurnanceData
   m_EditorClassIdentifier: 
   id: 0
-  displayName: 
+  displayName: Furnance
   description: 
   icon: {fileID: 0}
   maxStackValue: 0
-  prefab: {fileID: 6139819573181346870, guid: f182214e9379e6640ad452e71c7d082a, type: 3}
+  prefab: {fileID: 605806662011495987, guid: 1d6b8aded9a3fa04182cde617639ddc2, type: 3}
   width: 7
   height: 3

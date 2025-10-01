@@ -1,5 +1,6 @@
 ﻿using Game;
 using Game.Mods;
+using Grid.BuildingSystem.Buildings;
 using R3;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -14,23 +15,22 @@ namespace Grid.BuildingSystem.BuildingPreview
         private BuildingPreviewVisual _buildingPreviewVisual;
         private Vector3 _mousePosition;
 
-        private ReactiveProperty<BuildingSO> _buildingItem;
+        private ReactiveProperty<BuildingAssetData> _buildingItem;
         private ReactiveProperty<bool> _canBuildByCollision;
 
         public ReactiveProperty<bool> CanBuildByCollision => _canBuildByCollision;
-        public ReactiveProperty<BuildingSO> BuildingItem => _buildingItem;
+        public ReactiveProperty<BuildingAssetData> BuildingItem => _buildingItem;
         public GridBuildingSystem BuildingSystem => buildingSystem;
 
         private void Awake()
         {
             _canBuildByCollision = new ReactiveProperty<bool>(true);
-            _buildingItem = new ReactiveProperty<BuildingSO>();
+            _buildingItem = new ReactiveProperty<BuildingAssetData>();
             _buildingPreviewVisual = GetComponent<BuildingPreviewVisual>();
         }
 
         private void Start()
         {
-            // пофиксил тем, что переместил из Awake в Start...
             _mousePosition = buildingSystem.Player.GetMouseRaycast().position;
 
             buildingSystem.CurrentBuildingItem.Subscribe(OnBuildingChanged_Callback).AddTo(this);
@@ -49,9 +49,9 @@ namespace Grid.BuildingSystem.BuildingPreview
             _buildingPreviewVisual.DestroyPreview();
         }
 
-        private void OnBuildingChanged_Callback(BuildingSO so)
+        private void OnBuildingChanged_Callback(BuildingAssetData assetData)
         {
-            _buildingItem.Value = so;
+            _buildingItem.Value = assetData;
             
             if (_buildingItem.Value == null) return; 
             
@@ -59,7 +59,7 @@ namespace Grid.BuildingSystem.BuildingPreview
             _buildingPreviewVisual.HandleVisual(_canBuildByCollision.Value);
         }
         
-        private void OnBuildingPlaced_Callback(Building obj)
+        private void OnBuildingPlaced_Callback(BuildingBase obj)
         {
             _buildingPreviewVisual.RefreshVisual(CalcTargetPosition(), CalcVisualPlaneSize());
             _canBuildByCollision.Value = false;
