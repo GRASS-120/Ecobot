@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Game;
-using Game.Mods;
 using Grid.Base;
 using Grid.BuildingSystem.Buildings;
 using Inventory;
@@ -10,8 +9,6 @@ using R3;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.InputSystem;
 using PlayerInputManager = Player.InputManager.PlayerInputManager;
 
 namespace Grid.BuildingSystem
@@ -72,9 +69,6 @@ namespace Grid.BuildingSystem
             OnBuildingPlaced += OnBuildingPlaced_Callback;           
             _currentBuildingItem.Subscribe(CurrentBuildingItem_Callback).AddTo(this);
 
-            // gameManager.GameplayMode.OnEnterEvent += () => { Debug.Log("Game play entered"); };
-            // gameManager.GameplayMode.OnExitEvent += () => { Debug.Log("Game play exited"); };
-
             gameManager.BuildingMode.OnEnterEvent += OnEnterBuildingMode_Callback;
             gameManager.BuildingMode.OnExitEvent += OnExitBuildingMode_Callback;
             
@@ -86,7 +80,6 @@ namespace Grid.BuildingSystem
                 .AddTo(this);
             
             buildingPreview.Init();
-            // player.Inventory.MainInventory.
         }
         
         private void OnSelectionChanged(InventorySelectionService.InventorySelection sel)
@@ -177,13 +170,12 @@ namespace Grid.BuildingSystem
             BuildingAssetData.Dir dir,
             BuildingAssetData buildingAssetData) 
         {        
-            var buildingTransform = Instantiate(
+            var building = Instantiate(
                 buildingAssetData.prefab,
                 worldPosition,
                 Quaternion.Euler(0, buildingAssetData.GetRotationAngle(dir), 0)
             );
 
-            var building = buildingTransform.AddComponent<BuildingBase>();
             building.Init(buildingAssetData, origin, player.WindowManager, dir);
 
             return building;
@@ -225,7 +217,6 @@ namespace Grid.BuildingSystem
                     
                     ResetDir();
                     OnBuildingPlaced?.Invoke(building);
-                    // Списать 1 шт. из выбранного слота
                     
                     ConsumeOneFromSelectionOrExit();
                 } 

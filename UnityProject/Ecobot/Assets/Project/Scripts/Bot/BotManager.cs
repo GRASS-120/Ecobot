@@ -3,6 +3,7 @@ using Game;
 using Grid;
 using Grid.Base;
 using GUI.Programming;
+using GUI.UIFramework;
 using UnityEngine;
 
 namespace Bot
@@ -14,12 +15,13 @@ namespace Bot
         [SerializeField] private List<BotBase> bots;
         [SerializeField] private Transform target;
         [SerializeField] private GameManager gameManager;
+        [SerializeField] private WindowManager windowManager;
 
         private void Awake()
         {
             foreach (var bot in bots)
             {
-                bot.Init(gridMap, gameManager);
+                bot.Init(gridMap, gameManager, windowManager);
             }
         }
 

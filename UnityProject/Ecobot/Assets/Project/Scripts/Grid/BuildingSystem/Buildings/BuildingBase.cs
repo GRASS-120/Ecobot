@@ -22,6 +22,7 @@ namespace Grid.BuildingSystem.Buildings
             WindowManager windowManager,
             BuildingAssetData.Dir dir = BuildingAssetData.Dir.Down)
         {
+            _windowManager = windowManager;
             _buildingAssetData = data;
             _origin = origin;
             _dir = dir;

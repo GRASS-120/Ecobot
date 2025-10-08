@@ -38,7 +38,11 @@ namespace GUI.Gameplay.Windows.Controller
                 View.MouseInventoryItemUI,
                 _inventoryHolder.HotbarInventorySystem);
 
-            // View.StorageInventoryUI.Init(_playerInventoryHolder.HotbarInventorySystem, Subs);
+            var storageWindowController = _windowManager.GetController<StorageInventoryWindowController>();
+            storageWindowController.Init(
+                _inventoryHolder.InventorySelectionService,
+                View.MouseInventoryItemUI,
+                _inventoryHolder.MainInventory); 
         }
     }
 }

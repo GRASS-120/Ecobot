@@ -34,6 +34,7 @@ namespace Player
             InteractorSource = interactorSource;
             
             _input.OnInteract += HandleInteraction;
+            _input.OnAltInteract += HandleAltInteraction;
             _input.OnHoldInteraction += HandleHoldInteraction;
             _input.OnHoldInteractCanceled += HandleHoldInteractionCanceled;
         }
@@ -46,6 +47,18 @@ namespace Player
                 if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
                 {
                     interactable.Interact(this);
+                }
+            }
+        }
+        
+        public void HandleAltInteraction()
+        {
+            var r = new Ray(InteractorSource.position, InteractorSource.forward);
+            if (Physics.Raycast(r, out RaycastHit hit, interactionRange))
+            {
+                if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
+                {
+                    interactable.AltInteract(this);
                 }
             }
         }

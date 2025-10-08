@@ -8,6 +8,8 @@ namespace InteractionSystem
     {
         public virtual void Interact(IInteractor interactor) {}
 
+        public virtual void AltInteract(IInteractor interactor) {}
+        
         public virtual IEnumerator HoldInteract(IInteractor interactor)
         {
             yield return null;

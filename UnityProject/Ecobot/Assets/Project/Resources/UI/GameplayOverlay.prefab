@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1605956190294578901}
   - component: {fileID: 2066734142885594172}
   - component: {fileID: 7334384441648265752}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PlayerHotbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,7 +143,7 @@ GameObject:
   m_Component:
   - component: {fileID: 352761893371656224}
   - component: {fileID: 4141712165454806748}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameplayOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,8 +183,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerHotbarUI: {fileID: 284732366199804692}
-  playerInventoryUI: {fileID: 0}
-  storageInventoryUI: {fileID: 0}
   mouseInventoryItemUI: {fileID: 6595060992453530407}
 --- !u!1 &2791331477800822730
 GameObject:
@@ -197,7 +195,7 @@ GameObject:
   - component: {fileID: 3066916871377717425}
   - component: {fileID: 8217546011741154931}
   - component: {fileID: 9123494009926188180}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Count
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -333,7 +331,7 @@ GameObject:
   - component: {fileID: 2549933529851779776}
   - component: {fileID: 6595060992453530407}
   - component: {fileID: 6911462918135378959}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: MouseObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -397,7 +395,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1497074624854803852}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -436,7 +434,7 @@ GameObject:
   - component: {fileID: 8755861846184810121}
   - component: {fileID: 5242105196369136470}
   - component: {fileID: 1847145463017465120}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -21,7 +21,6 @@ namespace Grid.BuildingSystem.Buildings
             BuildingAssetData.Dir dir = BuildingAssetData.Dir.Down)
         {
             base.Init(data, origin, windowManager, dir);
-            
             _inventorySystem = new InventorySystem(inventorySize);
         }
 
@@ -29,24 +28,27 @@ namespace Grid.BuildingSystem.Buildings
         {
             HandleInventory();
         }
-        
+
         private void HandleInventory()
         {
-            Debug.Log("Interacting with solid storage");
-            var inventoryUI = _windowManager.GetController<InventoryWindowController>();
-            // if (inventoryUI.IsOpen)
-            // {
-            //     _windowManager.CloseWindow<InventoryWindowController>();
-            // }
-            // else
-            // {
-            //     _windowManager.OpenWindow<InventoryWindowController>();
-            // }
+            Debug.Log("Opening solid storage inventory");
+            
+            var storageWindow = _windowManager.GetController<StorageInventoryWindowController>();
+            
+            if (storageWindow.IsOpen)
+            {
+                _windowManager.CloseWindow<StorageInventoryWindowController>();
+            }
+            else
+            {
+                storageWindow.SetStorage(_inventorySystem);
+                _windowManager.OpenWindow<StorageInventoryWindowController>();
+            }
         }
-        
+
         public bool TryAddToInventory(InventoryItemData data, int amount)
         {
-            throw new System.NotImplementedException();
+            return _inventorySystem.TryAddToInventory(data, amount);
         }
     }
 }

@@ -12,6 +12,8 @@ namespace Player.InputManager
         public event Action OnDemountBuilding;
         public event Action OnOpenInventory;
         public event Action OnInteract;
+        public event Action OnAltInteract;
+
         public event Action OnHoldInteraction;
         public event Action OnHoldInteractCanceled;
 
@@ -28,6 +30,7 @@ namespace Player.InputManager
             _inputActions.GameplayMode.Inventory.performed += OnOpenInventory_Callback;
             _inputActions.GameplayMode.Interact.performed += OnInteractPerformed_Callback;
             _inputActions.GameplayMode.Interact.canceled += OnInteractCanceled_Callback;
+            _inputActions.GameplayMode.AltInteract.performed += OnAltInteractionPerformed_Callback;
             
             _inputActions.BuildingMode.RotateBuilding.performed += RotateBuilding_Callback;
             _inputActions.BuildingMode.DemountBuilding.performed += DemountBuilding_Callback;
@@ -74,6 +77,10 @@ namespace Player.InputManager
 
         private void ToggleBuildMode_Callback(InputAction.CallbackContext context) {
             OnToggleBuildMode?.Invoke();
+        }
+        
+        private void OnAltInteractionPerformed_Callback(InputAction.CallbackContext context) {
+            OnAltInteract?.Invoke();
         }
         
         private void OnInteractPerformed_Callback(InputAction.CallbackContext context)
