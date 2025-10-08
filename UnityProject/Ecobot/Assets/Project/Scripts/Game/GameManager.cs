@@ -1,6 +1,7 @@
 using FiniteStateMachine;
 using Game.Mods;
 using Game.Mods.Core;
+using Grid.BuildingSystem;
 using GUI.Core;
 using GUI.Gameplay;
 using Player;
@@ -18,6 +19,7 @@ namespace Game
         [SerializeField] private PlayerManager player;
         [SerializeField] private GameUIRootView uiRootView;
         [SerializeField] private PlayerInputManager inputManager;
+        [SerializeField] private GridBuildingSystem _gridBuildingSystem;
 
         public StateMachine FSM { get; private set; }
         public GameplayMode GameplayMode { get; private set; }
@@ -50,6 +52,8 @@ namespace Game
             BuildingMode.OnUpdate += player.ManualUpdate;
             
             uiRootView.Init(this, player);
+            
+            _gridBuildingSystem.Init();
         }
 
         private void Start()
@@ -73,6 +77,33 @@ namespace Game
         {
             _gameplayOrBuilding.Toggle();
             FSM.SetState(_gameplayOrBuilding.GetState());
+        }
+        
+        // ДОБАВЬ ЭТИ МЕТОДЫ:
+        public void EnterBuildingMode()
+        {
+            if (FSM.CurrentState != BuildingMode)
+            {
+                // Синхронизируем ToggleObject
+                if (_gameplayOrBuilding.GetState() != BuildingMode)
+                {
+                    _gameplayOrBuilding.Toggle();
+                }
+                FSM.SetState(BuildingMode);
+            }
+        }
+
+        public void EnterGameplayMode()
+        {
+            if (FSM.CurrentState != GameplayMode)
+            {
+                // Синхронизируем ToggleObject
+                if (_gameplayOrBuilding.GetState() != GameplayMode)
+                {
+                    _gameplayOrBuilding.Toggle();
+                }
+                FSM.SetState(GameplayMode);
+            }
         }
 
         private void At(IState from, IState to, IPredicate condition)

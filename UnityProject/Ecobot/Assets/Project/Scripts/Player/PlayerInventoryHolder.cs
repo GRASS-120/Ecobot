@@ -20,15 +20,18 @@ namespace Player
 
         public InventorySystem MainInventory => _mainInventorySystem;
         public InventorySystem HotbarInventorySystem => _hotbarInventorySystem;
+        public InventorySelectionService InventorySelectionService => _inventorySelectionService;
 
         private PlayerManager _player;
         private InventorySystem _mainInventorySystem;
         private InventorySystem _hotbarInventorySystem;
+        private InventorySelectionService _inventorySelectionService; 
 
         public void Init(PlayerManager player)
         {
             _hotbarInventorySystem = new InventorySystem(hotbarInventorySize);
             _mainInventorySystem = new InventorySystem(mainInventorySize);
+            _inventorySelectionService = new InventorySelectionService();
             
             _player = player;
             

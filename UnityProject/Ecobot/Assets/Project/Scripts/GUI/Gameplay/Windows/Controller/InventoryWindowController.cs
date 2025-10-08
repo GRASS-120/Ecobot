@@ -18,13 +18,16 @@ namespace GUI.Gameplay.Windows.Controller
         private InventorySystem _quickMoveTarget;
         private InventorySystem _inventory;
         private List<InventorySlotUI> _slots = new List<InventorySlotUI>();
+        private InventorySelectionService _inventorySelectionService;
         
         public void Init(
             InventorySystem inventorySystem, 
+            InventorySelectionService inventorySelectionService,
             MouseInventoryItemUI mouseUI, 
             InventorySystem quickMoveTarget = null)
         {
             _inventory = inventorySystem;
+            _inventorySelectionService = inventorySelectionService;
             _mouseUI = mouseUI;
             _quickMoveTarget = quickMoveTarget;
         }
@@ -36,7 +39,7 @@ namespace GUI.Gameplay.Windows.Controller
             {
                 var slot = View.CreateSlotVisual();
                 
-                slot.Init(_inventory, i, _mouseUI, _inventory.InventoryOperationsService, Subs, _quickMoveTarget);
+                slot.Init(_inventory, _inventorySelectionService, i, _mouseUI, _quickMoveTarget);
                 _slots.Add(slot);
             }
 

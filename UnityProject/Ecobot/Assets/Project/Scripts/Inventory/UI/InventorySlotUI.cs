@@ -14,28 +14,62 @@ namespace Inventory.UI
         [SerializeField] private TextMeshProUGUI count;
         [SerializeField] private Button button;
         [SerializeField] private CanvasGroup canvasGroup;
+        [SerializeField] private GameObject selectionBorder; 
 
         private InventorySystem _inventory;
         private int _index;
         private MouseInventoryItemUI _mouseUI;
         private InventoryOperationsService _ops;
         private InventorySystem _quickMoveTarget;
-        private CompositeDisposable _disposables;
+        private InventorySelectionService _selection;
 
         public void Init(
             InventorySystem inventory, 
+            InventorySelectionService selection,
             int index, 
             MouseInventoryItemUI mouseUI,
-            InventoryOperationsService ops,
-            CompositeDisposable disposables,
             InventorySystem quickMoveTarget = null)
         {
             _inventory = inventory;
             _index = index;
             _mouseUI = mouseUI;
-            _ops = ops;
-            _disposables = disposables;
+            _ops = inventory.InventoryOperationsService;
             _quickMoveTarget = quickMoveTarget;
+            _selection = selection;
+
+            // СНАЧАЛА отключаем рамку у всех
+            if (selectionBorder != null)
+            {
+                selectionBorder.SetActive(false);
+            }
+
+            // Подписываемся на изменение выбранного слота
+            if (_selection != null)
+            {
+                _selection.Active.Subscribe(OnSelectionChanged).AddTo(this);
+            }
+    
+            // Проверяем текущее состояние выделения (вдруг уже что-то выбрано)
+            if (_selection != null && _selection.Active.Value.IsValid)
+            {
+                OnSelectionChanged(_selection.Active.Value);
+            }
+        }
+
+        private void OnSelectionChanged(InventorySelectionService.InventorySelection sel)
+        {
+            // Проверяем, выбран ли этот слот
+            bool isSelected = sel.IsValid && sel.Inventory == _inventory && sel.Index == _index;
+            
+            UpdateSelectionVisual(isSelected);
+        }
+
+        private void UpdateSelectionVisual(bool isSelected)
+        {
+            if (selectionBorder != null)
+            {
+                selectionBorder.SetActive(isSelected);
+            }
         }
 
         public void Refresh()
@@ -54,22 +88,53 @@ namespace Inventory.UI
                 image.sprite = slot.ItemData.icon;
                 count.text = slot.StackSize > 1 ? slot.StackSize.ToString() : string.Empty;
             }
+
+            // Обновляем выделение при рефреше
+            if (_selection != null)
+            {
+                var active = _selection.Active.Value;
+                bool isSelected = active.IsValid && active.Inventory == _inventory && active.Index == _index;
+                UpdateSelectionVisual(isSelected);
+            }
         }
 
         // ЛКМ/ПКМ/Shift+ЛКМ
         public void OnPointerClick(PointerEventData eventData)
         {
             bool shift = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            bool alt = Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
 
+            // НОВАЯ ЛОГИКА: ЛКМ с Alt — выбираем слот (любой!)
+            bool isSelectGesture = eventData.button == PointerEventData.InputButton.Left && alt;
+            
+            if (isSelectGesture && _selection != null)
+            {
+                var slot = _inventory.GetSlot(_index);
+                
+                // Если кликнули на уже выбранный слот — снимаем выделение
+                var currentSelection = _selection.Active.Value;
+                if (currentSelection.IsValid && 
+                    currentSelection.Inventory == _inventory && 
+                    currentSelection.Index == _index)
+                {
+                    _selection.Clear();
+                }
+                else
+                {
+                    // Иначе выбираем этот слот (даже если он пустой или не постройка)
+                    _selection.Select(_inventory, _index);
+                }
+                return;
+            }
+
+            // Дальше — ваше текущее поведение ЛКМ/ПКМ/Shift+ЛКМ
             if (eventData.button == PointerEventData.InputButton.Left)
             {
                 if (shift && _quickMoveTarget != null)
                 {
-                    // Быстро переложить весь стак в целевой инвентарь (если возможно)
                     _ops.Move(_inventory, _index, _quickMoveTarget, FindAnyFreeOrMergeIndex(_quickMoveTarget), int.MaxValue);
                     return;
                 }
-
                 if (_mouseUI.IsEmpty())
                 {
                     _mouseUI.PickUpAll(_inventory, _index);
@@ -110,16 +175,13 @@ namespace Inventory.UI
         {
             SetDraggingVisual(false);
             
-            // Если бросили не на слот (мимо), возвращаем назад в исходный слот
-            if (_mouseUI.IsEmpty()) return; // уже куда-то положили
+            if (_mouseUI.IsEmpty()) return;
             
-            // Если курсор над UI, но не над слотом — просто вернем назад
             _mouseUI.ReturnBack(_inventory, _index);
         }
 
         public void OnDrop(PointerEventData eventData)
         {
-            // Когда на нас что-то дропнули — пытаемся положить из мыши в этот слот
             if (!_mouseUI.IsEmpty())
             {
                 _mouseUI.PlaceAll(_inventory, _index);
@@ -134,13 +196,11 @@ namespace Inventory.UI
             }
         }
 
-        // Вспомогательно: ищем индекс для quick move — сначала мердж, потом пустой слот
         private int FindAnyFreeOrMergeIndex(InventorySystem target)
         {
             var src = _inventory.GetSlot(_index);
             if (src.ItemData == null) return _index;
 
-            // 1) Сначала пробуем найти стак той же номенклатуры с местом
             for (int i = 0; i < target.InventorySize; i++)
             {
                 var t = target.GetSlot(i);
@@ -148,11 +208,9 @@ namespace Inventory.UI
                     return i;
             }
             
-            // 2) Потом пустой
             if (target.TryGetFreeSlotIndex(out int freeIndex))
                 return freeIndex;
 
-            // Если не нашли — вернем текущий, Move просто не выполнится
             return 0;
         }
     }

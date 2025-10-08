@@ -4,6 +4,7 @@ using Game;
 using Game.Mods;
 using Grid.Base;
 using Grid.BuildingSystem.Buildings;
+using Inventory;
 using Player;
 using R3;
 using Sirenix.OdinInspector;
@@ -25,7 +26,7 @@ namespace Grid.BuildingSystem
         [SerializeField] private PlayerManager player;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private BuildingPreview.BuildingPreview buildingPreview;
-        [FormerlySerializedAs("buildingListSO")] [SerializeField] private BuildingListConfig buildingListConfig;
+        [SerializeField] private BuildingListConfig buildingListConfig;
         
         [Title("Visual")]
         [SerializeField] private GameObject pointer;
@@ -43,7 +44,8 @@ namespace Grid.BuildingSystem
         private Vector3 _mousePosition;
         private LayerMask _groundMask;
         private List<BuildingAssetData> _buildingTypeList;
-
+        private InventorySelectionService _inventorySelectionService;
+        
         public GridBase<GridNode> Grid => _grid;
         public BuildingAssetData.Dir Dir => _dir;
         public GameManager GameManager => gameManager;
@@ -62,7 +64,7 @@ namespace Grid.BuildingSystem
             buildings = _buildingDatabase.BuildingsData;
         }
 
-        private void Start()
+        public void Init()
         {
             inputManager.OnRotateBuilding += OnRotateBuilding_Callback;
             inputManager.OnDemountBuilding += OnDemountBuilding_Callback;
@@ -75,14 +77,48 @@ namespace Grid.BuildingSystem
 
             gameManager.BuildingMode.OnEnterEvent += OnEnterBuildingMode_Callback;
             gameManager.BuildingMode.OnExitEvent += OnExitBuildingMode_Callback;
+            
+            _inventorySelectionService = player.Inventory.InventorySelectionService;
+            
+            Observable.NextFrame()
+                .Subscribe(_ =>
+                    _inventorySelectionService.Active.Subscribe(OnSelectionChanged).AddTo(this))
+                .AddTo(this);
+            
+            buildingPreview.Init();
+            // player.Inventory.MainInventory.
+        }
+        
+        private void OnSelectionChanged(InventorySelectionService.InventorySelection sel)
+        {
+            Debug.Log($"OnSelectionChanged: IsValid={sel.IsValid}, ItemData={sel.ItemData?.name}");
+    
+            // Если ничего не выбрано ИЛИ выбран НЕ билдинг — выходим из режима строительства
+            if (!sel.IsValid || sel.ItemData is not BuildingAssetData buildingData)
+            {
+                Debug.Log("Not a building item or nothing selected, exiting building mode");
+                ClearBuildingItem();
+                gameManager.EnterGameplayMode();
+                return;
+            }
+    
+            // Выбран билдинг — входим в режим строительства
+            Debug.Log($"Building selected: {buildingData.name}");
+    
+            _currentBuildingItem.Value = buildingData;
+            gameManager.EnterBuildingMode();
         }
         
         private void OnEnterBuildingMode_Callback()
         {
             pointer.SetActive(true);
             gridVisualTiles.SetActive(true);
-            
-            ClearBuildingItem();  
+    
+            // Принудительно обновляем визуал если предмет уже выбран
+            if (_currentBuildingItem.Value != null && buildingPreview != null)
+            {
+                buildingPreview.ForceRefreshVisual();
+            }
         }
         
         private void OnExitBuildingMode_Callback()
@@ -90,7 +126,7 @@ namespace Grid.BuildingSystem
             pointer.SetActive(false);
             gridVisualTiles.SetActive(false);
             
-            ClearBuildingItem();  
+            // ClearBuildingItem();  
         }
 
         private void OnBuildingPlaced_Callback(BuildingBase obj)
@@ -106,7 +142,7 @@ namespace Grid.BuildingSystem
         private void CurrentBuildingItem_Callback(BuildingAssetData assetData)
         {
             ResetDir();
-            pointer.SetActive(false);
+            // pointer.SetActive(false);
         }
 
         private void ClearBuildingItem()
@@ -155,6 +191,9 @@ namespace Grid.BuildingSystem
         
         public void HandleBuilding() {
             
+            if (_currentBuildingItem.Value == null)
+                return;
+            
             if (_mousePosition != player.GetMouseRaycast().position)
             {
                 OnBuildingPositionChanged?.Invoke();
@@ -186,33 +225,49 @@ namespace Grid.BuildingSystem
                     
                     ResetDir();
                     OnBuildingPlaced?.Invoke(building);
+                    // Списать 1 шт. из выбранного слота
+                    
+                    ConsumeOneFromSelectionOrExit();
                 } 
                 
                 _canBuildByGrid.Value = true;
             }
-
-            bool hasBuildingChanged = false;
-
-            if (Input.GetKeyDown(KeyCode.Alpha1)) {_currentBuildingItem.Value = _buildingTypeList[0];
-                hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha2)) {_currentBuildingItem.Value = _buildingTypeList[1];
-                hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha3)) {_currentBuildingItem.Value = _buildingTypeList[2];
-                hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha4)) {_currentBuildingItem.Value = _buildingTypeList[3];
-                hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha5)) {_currentBuildingItem.Value = _buildingTypeList[4];
-                hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha6)) {_currentBuildingItem.Value = _buildingTypeList[5];
-                hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha7)) {_currentBuildingItem.Value = _buildingTypeList[6];
-                hasBuildingChanged = true;}
-            if (Input.GetKeyDown(KeyCode.Alpha8)) {_currentBuildingItem.Value = _buildingTypeList[7];
-                hasBuildingChanged = true;}
-
-            if (!hasBuildingChanged) return;
-
-            ResetDir();
+            
+            // ResetDir();
+        }
+        
+        private void ConsumeOneFromSelectionOrExit()
+        {
+            var sel = _inventorySelectionService.Active.Value;
+            if (!sel.IsValid) return;
+    
+            var slot = sel.Inventory.GetSlot(sel.Index);
+            if (slot.ItemData == null)
+            {
+                _inventorySelectionService.Clear();
+                ClearBuildingItem();
+                gameManager.EnterGameplayMode(); // ← ИСПОЛЬЗУЙ НОВЫЙ МЕТОД
+                return;
+            }
+    
+            // Списываем 1
+            slot.RemoveFromStack(1);
+    
+            if (slot.StackSize <= 0)
+            {
+                slot.UpdateSlot(null, 0);
+                sel.Inventory.NotifySlotChanged(sel.Index);
+        
+                // Очищаем выбор и выходим из режима
+                _inventorySelectionService.Clear();
+                ClearBuildingItem();
+                gameManager.EnterGameplayMode(); // ← ИСПОЛЬЗУЙ НОВЫЙ МЕТОД
+            }
+            else
+            {
+                sel.Inventory.NotifySlotChanged(sel.Index);
+                // Предмет ещё есть - остаёмся в режиме строительства
+            }
         }
     }
 }

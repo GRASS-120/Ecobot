@@ -26,6 +26,7 @@ namespace GUI.Gameplay.Windows.Controller
             
             View.PlayerHotbarUI.Init(
                 _inventoryHolder.HotbarInventorySystem, 
+                _inventoryHolder.InventorySelectionService,
                 View.MouseInventoryItemUI, 
                 Subs,
                 quickMoveTarget: _inventoryHolder.MainInventory);
@@ -33,6 +34,7 @@ namespace GUI.Gameplay.Windows.Controller
             var inventoryWindowController = _windowManager.GetController<InventoryWindowController>();
             inventoryWindowController.Init(
                 _inventoryHolder.MainInventory,
+                _inventoryHolder.InventorySelectionService,
                 View.MouseInventoryItemUI,
                 _inventoryHolder.HotbarInventorySystem);
 

@@ -29,14 +29,28 @@ namespace Grid.BuildingSystem.BuildingPreview
             _buildingPreviewVisual = GetComponent<BuildingPreviewVisual>();
         }
 
-        private void Start()
+        public void Init()
         {
             _mousePosition = buildingSystem.Player.GetMouseRaycast().position;
-
+                
             buildingSystem.CurrentBuildingItem.Subscribe(OnBuildingChanged_Callback).AddTo(this);
             buildingSystem.OnBuildingPlaced += OnBuildingPlaced_Callback;
-            
+                
             buildingSystem.GameManager.GameplayMode.OnEnterEvent += OnEnterGameplayMode_Callback;
+            
+            _buildingPreviewVisual.Init();
+        }
+        
+        public void ForceRefreshVisual()
+        {
+            if (_buildingItem.Value == null) return;
+    
+            // Обновляем позицию мыши
+            _mousePosition = buildingSystem.Player.GetMouseRaycast().position;
+    
+            // Принудительно обновляем визуал
+            _buildingPreviewVisual.RefreshVisual(CalcTargetPosition(), CalcVisualPlaneSize());
+            _buildingPreviewVisual.HandleVisual(_canBuildByCollision.Value);
         }
         
         private void LateUpdate()

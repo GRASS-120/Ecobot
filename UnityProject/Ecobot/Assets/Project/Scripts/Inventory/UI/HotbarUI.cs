@@ -14,6 +14,7 @@ namespace Inventory.UI
 
         public void Init(
             InventorySystem inventorySystem, 
+            InventorySelectionService inventorySelectionService,
             MouseInventoryItemUI mouseUI, 
             CompositeDisposable disposables,
             InventorySystem quickMoveTarget = null)
@@ -24,7 +25,7 @@ namespace Inventory.UI
             for (int i = 0; i < _inventory.InventorySize; i++)
             {
                 var slot = Instantiate(slotPrefab, slotsRoot);
-                slot.Init(_inventory, i, mouseUI, _inventory.InventoryOperationsService, disposables, quickMoveTarget);
+                slot.Init(_inventory, inventorySelectionService, i, mouseUI, quickMoveTarget);
                 _slots.Add(slot);
             }
 

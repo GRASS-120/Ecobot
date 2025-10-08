@@ -29,7 +29,7 @@ namespace Grid.BuildingSystem.BuildingPreview
             _buildingPreview = GetComponent<BuildingPreview>();
         }
 
-        private void Start()
+        public void Init()
         {
             _buildingPreview.CanBuildByCollision.Subscribe(HandleVisual).AddTo(this);
             _buildingPreview.BuildingItem.Subscribe(item => _buildingAssetData = item).AddTo(this);
