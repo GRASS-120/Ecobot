@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
   m_Name: Building_ElectricityPoleData
   m_EditorClassIdentifier: 
-  id: 0
+  guid: 7848a8a6-4c40-470c-bb80-9adeb5523e58
   displayName: Electricity pole
   description: 
   icon: {fileID: 0}

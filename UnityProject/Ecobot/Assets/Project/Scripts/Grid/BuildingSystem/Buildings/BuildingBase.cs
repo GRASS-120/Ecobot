@@ -10,6 +10,7 @@ namespace Grid.BuildingSystem.Buildings
         protected Vector2Int _origin;
         protected WindowManager _windowManager;
         protected BuildingAssetData.Dir _dir;
+        protected BuildingContext _context; // <- добавить
 
         public Vector2Int[,] AllGridPositions => _buildingAssetData.GetAllGridPositions(_origin, _dir);
         public BuildingAssetData BuildingAssetData => _buildingAssetData;
@@ -19,10 +20,11 @@ namespace Grid.BuildingSystem.Buildings
         public virtual void Init(
             BuildingAssetData data,
             Vector2Int origin,
-            WindowManager windowManager,
+            BuildingContext context, 
             BuildingAssetData.Dir dir = BuildingAssetData.Dir.Down)
         {
-            _windowManager = windowManager;
+            _context = context;
+            _windowManager = context.WindowManager; 
             _buildingAssetData = data;
             _origin = origin;
             _dir = dir;

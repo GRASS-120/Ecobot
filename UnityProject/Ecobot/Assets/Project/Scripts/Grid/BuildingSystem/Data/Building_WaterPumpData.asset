@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
   m_Name: Building_WaterPumpData
   m_EditorClassIdentifier: 
-  id: 0
+  guid: f993bf92-5ee7-4736-8e49-a3afbddf5d1b
   displayName: 
   description: 
   icon: {fileID: 0}

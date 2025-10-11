@@ -8,19 +8,18 @@ namespace Grid.BuildingSystem.Buildings
 {
     public class BuildingSolidStorage : BuildingBase, IInventoryHolder, IInteractable
     {
-        [Header("Storage Capacity")]
-        [Min(1)]
-        [SerializeField] protected int inventorySize = 12;
+        [Header("Storage Capacity")] 
+        [Min(1)] [SerializeField] protected int inventorySize = 12;
         
         private InventorySystem _inventorySystem;
         
         public override void Init(
             BuildingAssetData data,
             Vector2Int origin,
-            WindowManager windowManager,
+            BuildingContext context, 
             BuildingAssetData.Dir dir = BuildingAssetData.Dir.Down)
         {
-            base.Init(data, origin, windowManager, dir);
+            base.Init(data, origin, context, dir); 
             _inventorySystem = new InventorySystem(inventorySize);
         }
 
@@ -31,8 +30,6 @@ namespace Grid.BuildingSystem.Buildings
 
         private void HandleInventory()
         {
-            Debug.Log("Opening solid storage inventory");
-            
             var storageWindow = _windowManager.GetController<StorageInventoryWindowController>();
             
             if (storageWindow.IsOpen)

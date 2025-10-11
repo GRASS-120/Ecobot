@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 146720af79904ed47995021be5adf49e, type: 3}
   m_Name: IronIngot_ItemData
   m_EditorClassIdentifier: 
-  id: 1
+  guid: 05069017-f11f-4026-8093-caf0eb4347b1
   displayName: Iron Ingot
   description: edrfdsfdf
   icon: {fileID: 21300000, guid: f6ffe664302d59f40bf31d68c06209a7, type: 3}

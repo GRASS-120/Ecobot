@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
-  m_Name: Building_BotWorkbanchData
+  m_Name: Building_WorkbenchData
   m_EditorClassIdentifier: 
-  id: 0
-  displayName: 
-  description: 
-  icon: {fileID: 0}
-  maxStackValue: 0
-  prefab: {fileID: 6938769516500563999, guid: ee6df62059ba9c74a96bd0c406038699, type: 3}
+  guid: 16ebdf23-03ae-4114-8d68-8fd009c68c14
+  displayName: Workbench
+  description: craft!!!
+  icon: {fileID: 21300000, guid: d1072bb4b3f95194897bd842ff47f856, type: 3}
+  maxStackValue: 1
+  prefab: {fileID: -1559787295459237394, guid: ee6df62059ba9c74a96bd0c406038699, type: 3}
   width: 3
   height: 3

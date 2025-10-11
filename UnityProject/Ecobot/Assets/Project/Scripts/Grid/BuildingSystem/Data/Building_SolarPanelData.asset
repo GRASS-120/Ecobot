@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
   m_Name: Building_SolarPanelData
   m_EditorClassIdentifier: 
-  id: 0
+  guid: 17996fa0-a71b-4752-8023-a8ec45ffe39a
   displayName: 
   description: 
   icon: {fileID: 0}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
   m_Name: Building_WindTurbineData
   m_EditorClassIdentifier: 
-  id: 0
+  guid: b2558e36-76e6-41c3-be02-283c7248fb3e
   displayName: Wind Generator
   description: 
   icon: {fileID: 0}

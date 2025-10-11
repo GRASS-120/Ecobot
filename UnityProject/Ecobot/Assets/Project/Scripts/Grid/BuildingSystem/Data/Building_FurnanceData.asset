@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
   m_Name: Building_FurnanceData
   m_EditorClassIdentifier: 
-  id: 0
+  guid: 505c8bab-8dc0-4f17-90b1-3c3b71afb288
   displayName: Furnance
-  description: 
-  icon: {fileID: 0}
-  maxStackValue: 0
+  description: Melt ore to get ingots
+  icon: {fileID: 21300000, guid: dce6f8bf09a884c4b972821c13305ec6, type: 3}
+  maxStackValue: 1
   prefab: {fileID: 605806662011495987, guid: 1d6b8aded9a3fa04182cde617639ddc2, type: 3}
   width: 7
   height: 3

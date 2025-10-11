@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8875f94bcccfd041981a4dd27de3b8b, type: 3}
   m_Name: Building_GazCollectorData
   m_EditorClassIdentifier: 
-  id: 0
+  guid: 6203aabe-4bf7-4532-b5a2-4929924a3923
   displayName: 
   description: 
   icon: {fileID: 0}

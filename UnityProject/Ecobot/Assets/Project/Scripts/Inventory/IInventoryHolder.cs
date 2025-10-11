@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace Inventory
 {
-    interface IInventoryHolder 
+    public interface IInventoryHolder 
     {
         public bool TryAddToInventory(InventoryItemData data, int amount);
     }

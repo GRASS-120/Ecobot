@@ -1,16 +1,35 @@
+using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace Inventory
 {
-    // add guid
     [CreateAssetMenu(menuName = "Project/Inventory Item")]
     public class InventoryItemData : ScriptableObject
     {
-        public int id;
+        [SerializeField] private string guid;
         public string displayName;
         [TextArea(4, 4)]
         public string description;
         public Sprite icon;
         public int maxStackValue;
+        
+        public string ID => guid;
+        
+        private void OnValidate()
+        {
+            if (string.IsNullOrEmpty(guid))
+            {
+                GenerateGUID();
+            }
+        }
+#if UNITY_EDITOR
+        [ContextMenu("Generate New GUID")]
+        private void GenerateGUID()
+        {
+            guid = Guid.NewGuid().ToString();
+            EditorUtility.SetDirty(this);
+        }
+#endif
     }
 }

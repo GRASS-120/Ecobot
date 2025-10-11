@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 146720af79904ed47995021be5adf49e, type: 3}
   m_Name: Coal_ItemData
   m_EditorClassIdentifier: 
-  id: 0
+  guid: 8d519a0b-1efd-438a-a06a-cb247660c17d
   displayName: Coal
   description: lorem ipsum
   icon: {fileID: 21300000, guid: 83d4c0e3d19d65146ad1dc996a82dc81, type: 3}
