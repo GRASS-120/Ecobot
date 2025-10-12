@@ -211,7 +211,6 @@ namespace Grid.BuildingSystem
                 
                 if (_canBuildByGrid.Value && buildingPreview.CanBuildByCollision.Value) {
                     Vector3 buildingWorldPosition = _grid.GetWorldPosition(mouseGridPosition);
-                    // buildingWorldPosition.y += 1.9f;
                     BuildingBase building = CreateBuilding(buildingWorldPosition, mouseGridPosition, _dir, _currentBuildingItem.Value);
 
                     foreach (Vector2Int gridPosition in gridPositionMatrix) {
