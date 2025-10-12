@@ -22,6 +22,7 @@ namespace GUI.Gameplay.Windows.View
         [SerializeField] private GameObject ingredientItemPrefab;
         [SerializeField] private Button craftButton; 
         [SerializeField] private Image craftButtonImage; 
+        [SerializeField] private TextMeshProUGUI resultAmountText; 
 
         [Header("Window Controls")]
         [SerializeField] private Button closeButton; 
@@ -68,6 +69,7 @@ namespace GUI.Gameplay.Windows.View
             resultIcon.sprite = recipe.ResultItem.icon;
             resultNameText.text = recipe.ResultItem.displayName;
             resultDescriptionText.text = recipe.ResultItem.description;
+            resultAmountText.text = $"x{recipe.ResultAmount}"; 
         }
 
         public void UpdateCraftButtonVisual(bool canCraft)
