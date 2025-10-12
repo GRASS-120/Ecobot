@@ -615,8 +615,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8823b82d244b53f4ca11cff8c54037d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeController
-  connectionsContainer: {fileID: 0}
-  connectionPrefab: {fileID: 0}
+  connectionsContainer: {fileID: 7021044038956648011}
+  connectionPrefab: {fileID: 4899158444216150950, guid: b518692297a1971429821b9fabf19efc,
+    type: 3}
 --- !u!1 &318043329720373881
 GameObject:
   m_ObjectHideFlags: 0
@@ -973,8 +974,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8823b82d244b53f4ca11cff8c54037d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeController
-  connectionsContainer: {fileID: 0}
-  connectionPrefab: {fileID: 0}
+  connectionsContainer: {fileID: 7021044038956648011}
+  connectionPrefab: {fileID: 4899158444216150950, guid: b518692297a1971429821b9fabf19efc,
+    type: 3}
 --- !u!1 &531113554754155526
 GameObject:
   m_ObjectHideFlags: 0
@@ -1929,6 +1931,7 @@ GameObject:
   - component: {fileID: 6660255816594546883}
   - component: {fileID: 7110777028932178847}
   - component: {fileID: 3821250222520237647}
+  - component: {fileID: 3297505194812143086}
   m_Layer: 0
   m_Name: DataSlot
   m_TagString: Untagged
@@ -1993,6 +1996,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3297505194812143086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984126828400607515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 0
+  _slotContentType: 1
+  _connectionPoint: {fileID: 6660255816594546883}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &1011828208127632429
 GameObject:
   m_ObjectHideFlags: 0
@@ -2189,6 +2211,7 @@ GameObject:
   - component: {fileID: 5238124869948621178}
   - component: {fileID: 5085222341855976385}
   - component: {fileID: 4519156964591773037}
+  - component: {fileID: 4427170158558103723}
   m_Layer: 0
   m_Name: StreamSlot (1)
   m_TagString: Untagged
@@ -2253,6 +2276,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4427170158558103723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1051947157015400202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 1
+  _slotContentType: 0
+  _connectionPoint: {fileID: 5238124869948621178}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &1060690704077850426
 GameObject:
   m_ObjectHideFlags: 0
@@ -2751,6 +2793,7 @@ GameObject:
   - component: {fileID: 3479456786373757713}
   - component: {fileID: 7943652156755872783}
   - component: {fileID: 7069193193233475408}
+  - component: {fileID: 1848535294259040732}
   m_Layer: 0
   m_Name: DataSlot
   m_TagString: Untagged
@@ -2815,6 +2858,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1848535294259040732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804407856559753918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 1
+  _slotContentType: 1
+  _connectionPoint: {fileID: 3479456786373757713}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &1813273243981485648
 GameObject:
   m_ObjectHideFlags: 0
@@ -3328,6 +3390,7 @@ GameObject:
   - component: {fileID: 8857099526829996156}
   - component: {fileID: 6620444288507872784}
   - component: {fileID: 6407390794171556867}
+  - component: {fileID: 8250303452916333914}
   m_Layer: 0
   m_Name: StreamSlot (1)
   m_TagString: Untagged
@@ -3392,6 +3455,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8250303452916333914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125488447793241200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 1
+  _slotContentType: 0
+  _connectionPoint: {fileID: 8857099526829996156}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &2261976688530682178
 GameObject:
   m_ObjectHideFlags: 0
@@ -4747,6 +4829,7 @@ GameObject:
   - component: {fileID: 7078515092443388951}
   - component: {fileID: 6081652820690991855}
   - component: {fileID: 427998233528159853}
+  - component: {fileID: 1465367594073266812}
   m_Layer: 0
   m_Name: StreamSlot (1)
   m_TagString: Untagged
@@ -4811,6 +4894,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1465367594073266812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3169744313645397195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 1
+  _slotContentType: 0
+  _connectionPoint: {fileID: 7078515092443388951}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &3175277058739286682
 GameObject:
   m_ObjectHideFlags: 0
@@ -5948,8 +6050,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8823b82d244b53f4ca11cff8c54037d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeController
-  connectionsContainer: {fileID: 0}
-  connectionPrefab: {fileID: 0}
+  connectionsContainer: {fileID: 7021044038956648011}
+  connectionPrefab: {fileID: 4899158444216150950, guid: b518692297a1971429821b9fabf19efc,
+    type: 3}
 --- !u!1 &3940031657407155209
 GameObject:
   m_ObjectHideFlags: 0
@@ -6063,6 +6166,7 @@ GameObject:
   - component: {fileID: 6612947280539533400}
   - component: {fileID: 2279982854809172540}
   - component: {fileID: 7968231217481852569}
+  - component: {fileID: 1183291140460417869}
   m_Layer: 0
   m_Name: DataSlot
   m_TagString: Untagged
@@ -6127,6 +6231,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1183291140460417869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958096867661338962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 1
+  _slotContentType: 1
+  _connectionPoint: {fileID: 6612947280539533400}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &4005820750658330850
 GameObject:
   m_ObjectHideFlags: 0
@@ -6635,6 +6758,7 @@ GameObject:
   - component: {fileID: 2127466858812423842}
   - component: {fileID: 6288233921607040200}
   - component: {fileID: 5072670386485298071}
+  - component: {fileID: 8196363230020633656}
   m_Layer: 0
   m_Name: StreamSlot
   m_TagString: Untagged
@@ -6699,6 +6823,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8196363230020633656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4472070633792202106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 0
+  _slotContentType: 0
+  _connectionPoint: {fileID: 2127466858812423842}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &4560373179009440675
 GameObject:
   m_ObjectHideFlags: 0
@@ -6756,6 +6899,7 @@ GameObject:
   - component: {fileID: 2646833853036140081}
   - component: {fileID: 8389064489748819759}
   - component: {fileID: 3647034169079285053}
+  - component: {fileID: 2523589449604267090}
   m_Layer: 0
   m_Name: StreamSlot
   m_TagString: Untagged
@@ -6820,6 +6964,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2523589449604267090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4670860947055714310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 0
+  _slotContentType: 0
+  _connectionPoint: {fileID: 2646833853036140081}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &4770175628355796378
 GameObject:
   m_ObjectHideFlags: 0
@@ -8413,6 +8576,7 @@ GameObject:
   - component: {fileID: 456250424703474508}
   - component: {fileID: 1374581952375443580}
   - component: {fileID: 1990402235058136141}
+  - component: {fileID: 8775794988576143257}
   m_Layer: 0
   m_Name: StreamSlot (1)
   m_TagString: Untagged
@@ -8477,6 +8641,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8775794988576143257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5965469419424898953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 1
+  _slotContentType: 0
+  _connectionPoint: {fileID: 456250424703474508}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &6004572498615177458
 GameObject:
   m_ObjectHideFlags: 0
@@ -8560,6 +8743,7 @@ GameObject:
   - component: {fileID: 9056470630033937610}
   - component: {fileID: 6679747153344767017}
   - component: {fileID: 3260626240771414828}
+  - component: {fileID: 1581312483477304353}
   m_Layer: 0
   m_Name: DataSlot
   m_TagString: Untagged
@@ -8624,6 +8808,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1581312483477304353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6075825080255629506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 0
+  _slotContentType: 1
+  _connectionPoint: {fileID: 9056470630033937610}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &6076993284863397377
 GameObject:
   m_ObjectHideFlags: 0
@@ -8960,6 +9163,7 @@ GameObject:
   - component: {fileID: 8654297161103887071}
   - component: {fileID: 4813257842600223403}
   - component: {fileID: 4130975952677378938}
+  - component: {fileID: 8264775215051022370}
   m_Layer: 0
   m_Name: StreamSlot (1)
   m_TagString: Untagged
@@ -9024,6 +9228,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8264775215051022370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6336063431427576059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 1
+  _slotContentType: 0
+  _connectionPoint: {fileID: 8654297161103887071}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &6372563458105511151
 GameObject:
   m_ObjectHideFlags: 0
@@ -11161,6 +11384,7 @@ GameObject:
   - component: {fileID: 7667743894737106037}
   - component: {fileID: 9198427367062242696}
   - component: {fileID: 6435885869426868570}
+  - component: {fileID: 5855237215501108177}
   m_Layer: 0
   m_Name: StreamSlot (1)
   m_TagString: Untagged
@@ -11225,6 +11449,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5855237215501108177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8096825435470887353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 1
+  _slotContentType: 0
+  _connectionPoint: {fileID: 7667743894737106037}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &8406256752233563771
 GameObject:
   m_ObjectHideFlags: 0
@@ -11463,8 +11706,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8823b82d244b53f4ca11cff8c54037d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeController
-  connectionsContainer: {fileID: 0}
-  connectionPrefab: {fileID: 0}
+  connectionsContainer: {fileID: 7021044038956648011}
+  connectionPrefab: {fileID: 4899158444216150950, guid: b518692297a1971429821b9fabf19efc,
+    type: 3}
 --- !u!1 &8552792684047913383
 GameObject:
   m_ObjectHideFlags: 0
@@ -11476,6 +11720,7 @@ GameObject:
   - component: {fileID: 9201145514113787772}
   - component: {fileID: 2114634257793117122}
   - component: {fileID: 2499306098984392457}
+  - component: {fileID: 5948643281417355327}
   m_Layer: 0
   m_Name: StreamSlot
   m_TagString: Untagged
@@ -11540,6 +11785,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5948643281417355327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8552792684047913383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 1
+  _slotContentType: 0
+  _connectionPoint: {fileID: 9201145514113787772}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &8589610330732498259
 GameObject:
   m_ObjectHideFlags: 0
@@ -11551,6 +11815,8 @@ GameObject:
   - component: {fileID: 816686086897154523}
   - component: {fileID: 1336074580968348503}
   - component: {fileID: 640898554130289136}
+  - component: {fileID: 7534534224341290906}
+  - component: {fileID: 4825225428280997904}
   m_Layer: 0
   m_Name: StreamSlot
   m_TagString: Untagged
@@ -11615,6 +11881,44 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7534534224341290906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8589610330732498259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 0
+  _slotContentType: 0
+  _connectionPoint: {fileID: 0}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
+--- !u!114 &4825225428280997904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8589610330732498259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 0
+  _slotContentType: 0
+  _connectionPoint: {fileID: 816686086897154523}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &8609801760123977748
 GameObject:
   m_ObjectHideFlags: 0
