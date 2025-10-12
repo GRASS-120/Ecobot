@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GUI.Programming.Windows.Nodes;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -44,6 +45,28 @@ namespace GUI.Programming.Windows.Viewport
             
                 // Предотвращаем обработку события другими элементами
                 eventData.Use();
+            }
+            
+            //при нажатии на viewport удаляем все активные соединения
+            if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                CancelAllActiveConnections();
+            }
+            
+            
+        }
+        
+        private void CancelAllActiveConnections()
+        {
+            // Находим все ноды и отменяем их активные соединения
+            NodeController[] allNodes = FindObjectsOfType<NodeController>();
+            foreach (var node in allNodes)
+            {
+                if (node.HasActiveConnection)
+                {
+                    node.CancelActiveConnection();
+                    Debug.Log("Активное соединение отменено по клику на пустую область");
+                }
             }
         }
 
@@ -101,6 +124,7 @@ namespace GUI.Programming.Windows.Viewport
                 newPosition = ClampPositionToBounds(newPosition);
         
             canvasRectTransform.anchoredPosition = newPosition;
+            
         }
 
         // Ограничение позиции полотна границами видимой области

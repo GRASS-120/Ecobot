@@ -14,6 +14,7 @@ namespace Bot.Programming.Nodes.Base
             Owner = owner;
         }
         
+        
         public void Connect(ProgNodeBase node)
         {
             if (CanConnect(node))
@@ -27,6 +28,8 @@ namespace Bot.Programming.Nodes.Base
         }
         
         public abstract bool CanConnect(ProgNodeBase node);
+        
+        
         
         public void Disconnect()
         {

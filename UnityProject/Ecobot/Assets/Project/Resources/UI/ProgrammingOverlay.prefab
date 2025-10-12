@@ -496,6 +496,7 @@ GameObject:
   - component: {fileID: 992506135810653723}
   - component: {fileID: 8057757776838472784}
   - component: {fileID: 3160083377763794704}
+  - component: {fileID: 4611428493701603976}
   m_Layer: 0
   m_Name: NodeAction - Find Building
   m_TagString: Untagged
@@ -602,6 +603,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 1
+--- !u!114 &4611428493701603976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297746452761613757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8823b82d244b53f4ca11cff8c54037d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeController
+  connectionsContainer: {fileID: 0}
+  connectionPrefab: {fileID: 0}
 --- !u!1 &318043329720373881
 GameObject:
   m_ObjectHideFlags: 0
@@ -839,6 +854,7 @@ GameObject:
   - component: {fileID: 4088162562404511777}
   - component: {fileID: 5879072389756004412}
   - component: {fileID: 4630549894282759753}
+  - component: {fileID: 3671263447940207839}
   m_Layer: 0
   m_Name: NodeAction - Put
   m_TagString: Untagged
@@ -945,6 +961,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 1
+--- !u!114 &3671263447940207839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455335090307952243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8823b82d244b53f4ca11cff8c54037d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeController
+  connectionsContainer: {fileID: 0}
+  connectionPrefab: {fileID: 0}
 --- !u!1 &531113554754155526
 GameObject:
   m_ObjectHideFlags: 0
@@ -1420,6 +1450,7 @@ GameObject:
   - component: {fileID: 6102257490681051384}
   - component: {fileID: 827622362762764635}
   - component: {fileID: 4951038591928707656}
+  - component: {fileID: 4484169446668424955}
   m_Layer: 0
   m_Name: StreamSlot
   m_TagString: Untagged
@@ -1484,6 +1515,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4484169446668424955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 849366244903817618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 1
+  _slotContentType: 0
+  _connectionPoint: {fileID: 6102257490681051384}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &875225483808927412
 GameObject:
   m_ObjectHideFlags: 0
@@ -1943,6 +1993,83 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &1011828208127632429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7021044038956648011}
+  - component: {fileID: 3942844941320997530}
+  - component: {fileID: 8051591853828656068}
+  m_Layer: 0
+  m_Name: connectionsContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7021044038956648011
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011828208127632429}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6640751308459045040}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 137, y: -32}
+  m_SizeDelta: {x: -3380, y: -3959.998}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!223 &3942844941320997530
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011828208127632429}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!114 &8051591853828656068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011828208127632429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 1052663
 --- !u!1 &1050748821646524839
 GameObject:
   m_ObjectHideFlags: 0
@@ -2347,6 +2474,7 @@ GameObject:
   - component: {fileID: 9104331751788505044}
   - component: {fileID: 4819393266022742379}
   - component: {fileID: 1222149151435989152}
+  - component: {fileID: 2795254333211087115}
   m_Layer: 0
   m_Name: DataSlot
   m_TagString: Untagged
@@ -2411,6 +2539,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2795254333211087115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311619460363807146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SlotController
+  _slotDirection: 1
+  _slotContentType: 1
+  _connectionPoint: {fileID: 9104331751788505044}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &1333962151062983743
 GameObject:
   m_ObjectHideFlags: 0
@@ -2509,6 +2656,7 @@ GameObject:
   - component: {fileID: 7896174218243937920}
   - component: {fileID: 3354055664196882935}
   - component: {fileID: 7984026652539899327}
+  - component: {fileID: 5947809022880682143}
   m_Layer: 0
   m_Name: DataSlot
   m_TagString: Untagged
@@ -2573,6 +2721,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5947809022880682143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703280155917657297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 0
+  _slotContentType: 1
+  _connectionPoint: {fileID: 7896174218243937920}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &1804407856559753918
 GameObject:
   m_ObjectHideFlags: 0
@@ -3793,6 +3960,7 @@ GameObject:
   - component: {fileID: 5887730912340985736}
   - component: {fileID: 6128841615068498417}
   - component: {fileID: 7846742647855626062}
+  - component: {fileID: 6026766845099102186}
   m_Layer: 0
   m_Name: DataSlot
   m_TagString: Untagged
@@ -3857,6 +4025,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6026766845099102186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2607961593577132074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 0
+  _slotContentType: 1
+  _connectionPoint: {fileID: 5887730912340985736}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &2645605445333026604
 GameObject:
   m_ObjectHideFlags: 0
@@ -3889,6 +4076,7 @@ RectTransform:
   m_Children:
   - {fileID: 2821382626785274887}
   - {fileID: 1556701570619991376}
+  - {fileID: 7021044038956648011}
   m_Father: {fileID: 1939064069426774810}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -5641,6 +5829,7 @@ GameObject:
   - component: {fileID: 6189843506742389802}
   - component: {fileID: 6831462141140768340}
   - component: {fileID: 815669032530356693}
+  - component: {fileID: 3379122692037301422}
   m_Layer: 0
   m_Name: NodeAction - Find&Pick
   m_TagString: Untagged
@@ -5747,6 +5936,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 1
+--- !u!114 &3379122692037301422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3916018705564086254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8823b82d244b53f4ca11cff8c54037d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeController
+  connectionsContainer: {fileID: 0}
+  connectionPrefab: {fileID: 0}
 --- !u!1 &3940031657407155209
 GameObject:
   m_ObjectHideFlags: 0
@@ -6080,6 +6283,7 @@ GameObject:
   - component: {fileID: 161300896842932799}
   - component: {fileID: 2170065466557816239}
   - component: {fileID: 3720096053687919735}
+  - component: {fileID: 6061422028335955119}
   m_Layer: 0
   m_Name: DataSlot
   m_TagString: Untagged
@@ -6144,6 +6348,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6061422028335955119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4364022065824057065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 0
+  _slotContentType: 1
+  _connectionPoint: {fileID: 161300896842932799}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &4364215161585931676
 GameObject:
   m_ObjectHideFlags: 0
@@ -6937,6 +7160,7 @@ GameObject:
   - component: {fileID: 6327356440872425932}
   - component: {fileID: 1384061584915702582}
   - component: {fileID: 108571905303078167}
+  - component: {fileID: 2287579178850419450}
   m_Layer: 0
   m_Name: StreamSlot (1)
   m_TagString: Untagged
@@ -7001,6 +7225,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2287579178850419450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5247619354388475216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 1
+  _slotContentType: 0
+  _connectionPoint: {fileID: 6327356440872425932}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &5279270595432606311
 GameObject:
   m_ObjectHideFlags: 0
@@ -7704,6 +7947,7 @@ GameObject:
   - component: {fileID: 6662859046655104544}
   - component: {fileID: 7180789090033651617}
   - component: {fileID: 2539541269207023621}
+  - component: {fileID: 1090393351046414189}
   m_Layer: 0
   m_Name: StreamSlot
   m_TagString: Untagged
@@ -7768,6 +8012,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1090393351046414189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5726474894545693720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 0
+  _slotContentType: 0
+  _connectionPoint: {fileID: 6662859046655104544}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &5762769823482704252
 GameObject:
   m_ObjectHideFlags: 0
@@ -9180,7 +9443,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 9, y: 20}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7001688031554491398
@@ -9298,6 +9561,7 @@ GameObject:
   - component: {fileID: 3280245856275565008}
   - component: {fileID: 4005631372538483331}
   - component: {fileID: 3920003067107583760}
+  - component: {fileID: 5542417142766837368}
   m_Layer: 0
   m_Name: NodeControl
   m_TagString: Untagged
@@ -9404,6 +9668,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 1
+--- !u!114 &5542417142766837368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6677284590047537835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8823b82d244b53f4ca11cff8c54037d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeController
+  connectionsContainer: {fileID: 7021044038956648011}
+  connectionPrefab: {fileID: 4899158444216150950, guid: b518692297a1971429821b9fabf19efc,
+    type: 3}
 --- !u!1 &6821773986983668397
 GameObject:
   m_ObjectHideFlags: 0
@@ -9889,6 +10168,7 @@ GameObject:
   - component: {fileID: 8955259898480257149}
   - component: {fileID: 4224942574868082446}
   - component: {fileID: 6675505647631193709}
+  - component: {fileID: 438307092088983868}
   m_Layer: 0
   m_Name: StreamSlot (1)
   m_TagString: Untagged
@@ -9953,6 +10233,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &438307092088983868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7440973070260481647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 1
+  _slotContentType: 0
+  _connectionPoint: {fileID: 8955259898480257149}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &7500708521509116888
 GameObject:
   m_ObjectHideFlags: 0
@@ -11059,6 +11358,7 @@ GameObject:
   - component: {fileID: 5689781010494825842}
   - component: {fileID: 6056113300359498161}
   - component: {fileID: 4338852278179652841}
+  - component: {fileID: 4498416287718414342}
   m_Layer: 0
   m_Name: NodeInput
   m_TagString: Untagged
@@ -11151,6 +11451,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &4498416287718414342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8517908950667392925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8823b82d244b53f4ca11cff8c54037d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeController
+  connectionsContainer: {fileID: 0}
+  connectionPrefab: {fileID: 0}
 --- !u!1 &8552792684047913383
 GameObject:
   m_ObjectHideFlags: 0
@@ -11312,6 +11626,7 @@ GameObject:
   - component: {fileID: 4599079907521795984}
   - component: {fileID: 277992461553412452}
   - component: {fileID: 7485997162476323898}
+  - component: {fileID: 2453988902227342228}
   m_Layer: 0
   m_Name: StreamSlot
   m_TagString: Untagged
@@ -11376,6 +11691,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2453988902227342228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8609801760123977748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9fc293c1420e4f9600a691befe143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Slots.SlotController
+  _slotDirection: 0
+  _slotContentType: 0
+  _connectionPoint: {fileID: 0}
+  slotImage: {fileID: 0}
+  defaultMaterial: {fileID: 0}
+  validMaterial: {fileID: 0}
+  invalidMaterial: {fileID: 0}
 --- !u!1 &8704158008154493789
 GameObject:
   m_ObjectHideFlags: 0
@@ -11389,6 +11723,7 @@ GameObject:
   - component: {fileID: 8377690575508597517}
   - component: {fileID: 8607247590995332586}
   - component: {fileID: 6629035566546326344}
+  - component: {fileID: 3103469790310718346}
   m_Layer: 0
   m_Name: NodeAction - MoveTo
   m_TagString: Untagged
@@ -11495,6 +11830,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 1
+--- !u!114 &3103469790310718346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8704158008154493789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8823b82d244b53f4ca11cff8c54037d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeController
+  connectionsContainer: {fileID: 7021044038956648011}
+  connectionPrefab: {fileID: 4899158444216150950, guid: b518692297a1971429821b9fabf19efc,
+    type: 3}
 --- !u!1 &8716875786731150397
 GameObject:
   m_ObjectHideFlags: 0
@@ -11770,6 +12120,7 @@ GameObject:
   - component: {fileID: 2110415812453396201}
   - component: {fileID: 8584673176852638441}
   - component: {fileID: 227076884968364562}
+  - component: {fileID: 4794276472029730733}
   m_Layer: 0
   m_Name: NodeVar
   m_TagString: Untagged
@@ -11876,6 +12227,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 1
+--- !u!114 &4794276472029730733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9102762093682827090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8823b82d244b53f4ca11cff8c54037d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeController
+  connectionsContainer: {fileID: 7021044038956648011}
+  connectionPrefab: {fileID: 4899158444216150950, guid: b518692297a1971429821b9fabf19efc,
+    type: 3}
 --- !u!1 &9119897693381318206
 GameObject:
   m_ObjectHideFlags: 0
