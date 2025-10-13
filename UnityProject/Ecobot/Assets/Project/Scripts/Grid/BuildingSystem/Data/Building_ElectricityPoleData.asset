@@ -15,8 +15,8 @@ MonoBehaviour:
   guid: 7848a8a6-4c40-470c-bb80-9adeb5523e58
   displayName: Electricity pole
   description: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: b45a6b397eb4ae246a2f6d0ddc6ea5fa, type: 3}
   maxStackValue: 0
-  prefab: {fileID: 990970971903724875, guid: ad4b29aa0894d2848b526eabab9be05f, type: 3}
+  prefab: {fileID: 1890868283738754722, guid: ad4b29aa0894d2848b526eabab9be05f, type: 3}
   width: 1
   height: 1

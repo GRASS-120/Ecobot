@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Grid.BuildingSystem.Buildings.Base;
 using GUI.Gameplay.Windows.Controller;
 using InteractionSystem;
 using UnityEngine;
@@ -9,6 +10,11 @@ namespace Grid.BuildingSystem.Buildings
     {
         public void Interact(IInteractor interactor)
         {
+            if (_context?.PowerWireToolService?.IsActive == true)
+            {
+                return;
+            }
+            
             HandleCraftingWindow();
         }
 

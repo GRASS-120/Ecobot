@@ -1,5 +1,6 @@
 using Grid.BuildingSystem;
 using Grid.BuildingSystem.Buildings;
+using Grid.BuildingSystem.Buildings.Base;
 using UnityEngine;
 
 //! наверное все же нужно разделить ноды: сделать общую ноду и от нее наследовать

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Grid.BuildingSystem.UI;
+using Grid.BuildingSystem.Buildings.Types.Workbench.UI;
 using GUI.UIFramework;
 using Inventory.CraftingSystem;
 using TMPro;

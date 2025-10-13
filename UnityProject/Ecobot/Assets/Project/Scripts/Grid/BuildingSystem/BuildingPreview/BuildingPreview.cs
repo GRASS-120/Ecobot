@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.Mods;
 using Grid.BuildingSystem.Buildings;
+using Grid.BuildingSystem.Buildings.Base;
 using R3;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -76,7 +77,6 @@ namespace Grid.BuildingSystem.BuildingPreview
         private void OnBuildingPlaced_Callback(BuildingBase obj)
         {
             _buildingPreviewVisual.RefreshVisual(CalcTargetPosition(), CalcVisualPlaneSize());
-            _canBuildByCollision.Value = false;
         }
 
         private void UpdatePreviewPosition()

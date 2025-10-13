@@ -1,4 +1,5 @@
-﻿using GUI.Gameplay.Windows.Controller;
+﻿using Grid.BuildingSystem.Buildings.Base;
+using GUI.Gameplay.Windows.Controller;
 using GUI.UIFramework;
 using InteractionSystem;
 using Inventory;

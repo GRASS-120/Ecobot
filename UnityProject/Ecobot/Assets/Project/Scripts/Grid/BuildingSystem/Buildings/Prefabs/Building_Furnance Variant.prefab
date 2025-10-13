@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7091251446635393798
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5419149818009535595}
+  m_Layer: 10
+  m_Name: WireAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5419149818009535595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7091251446635393798}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.024, y: 0.669, z: 0.42}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3938805221391469173}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &53575758165452899
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37,6 +68,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Center.z
       value: -0.20989847
+      objectReference: {fileID: 0}
+    - target: {fileID: 3299661585941553967, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      propertyPath: m_Radius
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 3897624292232798742, guid: da20c72b148170a4786e100c03ef5398,
         type: 3}
@@ -93,9 +129,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: Building_Furnance Variant
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7884176727248007105, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.28
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: -8586650156256686512, guid: da20c72b148170a4786e100c03ef5398, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3897624292232798742, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5419149818009535595}
     - targetCorrespondingSourceObject: {fileID: 6755515045247424536, guid: da20c72b148170a4786e100c03ef5398,
         type: 3}
       insertIndex: -1
@@ -104,8 +150,96 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8578418030815570033}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4188047236956719531, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 4332721778702004206}
+    - targetCorrespondingSourceObject: {fileID: 4188047236956719531, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8582127735381278040}
+    - targetCorrespondingSourceObject: {fileID: 96064365467064251, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 7757530821609406797}
   m_SourcePrefab: {fileID: 100100000, guid: da20c72b148170a4786e100c03ef5398, type: 3}
+--- !u!1 &138235920242114520 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 96064365467064251, guid: da20c72b148170a4786e100c03ef5398,
+    type: 3}
+  m_PrefabInstance: {fileID: 53575758165452899}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7757530821609406797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138235920242114520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f899ae25d3f4cf1bae8bfd5853d00d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grid.BuildingSystem.PowerSystem.PowerWireProximityReactor
+  playerTrigger: {fileID: 5694447683166932441}
+--- !u!4 &3938805221391469173 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3897624292232798742, guid: da20c72b148170a4786e100c03ef5398,
+    type: 3}
+  m_PrefabInstance: {fileID: 53575758165452899}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4224578879116452296 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4188047236956719531, guid: da20c72b148170a4786e100c03ef5398,
+    type: 3}
+  m_PrefabInstance: {fileID: 53575758165452899}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4332721778702004206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4224578879116452296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4294fc0ce34ab6bbbb07973ab6548c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grid.BuildingSystem.Buildings.BuildingFurnace
+  consumedUnits: 1
+  wireAnchor: {fileID: 5419149818009535595}
+  proximityReactor: {fileID: 7757530821609406797}
+  visual: {fileID: 8582127735381278040}
+  recipes:
+  - {fileID: 11400000, guid: a3c2f4c7de45e144bb8725c6a0aa48e7, type: 2}
+  coalItem: {fileID: 11400000, guid: b83c0ea004e8e4343933e877b71fcdf7, type: 2}
+--- !u!114 &8582127735381278040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4224578879116452296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea8ad4bb2b5485dae489d3fdd304aea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grid.BuildingSystem.Buildings.Visual.BuildingFurnaceVisual
+  smokeVfx: {fileID: 8485569437615711143}
+  fadeInDuration: 0.8
+--- !u!114 &5694447683166932441 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5744599851965883834, guid: da20c72b148170a4786e100c03ef5398,
+    type: 3}
+  m_PrefabInstance: {fileID: 53575758165452899}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138235920242114520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5749dc541d4441b279c3f9445713c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerProximityTrigger
 --- !u!4 &6736892437458956411 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6755515045247424536, guid: da20c72b148170a4786e100c03ef5398,
@@ -223,6 +357,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 1987276756457250, guid: 64c05f09726a0cc459c8bc95f6e1f149, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4472706492025242, guid: 64c05f09726a0cc459c8bc95f6e1f149, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.5
@@ -273,6 +411,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 64c05f09726a0cc459c8bc95f6e1f149, type: 3}
+--- !u!198 &8485569437615711143 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198587371007754828, guid: 64c05f09726a0cc459c8bc95f6e1f149,
+    type: 3}
+  m_PrefabInstance: {fileID: 8575779859479208427}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8578418030815570033 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4472706492025242, guid: 64c05f09726a0cc459c8bc95f6e1f149,

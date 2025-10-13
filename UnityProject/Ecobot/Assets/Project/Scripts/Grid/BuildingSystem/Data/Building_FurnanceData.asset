@@ -17,6 +17,6 @@ MonoBehaviour:
   description: Melt ore to get ingots
   icon: {fileID: 21300000, guid: dce6f8bf09a884c4b972821c13305ec6, type: 3}
   maxStackValue: 1
-  prefab: {fileID: 605806662011495987, guid: 1d6b8aded9a3fa04182cde617639ddc2, type: 3}
+  prefab: {fileID: 4332721778702004206, guid: 1d6b8aded9a3fa04182cde617639ddc2, type: 3}
   width: 7
   height: 3

@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Grid.BuildingSystem.UI
+namespace Grid.BuildingSystem.Buildings.Types.Workbench.UI
 {
     public class CraftingRecipeItemView : MonoBehaviour
     {

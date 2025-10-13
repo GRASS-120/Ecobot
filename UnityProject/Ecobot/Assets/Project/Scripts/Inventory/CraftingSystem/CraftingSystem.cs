@@ -40,29 +40,6 @@ namespace Inventory.CraftingSystem
             return true;
         }
         
-        public bool TryGetMissingResources(CraftingRecipeData recipe, out Dictionary<InventoryItemData, int> missingResources)
-        {
-            missingResources = new Dictionary<InventoryItemData, int>();
-            
-            if (recipe == null) return false;
-            
-            bool hasMissing = false;
-            
-            foreach (var ingredient in recipe.Ingredients)
-            {
-                int currentAmount = _resourceCounter.GetResourceCount(ingredient.item);
-                int missing = ingredient.amount - currentAmount;
-                
-                if (missing > 0)
-                {
-                    missingResources[ingredient.item] = missing;
-                    hasMissing = true;
-                }
-            }
-            
-            return hasMissing;
-        }
-        
         public List<CraftingRecipeData> GetAvailableRecipes() => _availableRecipes;
         
         public List<CraftingRecipeData> GetCraftableRecipes()
@@ -160,6 +137,36 @@ namespace Inventory.CraftingSystem
             }
             
             return remainingAmount;
+        }
+        
+        public bool TryConsume(List<RecipeIngredient> ingredients, InventorySystem mainInventory, InventorySystem hotbarInventory)
+        {
+            var consumedItems = new List<(InventorySlot slot, int amount)>();
+
+            foreach (var ingredient in ingredients)
+            {
+                int remainingAmount = ingredient.amount;
+
+                // сначала пробуем взять из hotbar
+                remainingAmount = ConsumeFromInventory(hotbarInventory, ingredient.item, remainingAmount, consumedItems);
+
+                // если не хватило - берем из основного инвентаря
+                if (remainingAmount > 0)
+                {
+                    remainingAmount = ConsumeFromInventory(mainInventory, ingredient.item, remainingAmount, consumedItems);
+                }
+
+                if (remainingAmount > 0)
+                {
+                    // не хватило ресурсов - откатываем изменения
+                    RollbackConsumption(consumedItems, mainInventory, hotbarInventory);
+                    return false;
+                }
+            }
+
+            // уведомляем об изменениях слотов
+            NotifyConsumedSlots(consumedItems, mainInventory, hotbarInventory);
+            return true;
         }
 
         private void RollbackConsumption(List<(InventorySlot slot, int amount)> consumedItems, InventorySystem mainInventory, InventorySystem hotbarInventory)

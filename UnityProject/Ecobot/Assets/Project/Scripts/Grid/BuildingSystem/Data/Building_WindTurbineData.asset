@@ -15,8 +15,8 @@ MonoBehaviour:
   guid: b2558e36-76e6-41c3-be02-283c7248fb3e
   displayName: Wind Generator
   description: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 6ef0d7c5de16ca14fb868b4cbd8f05c5, type: 3}
   maxStackValue: 0
-  prefab: {fileID: 9012627248208520254, guid: 4d1c4fc51081e32458f3c987a76f08ac, type: 3}
+  prefab: {fileID: 2154387847870839952, guid: 4d1c4fc51081e32458f3c987a76f08ac, type: 3}
   width: 3
   height: 3
