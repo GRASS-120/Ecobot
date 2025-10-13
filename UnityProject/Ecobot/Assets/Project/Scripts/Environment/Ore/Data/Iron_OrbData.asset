@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d38deca8be44980998ac8857a5701ea, type: 3}
   m_Name: Iron_OrbData
   m_EditorClassIdentifier: 
-  oreItem: {fileID: 11400000, guid: 1fb045d0cd673d946afe817bea258c9c, type: 2}
+  oreItem: {fileID: 11400000, guid: 17bd8addcde651949bda7c83ef53928d, type: 2}
   miningTime: 1
+  capacity: 30

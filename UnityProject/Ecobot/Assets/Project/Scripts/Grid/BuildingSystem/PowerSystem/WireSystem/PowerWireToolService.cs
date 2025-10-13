@@ -4,7 +4,7 @@ using Grid.BuildingSystem.Buildings.Base;
 using Player;
 using UnityEngine;
 
-namespace Grid.BuildingSystem.PowerSystem
+namespace Grid.BuildingSystem.PowerSystem.WireSystem
 {
     public class PowerWireToolService : MonoBehaviour
     {

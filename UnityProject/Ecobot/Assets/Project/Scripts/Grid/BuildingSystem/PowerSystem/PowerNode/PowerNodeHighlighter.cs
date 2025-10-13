@@ -1,4 +1,5 @@
 ﻿using Grid.BuildingSystem.Buildings.Base;
+using Grid.BuildingSystem.PowerSystem.WireSystem;
 using UnityEngine;
 
 namespace Grid.BuildingSystem.PowerSystem

@@ -5,6 +5,8 @@ using Grid.Base;
 using Grid.BuildingSystem.Buildings;
 using Grid.BuildingSystem.Buildings.Base;
 using Grid.BuildingSystem.PowerSystem;
+using Grid.BuildingSystem.PowerSystem.WireSystem;
+using GUI.Gameplay.Windows.Controller;
 using Inventory;
 using Player;
 using R3;
@@ -185,7 +187,14 @@ namespace Grid.BuildingSystem
                 Quaternion.Euler(0, buildingAssetData.GetRotationAngle(dir), 0)
             );
             
-            var context = new BuildingContext(player.WindowManager, player, powerGridService, powerWireToolService);
+            var overlay = player.WindowManager.GetController<GameplayOverlayController>();
+            var context = new BuildingContext(
+                player.WindowManager,
+                player,
+                powerGridService,
+                powerWireToolService,
+                overlay?.MouseUI 
+            );
             
             building.Init(buildingAssetData, origin, context, dir);
 

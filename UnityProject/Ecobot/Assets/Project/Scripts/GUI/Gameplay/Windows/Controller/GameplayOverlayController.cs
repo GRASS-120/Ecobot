@@ -1,5 +1,6 @@
 ﻿using GUI.Gameplay.Windows.View;
 using GUI.UIFramework;
+using Inventory.UI;
 using Player;
 using R3;
 using UnityEngine;
@@ -10,7 +11,8 @@ namespace GUI.Gameplay.Windows.Controller
     public class GameplayOverlayController : WindowController<GameplayOverlayView>
     {
         public override string Id => "GameplayOverlay";
-        
+        public MouseInventoryItemUI MouseUI { get; private set; }
+
         private PlayerInventoryHolder _inventoryHolder;
         private WindowManager _windowManager;
 
@@ -43,6 +45,8 @@ namespace GUI.Gameplay.Windows.Controller
                 _inventoryHolder.InventorySelectionService,
                 View.MouseInventoryItemUI,
                 _inventoryHolder.MainInventory); 
+            
+            MouseUI = View.MouseInventoryItemUI;
         }
     }
 }

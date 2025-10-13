@@ -33,6 +33,25 @@ namespace Grid.BuildingSystem.Buildings.Visual
         {
             if (smokeVfx == null) return;
 
+            if (!isPowered)
+            {
+                if (_fadeRoutine != null)
+                {
+                    StopCoroutine(_fadeRoutine);
+                    _fadeRoutine = null;
+                }
+                var emission = smokeVfx.emission;
+                emission.enabled = false;
+                if (smokeVfx.isPlaying)
+                    smokeVfx.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                SetEmissionRate(0f);
+            }
+        }
+        
+        public void SetSmelting(bool isSmelting)
+        {
+            if (smokeVfx == null) return;
+
             if (_fadeRoutine != null)
             {
                 StopCoroutine(_fadeRoutine);
@@ -40,17 +59,14 @@ namespace Grid.BuildingSystem.Buildings.Visual
             }
 
             var emission = smokeVfx.emission;
-
-            if (isPowered)
+            if (isSmelting)
             {
-                // плавный fade-in
                 emission.enabled = true;
                 if (!smokeVfx.isPlaying) smokeVfx.Play(true);
                 _fadeRoutine = StartCoroutine(FadeEmission(0f, _baseRate, fadeInDuration));
             }
             else
             {
-                // естественный fade-out за счёт lifeTime частиц
                 emission.enabled = false;
                 if (smokeVfx.isPlaying)
                     smokeVfx.Stop(true, ParticleSystemStopBehavior.StopEmitting);

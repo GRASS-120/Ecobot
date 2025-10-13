@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Grid.BuildingSystem.Buildings;
+using Grid.BuildingSystem.Buildings.Types.Furnance;
 using Grid.BuildingSystem.Buildings.Types.PowerPole;
 using Grid.BuildingSystem.Buildings.Types.WindTurbine;
 using Grid.BuildingSystem.PowerSystem;

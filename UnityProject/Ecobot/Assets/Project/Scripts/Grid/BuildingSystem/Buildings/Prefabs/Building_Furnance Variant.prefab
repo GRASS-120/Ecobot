@@ -211,6 +211,9 @@ MonoBehaviour:
   wireAnchor: {fileID: 5419149818009535595}
   proximityReactor: {fileID: 7757530821609406797}
   visual: {fileID: 8582127735381278040}
+  recipes:
+  - {fileID: 11400000, guid: a3c2f4c7de45e144bb8725c6a0aa48e7, type: 2}
+  coalItem: {fileID: 11400000, guid: b83c0ea004e8e4343933e877b71fcdf7, type: 2}
 --- !u!114 &8582127735381278040
 MonoBehaviour:
   m_ObjectHideFlags: 0
