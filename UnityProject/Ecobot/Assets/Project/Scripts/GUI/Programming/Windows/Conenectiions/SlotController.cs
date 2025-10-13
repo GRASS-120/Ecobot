@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using GUI.Programming.Windows.Nodes;
+using Bot.Programming.Nodes.Base; 
 
 namespace GUI.Programming.Windows.Slots
 {
@@ -33,7 +34,14 @@ namespace GUI.Programming.Windows.Slots
 
         public enum SlotDirection { Input, Output }
         public enum SlotContentType { Stream, Data }
-
+        
+        public ProgNodeSlotBase LinkedSlot { get; private set; }
+        
+        public void Initialize(ProgNodeSlotBase slot)
+        {
+            LinkedSlot = slot;
+        }
+        
         private void Awake()
         {
             if (_connectionPoint == null)

@@ -7,6 +7,7 @@ namespace Bot.Programming.Nodes.Base
     public abstract class ProgNodeBase
     {
         public string NodeName { get; protected set; }
+        
         public string Description { get; protected set; }
         
         protected List<ProgNodeSlotBase> slots = new ();

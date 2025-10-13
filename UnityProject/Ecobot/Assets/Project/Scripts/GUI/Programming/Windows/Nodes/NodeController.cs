@@ -1,8 +1,10 @@
-
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using GUI.Programming.Windows.Slots;
+using Bot.Programming.Nodes.Base;
+using Bot.Programming.Nodes.Slots;
 
 namespace GUI.Programming.Windows.Nodes
 {
@@ -17,6 +19,15 @@ namespace GUI.Programming.Windows.Nodes
         [Header("Connections Setup")]
         [SerializeField] private RectTransform connectionsContainer;
         [SerializeField] private UIBezierConnection connectionPrefab;
+
+        [Header("Selection")]
+        [SerializeField] private Outline selectionOutline;
+
+        [Header("Permissions")]
+        [SerializeField] private bool canBeDeleted = true;
+
+        private bool _isSelected;
+        public static NodeController SelectedNode { get; private set; }
 
         private UIBezierConnection _activeConnection;
         private SlotController _activeOutputSlot;
@@ -38,14 +49,44 @@ namespace GUI.Programming.Windows.Nodes
         public static NodeController ActiveConnectionNode { get; private set; }
         public bool HasActiveConnection => _activeConnection != null;
 
+        // === Привязка к программной ноде ===
+        public ProgNodeBase LinkedProgramNode { get; private set; }
+
+        public void Initialize(ProgNodeBase programNode)
+        {
+            LinkedProgramNode = programNode;
+        }
+
         private void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
             _parentRect = _rectTransform.parent as RectTransform;
             _canvas = GetComponentInParent<Canvas>();
 
+            // === Найти контейнер соединений через родителя ===
+            if (connectionsContainer == null)
+            {
+                var nodesContainer = GetComponentInParent<NodesContainer>();
+                if (nodesContainer != null)
+                {
+                    connectionsContainer = nodesContainer.GetConnectionsContainer();
+                }
+                else
+                {
+                    Debug.LogWarning($"[NodeController] No NodesContainer found for {name}, connections will not work!");
+                }
+            }
+
             FindAllSlots();
             SetupSlotsEvents();
+
+            if (selectionOutline != null)
+                selectionOutline.enabled = false;
+        }
+        
+        public void SetConnectionsContainer(RectTransform container)
+        {
+            connectionsContainer = container;
         }
 
         private void FindAllSlots()
@@ -79,6 +120,12 @@ namespace GUI.Programming.Windows.Nodes
         {
             if (_activeConnection != null)
                 UpdateActiveConnectionToMouse();
+
+            // Удаление выделенной ноды (если разрешено)
+            if (_isSelected && canBeDeleted && (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.X)))
+            {
+                DeleteNode();
+            }
         }
 
         #region Slot Handlers
@@ -157,6 +204,8 @@ namespace GUI.Programming.Windows.Nodes
                 activeOutput.SetConnected(true);
                 inputSlot.SetConnected(true);
 
+                TryLinkProgramSlots(activeOutput, inputSlot);
+
                 ActiveConnectionNode.ClearTempEndPoint();
                 ActiveConnectionNode._activeConnection = null;
                 ActiveConnectionNode._activeOutputSlot = null;
@@ -165,6 +214,26 @@ namespace GUI.Programming.Windows.Nodes
             else
             {
                 ActiveConnectionNode.CancelActiveConnection();
+            }
+        }
+
+        private void TryLinkProgramSlots(SlotController output, SlotController input)
+        {
+            if (output.LinkedSlot == null || input.LinkedSlot == null)
+                return;
+
+            var outSlot = output.LinkedSlot;
+            var inSlot = input.LinkedSlot;
+
+            if (outSlot.CanConnect(input.LinkedSlot.Owner))
+            {
+                outSlot.Connect(input.LinkedSlot.Owner);
+                Debug.Log($"[NodeController] Linked flow: {outSlot.SlotName} -> {input.LinkedSlot.SlotName}");
+            }
+            else if (outSlot is ProgNodeDataSlot<object> dataOut && inSlot is ProgNodeDataSlot<object> dataIn)
+            {
+                dataIn.ConnectToDataSlot(dataOut);
+                Debug.Log($"[NodeController] Linked data: {dataOut.SlotName} -> {dataIn.SlotName}");
             }
         }
 
@@ -233,15 +302,93 @@ namespace GUI.Programming.Windows.Nodes
 
         #endregion
 
+        #region Selection Logic
+
+        private void ToggleSelection()
+        {
+            if (_isSelected)
+                Deselect();
+            else
+                Select();
+        }
+
+        private void Select()
+        {
+            if (SelectedNode != null && SelectedNode != this)
+                SelectedNode.Deselect();
+
+            _isSelected = true;
+            SelectedNode = this;
+
+            if (selectionOutline != null)
+                selectionOutline.enabled = true;
+        }
+
+        private void Deselect()
+        {
+            _isSelected = false;
+
+            if (SelectedNode == this)
+                SelectedNode = null;
+
+            if (selectionOutline != null)
+                selectionOutline.enabled = false;
+        }
+
+        private void DeleteNode()
+        {
+            if (!canBeDeleted)
+                return;
+
+            // === Удаляем активное соединение, если оно тянется ===
+            if (_activeConnection != null)
+            {
+                CancelActiveConnection();
+            }
+
+            // === Удаляем все связи этой ноды (входящие и исходящие) ===
+            var connectionsToRemove = new List<ConnectionInfo>();
+
+            foreach (var conn in _allConnections)
+            {
+                if ((conn.Input != null && _inputSlots.Contains(conn.Input)) ||
+                    (conn.Output != null && _outputSlots.Contains(conn.Output)))
+                {
+                    connectionsToRemove.Add(conn);
+                }
+            }
+
+            foreach (var conn in connectionsToRemove)
+            {
+                if (conn.Line != null)
+                    Destroy(conn.Line.gameObject);
+
+                _allConnections.Remove(conn);
+            }
+
+            _connections.Clear();
+
+            Deselect();
+            Destroy(gameObject);
+        }
+
+        #endregion
+
         #region Pointer Handlers
+
+        private bool _isPointerDown;
+        private Vector2 _pointerDownPosition;
+        private const float DragThreshold = 5f;
 
         public void OnPointerDown(PointerEventData eventData)
         {
             if (eventData.button != PointerEventData.InputButton.Left)
                 return;
 
+            _isPointerDown = true;
+            _pointerDownPosition = eventData.position;
+
             _rectTransform.SetAsLastSibling();
-            _isDragging = true;
 
             if (_parentRect != null)
             {
@@ -259,16 +406,24 @@ namespace GUI.Programming.Windows.Nodes
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (!_isDragging || _parentRect == null)
+            if (!_isPointerDown || _parentRect == null)
                 return;
 
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    _parentRect,
-                    eventData.position,
-                    eventData.pressEventCamera,
-                    out Vector2 pointerLocalPoint))
+            if (!_isDragging && Vector2.Distance(_pointerDownPosition, eventData.position) > DragThreshold)
             {
-                _rectTransform.anchoredPosition = pointerLocalPoint + _offset;
+                _isDragging = true;
+            }
+
+            if (_isDragging)
+            {
+                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                        _parentRect,
+                        eventData.position,
+                        eventData.pressEventCamera,
+                        out Vector2 pointerLocalPoint))
+                {
+                    _rectTransform.anchoredPosition = pointerLocalPoint + _offset;
+                }
             }
 
             eventData.Use();
@@ -276,31 +431,16 @@ namespace GUI.Programming.Windows.Nodes
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            if (_isPointerDown && !_isDragging)
+            {
+                ToggleSelection();
+            }
+
+            _isPointerDown = false;
             _isDragging = false;
             eventData.Use();
         }
 
         #endregion
-
-        private void OnDestroy()
-        {
-            foreach (var slot in _inputSlots)
-            {
-                slot.OnSlotPressed -= OnInputSlotPressed;
-                slot.OnSlotReleased -= OnInputSlotReleased;
-            }
-
-            foreach (var slot in _outputSlots)
-            {
-                slot.OnSlotPressed -= OnOutputSlotPressed;
-                slot.OnSlotReleased -= OnOutputSlotReleased;
-            }
-
-            _allConnections.RemoveAll(c =>
-                c.Output == null || c.Input == null);
-
-            if (ActiveConnectionNode == this)
-                ActiveConnectionNode = null;
-        }
     }
 }
