@@ -69,6 +69,11 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: -0.20989847
       objectReference: {fileID: 0}
+    - target: {fileID: 3299661585941553967, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      propertyPath: m_Radius
+      value: 3.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3897624292232798742, guid: da20c72b148170a4786e100c03ef5398,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -123,6 +128,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Building_Furnance Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7884176727248007105, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.28
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -8586650156256686512, guid: da20c72b148170a4786e100c03ef5398, type: 3}
@@ -214,6 +224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Grid.BuildingSystem.Buildings.Visual.BuildingFurnaceVisual
   smokeVfx: {fileID: 8485569437615711143}
+  fadeInDuration: 0.8
 --- !u!114 &5694447683166932441 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5744599851965883834, guid: da20c72b148170a4786e100c03ef5398,

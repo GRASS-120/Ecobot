@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Game;
 using Grid.Base;
 using Grid.BuildingSystem.Buildings;
+using Grid.BuildingSystem.Buildings.Base;
 using Grid.BuildingSystem.PowerSystem;
 using Inventory;
 using Player;

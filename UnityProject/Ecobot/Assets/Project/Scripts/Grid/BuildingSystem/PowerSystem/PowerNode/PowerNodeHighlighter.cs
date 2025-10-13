@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Grid.BuildingSystem.Buildings.Base;
+using UnityEngine;
 
 namespace Grid.BuildingSystem.PowerSystem
 {
@@ -46,7 +47,7 @@ namespace Grid.BuildingSystem.PowerSystem
                 return;
             }
 
-            var fromBB = source as Buildings.BuildingBase;
+            var fromBB = source as BuildingBase;
             var fromAnchor = (source as IPowerAnchorProvider)?.WireAnchor;
             var p1 = (fromAnchor != null ? fromAnchor.position : fromBB.transform.position);
 
@@ -54,7 +55,7 @@ namespace Grid.BuildingSystem.PowerSystem
             if (_tool.CurrentHover != null)
             {
                 var to = _tool.CurrentHover;
-                var toBB = to as Buildings.BuildingBase;
+                var toBB = to as BuildingBase;
                 var toAnchor = (to as IPowerAnchorProvider)?.WireAnchor;
                 p2 = (toAnchor != null ? toAnchor.position : toBB.transform.position);
             }

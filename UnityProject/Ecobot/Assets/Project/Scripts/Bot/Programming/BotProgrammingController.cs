@@ -7,6 +7,7 @@ using Bot.Programming.Nodes.Concrete;
 using Bot.Programming.Nodes.Slots;
 using Grid.BuildingSystem;
 using Grid.BuildingSystem.Buildings;
+using Grid.BuildingSystem.Buildings.Base;
 using Inventory;
 using UnityEngine;
 

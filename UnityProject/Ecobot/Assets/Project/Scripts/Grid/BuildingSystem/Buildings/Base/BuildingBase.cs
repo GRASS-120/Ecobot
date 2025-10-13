@@ -1,8 +1,7 @@
 using GUI.UIFramework;
-using InteractionSystem;
 using UnityEngine;
 
-namespace Grid.BuildingSystem.Buildings
+namespace Grid.BuildingSystem.Buildings.Base
 {
     public class BuildingBase : MonoBehaviour 
     {
@@ -10,7 +9,7 @@ namespace Grid.BuildingSystem.Buildings
         protected Vector2Int _origin;
         protected WindowManager _windowManager;
         protected BuildingAssetData.Dir _dir;
-        protected BuildingContext _context; // <- добавить
+        protected BuildingContext _context;
 
         public Vector2Int[,] AllGridPositions => _buildingAssetData.GetAllGridPositions(_origin, _dir);
         public BuildingAssetData BuildingAssetData => _buildingAssetData;

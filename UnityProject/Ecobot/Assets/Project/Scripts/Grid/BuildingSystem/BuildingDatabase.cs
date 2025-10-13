@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Grid.BuildingSystem.Buildings;
+using Grid.BuildingSystem.Buildings.Base;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

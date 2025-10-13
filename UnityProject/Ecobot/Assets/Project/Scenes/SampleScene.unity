@@ -2670,7 +2670,7 @@ MonoBehaviour:
   rotationSpeed: 5
   invertDirection: 0
   lockX: 0
-  lockY: 0
+  lockY: 1
   lockZ: 0
 --- !u!1 &409894669
 GameObject:
@@ -13062,7 +13062,7 @@ MonoBehaviour:
   rotationSpeed: 5
   invertDirection: 0
   lockX: 0
-  lockY: 0
+  lockY: 1
   lockZ: 0
 --- !u!114 &1925662936
 MonoBehaviour:

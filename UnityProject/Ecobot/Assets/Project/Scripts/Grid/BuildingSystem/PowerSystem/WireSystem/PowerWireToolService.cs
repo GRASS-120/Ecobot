@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Grid.BuildingSystem.Buildings.Base;
 using Player;
 using UnityEngine;
 
@@ -43,7 +44,7 @@ namespace Grid.BuildingSystem.PowerSystem
                 if (node == null || node == _source) continue;
 
                 var toPos = ((node as IPowerAnchorProvider)?.WireAnchor?.position) 
-                            ?? (node as Buildings.BuildingBase)?.transform.position 
+                            ?? (node as BuildingBase)?.transform.position 
                             ?? Vector3.zero;
                 var dist = Vector3.Distance(playerPos, toPos);
                 if (dist < bestDist)
@@ -61,7 +62,7 @@ namespace Grid.BuildingSystem.PowerSystem
                     if (node == null || node == _source) continue;
 
                     var toPos = ((node as IPowerAnchorProvider)?.WireAnchor?.position) 
-                                ?? (node as Buildings.BuildingBase)?.transform.position 
+                                ?? (node as BuildingBase)?.transform.position 
                                 ?? Vector3.zero;
                     var dist = Vector3.Distance(playerPos, toPos);
                     if (dist < hoverRadius && dist < bestDist)
@@ -74,11 +75,16 @@ namespace Grid.BuildingSystem.PowerSystem
 
             CurrentHover = best;
 
-            // ВАЖНО: валидность — через CanProvide/CanAccept (учитывают порты и роли).
-            // При этом CurrentHover может быть и невалидным (для показа "красного" превью).
-            HoverIsValid = (CurrentHover != null) 
-                           && _source.CanProvideOutputTo(CurrentHover) 
-                           && CurrentHover.CanAcceptInputFrom(_source);
+            if (CurrentHover != null)
+            {
+                var forwardValid = _source.CanProvideOutputTo(CurrentHover) && CurrentHover.CanAcceptInputFrom(_source);
+                var reverseValid = CurrentHover.CanProvideOutputTo(_source) && _source.CanAcceptInputFrom(CurrentHover);
+                HoverIsValid = forwardValid || reverseValid;
+            }
+            else
+            {
+                HoverIsValid = false;
+            }
 
             if (highlighter != null)
             {
@@ -120,25 +126,29 @@ namespace Grid.BuildingSystem.PowerSystem
                 return;
             }
 
+            var targetIsConsumer = target.NodeType == PowerNodeType.Consumer;
+            var targetIsPole = target.NodeType == PowerNodeType.Pole;
+            var targetIsGenerator = target.NodeType == PowerNodeType.Generator;
+
             var ok = powerGridService.Connect(_source, target);
             if (ok)
             {
-                var targetIsConsumer = target.NodeType == PowerNodeType.Consumer;
-                var targetIsPole = target.NodeType == PowerNodeType.Pole;
                 var noFreeOutputs = _source.Outputs.Count >= _source.MaxOutputs;
 
-                // Правило:
-                // - всегда выходим из режима при подключении к потребителю
-                // - выходим при подключении столб -> столб (фикс бага)
-                // - выходим, если у источника кончились выходы
-                if (targetIsConsumer || targetIsPole || noFreeOutputs)
+                // Выходим из режима: потребитель, столб, генератор или закончились порты
+                if (targetIsConsumer || targetIsPole || targetIsGenerator || noFreeOutputs)
                 {
                     Cancel();
                 }
             }
             else
             {
-                // не удалось соединить — остаёмся в режиме, пользователь может выбрать другую цель или Alt
+                // Если кликнули по генератору — тоже выходим (соединение недопустимо)
+                if (targetIsGenerator)
+                {
+                    Cancel();
+                }
+                // иначе остаёмся в режиме
             }
         }
 

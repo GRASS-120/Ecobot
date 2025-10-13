@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Grid.BuildingSystem.Buildings
+namespace Grid.BuildingSystem.Buildings.Base
 {
     public abstract class BuildingVisualBase : MonoBehaviour
     {

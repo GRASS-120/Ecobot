@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Grid.BuildingSystem.Buildings.Base;
+using UnityEngine;
 
 namespace Grid.BuildingSystem.Buildings.Visual
 {
@@ -7,7 +8,9 @@ namespace Grid.BuildingSystem.Buildings.Visual
         [SerializeField] private Transform rotor;
         [SerializeField] private float maxSpinSpeed = 360f;
         [SerializeField] private float spinRampDuration = 2f;
-
+        [SerializeField] private Vector3 localAxis = Vector3.up;
+        [SerializeField] private bool invertDirection;
+        
         private float _currentSpinSpeed;
         private Coroutine _spinRoutine;
 
@@ -32,7 +35,8 @@ namespace Grid.BuildingSystem.Buildings.Visual
         {
             if (rotor == null) return;
             if (_currentSpinSpeed <= 0f) return;
-            rotor.Rotate(Vector3.up, _currentSpinSpeed * Time.deltaTime, Space.Self);
+            
+            rotor.Rotate(localAxis.normalized, _currentSpinSpeed * (invertDirection ? -1f : 1f) * Time.deltaTime, Space.Self);
         }
 
         private void SpinTo(float targetSpeed, float duration)

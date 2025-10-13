@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Grid.BuildingSystem.Buildings.Base;
 using R3;
 using UnityEngine;
 
@@ -78,7 +79,7 @@ namespace Grid.BuildingSystem.PowerSystem
 
         private void CreateLine(IPowerNode from, IPowerNode to)
         {
-            var go = new GameObject($"Wire_{(from as Buildings.BuildingBase)?.name}_{(to as Buildings.BuildingBase)?.name}");
+            var go = new GameObject($"Wire_{(from as BuildingBase)?.name}_{(to as BuildingBase)?.name}");
             if (wiresContainer != null) go.transform.SetParent(wiresContainer, false);
 
             var lr = go.AddComponent<LineRenderer>();
@@ -128,7 +129,7 @@ namespace Grid.BuildingSystem.PowerSystem
         
         private Vector3 GetAnchorPosition(IPowerNode node)
         {
-            var bb = node as Buildings.BuildingBase;
+            var bb = node as BuildingBase;
             var anchor = (node as IPowerAnchorProvider)?.WireAnchor;
             return (anchor != null ? anchor.position : bb.transform.position) + Vector3.up * 0.0f;
         }

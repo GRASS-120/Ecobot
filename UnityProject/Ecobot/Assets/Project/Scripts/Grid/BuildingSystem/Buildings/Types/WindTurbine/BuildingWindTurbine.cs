@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Grid.BuildingSystem.Buildings.Base;
+using Grid.BuildingSystem.Buildings.Reactors;
 using Grid.BuildingSystem.Buildings.Visual;
 using Grid.BuildingSystem.PowerSystem;
 using GUI.Gameplay.Windows.Controller;
@@ -6,7 +8,7 @@ using InteractionSystem;
 using Inventory.CraftingSystem;
 using UnityEngine;
 
-namespace Grid.BuildingSystem.Buildings
+namespace Grid.BuildingSystem.Buildings.Types.WindTurbine
 {
     public class BuildingWindTurbine : BuildingBase, IPowerNode, IInteractable, IPowerAnchorProvider
     {
@@ -15,6 +17,8 @@ namespace Grid.BuildingSystem.Buildings
         [SerializeField] private List<RecipeIngredient> repairCost = new();
         [SerializeField] private PowerWireProximityReactor proximityReactor;
         [SerializeField] private BuildingWindTurbineVisual visual;
+        [SerializeField] private BuildingWindTurbineWorldUi worldUi;
+        [SerializeField] private WorldUiProximityReactor worldUiReactor;
         
         private readonly List<IPowerNode> _inputs = new();
         private readonly List<IPowerNode> _outputs = new();
@@ -39,8 +43,11 @@ namespace Grid.BuildingSystem.Buildings
             BuildingAssetData.Dir dir = BuildingAssetData.Dir.Down)
         {
             base.Init(data, origin, context, dir); 
+            
             visual?.Init(this, _context);
             proximityReactor?.Init(_context, this);
+            worldUi?.Init(this, _context);
+            worldUiReactor?.Init(_context);
         }
         
         public bool CanAcceptInputFrom(IPowerNode from) => false;

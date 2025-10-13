@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Bot.Programming.Nodes.Base;
 using Grid.BuildingSystem;
 using Grid.BuildingSystem.Buildings;
+using Grid.BuildingSystem.Buildings.Base;
 using Inventory;
 using UnityEngine;
 

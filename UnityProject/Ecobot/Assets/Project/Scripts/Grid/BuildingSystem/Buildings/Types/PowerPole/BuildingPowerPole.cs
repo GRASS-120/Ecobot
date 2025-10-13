@@ -1,14 +1,21 @@
 ﻿using System.Collections.Generic;
+using Grid.BuildingSystem.Buildings.Base;
+using Grid.BuildingSystem.Buildings.Reactors;
+using Grid.BuildingSystem.Buildings.Types.WindTurbine;
+using Grid.BuildingSystem.Buildings.Visual;
 using Grid.BuildingSystem.PowerSystem;
 using InteractionSystem;
 using UnityEngine;
 
-namespace Grid.BuildingSystem.Buildings
+namespace Grid.BuildingSystem.Buildings.Types.PowerPole
 {
     public class BuildingPowerPole : BuildingBase, IPowerNode, IPowerNodeInternalDisconnect, IInteractable, IPowerAnchorProvider
     {
         [SerializeField] private Transform wireAnchor;
         [SerializeField] private PowerWireProximityReactor proximityReactor;
+        [SerializeField] private BuildingPowerPoleVisual visual;
+        [SerializeField] private BuildingPowerPoleWorldUi worldUi;
+        [SerializeField] private WorldUiProximityReactor worldUiReactor;
 
         private readonly List<IPowerNode> _inputs = new();
         private readonly List<IPowerNode> _outputs = new();
@@ -31,8 +38,12 @@ namespace Grid.BuildingSystem.Buildings
             BuildingContext context, 
             BuildingAssetData.Dir dir = BuildingAssetData.Dir.Down)
         {
-            base.Init(data, origin, context, dir); 
+            base.Init(data, origin, context, dir);
+            
+            visual?.Init(this, _context);
             proximityReactor?.Init(_context, this);
+            worldUi?.Init(this, _context);
+            worldUiReactor?.Init(_context);
         }
         
         public bool CanAcceptInputFrom(IPowerNode from)
@@ -111,7 +122,7 @@ namespace Grid.BuildingSystem.Buildings
 
         public void OnPowerStateChanged(bool isPowered)
         {
-            // столбу не нужно
+            visual?.SetPowered(isPowered);
         }
 
         public void MarkBroken() { }

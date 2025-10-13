@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.Mods;
 using Grid.BuildingSystem.Buildings;
+using Grid.BuildingSystem.Buildings.Base;
 using R3;
 using UnityEngine;
 using UnityEngine.Serialization;

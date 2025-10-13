@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Grid.BuildingSystem.PowerSystem.PowerNode;
 using R3;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace Grid.BuildingSystem.PowerSystem
         
         private readonly HashSet<IPowerNode> _nodes = new();
         private bool _isRecomputing;
+        private readonly Dictionary<IPowerNode, NodePowerState> _nodeStates = new();
 
         private readonly Subject<Unit> _changed = new();
         public Observable<Unit> Changed => _changed;
@@ -65,6 +67,30 @@ namespace Grid.BuildingSystem.PowerSystem
             b.Disconnect(a);
             Recompute();
         }
+        
+        public bool TryGetNetworkState(
+            IPowerNode node,
+            out bool powered,
+            out bool overload,
+            out int totalProduction,
+            out int totalConsumption)
+        {
+            powered = false;
+            overload = false;
+            totalProduction = 0;
+            totalConsumption = 0;
+
+            if (node == null) return false;
+            if (_nodeStates.TryGetValue(node, out var s))
+            {
+                powered = s.Powered;
+                overload = s.Overload;
+                totalProduction = s.TotalProduction;
+                totalConsumption = s.TotalConsumption;
+                return true;
+            }
+            return false;
+        }
 
         public void NotifyNodeStateChanged(IPowerNode node)
         {
@@ -74,6 +100,8 @@ namespace Grid.BuildingSystem.PowerSystem
 
         private void Recompute()
         {
+            _nodeStates.Clear();
+            
             if (_isRecomputing) return;
             _isRecomputing = true;
 
@@ -102,11 +130,27 @@ namespace Grid.BuildingSystem.PowerSystem
                     anyGeneratorBroken = true;
                 }
 
-                bool powered = !anyGeneratorBroken && !overload;
+                bool hasProduction = net.TotalProduction > 0;
+                bool powered = hasProduction && !anyGeneratorBroken && !overload;
 
+                foreach (var p in net.Nodes.Where(n => n.NodeType == PowerNodeType.Pole))
+                    p.OnPowerStateChanged(powered);
+                
                 // Сообщаем потребителям состояние питания
                 foreach (var c in net.Nodes.Where(n => n.NodeType == PowerNodeType.Consumer))
                     c.OnPowerStateChanged(powered);
+                
+                foreach (var n in net.Nodes)
+                {
+                    _nodeStates[n] = new NodePowerState
+                    {
+                        Powered = powered,
+                        Overload = overload,
+                        TotalProduction = net.TotalProduction,
+                        TotalConsumption = net.TotalConsumption,
+                        HasProduction = hasProduction
+                    };
+                }
             }
 
             _changed.OnNext(Unit.Default);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Grid.BuildingSystem.Buildings;
+using Grid.BuildingSystem.Buildings.Base;
 
 namespace Grid.BuildingSystem.PowerSystem
 {

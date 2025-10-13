@@ -1,8 +1,9 @@
-﻿using Player;
+﻿using Grid.BuildingSystem.PowerSystem;
+using Player;
 using R3;
 using UnityEngine;
 
-namespace Grid.BuildingSystem.PowerSystem
+namespace Grid.BuildingSystem.Buildings.Reactors
 {
     [RequireComponent(typeof(PlayerTrigger))]
     public class PowerWireProximityReactor : MonoBehaviour
