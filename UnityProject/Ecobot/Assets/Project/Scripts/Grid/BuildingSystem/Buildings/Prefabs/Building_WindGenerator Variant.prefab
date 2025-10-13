@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2311652225969160108
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7211358597031992364}
+  m_Layer: 10
+  m_Name: WireAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7211358597031992364
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2311652225969160108}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.726, y: 0.694, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4887104003848341624}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &935359106223297732
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -108,6 +139,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 787a9b507c79ccf45adb16294dec7ad4,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 787a9b507c79ccf45adb16294dec7ad4,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 47d5f8f71f33bc648bf3e473414be950, type: 2}
     - target: {fileID: 7176157410714768559, guid: 787a9b507c79ccf45adb16294dec7ad4,
         type: 3}
       propertyPath: m_Layer
@@ -121,6 +162,12 @@ PrefabInstance:
 --- !u!4 &824626418336969519 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 787a9b507c79ccf45adb16294dec7ad4,
+    type: 3}
+  m_PrefabInstance: {fileID: 935359106223297732}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4582282920776477286 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5517865915055243614, guid: 787a9b507c79ccf45adb16294dec7ad4,
     type: 3}
   m_PrefabInstance: {fileID: 935359106223297732}
   m_PrefabAsset: {fileID: 0}
@@ -207,14 +254,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: Building_WindGenerator Variant
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8586650156256686512, guid: da20c72b148170a4786e100c03ef5398, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3897624292232798742, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7211358597031992364}
     - targetCorrespondingSourceObject: {fileID: 6755515045247424536, guid: da20c72b148170a4786e100c03ef5398,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 824626418336969519}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4188047236956719531, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 2154387847870839952}
+    - targetCorrespondingSourceObject: {fileID: 4188047236956719531, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6279687607853439450}
+    - targetCorrespondingSourceObject: {fileID: 96064365467064251, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 2772445276547261768}
   m_SourcePrefab: {fileID: 100100000, guid: da20c72b148170a4786e100c03ef5398, type: 3}
 --- !u!4 &2883771275832636022 stripped
 Transform:
@@ -222,3 +286,82 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8486294172842404462}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4214723526215405524 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5744599851965883834, guid: da20c72b148170a4786e100c03ef5398,
+    type: 3}
+  m_PrefabInstance: {fileID: 8486294172842404462}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8399237075349667285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5749dc541d4441b279c3f9445713c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerProximityTrigger
+--- !u!4 &4887104003848341624 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3897624292232798742, guid: da20c72b148170a4786e100c03ef5398,
+    type: 3}
+  m_PrefabInstance: {fileID: 8486294172842404462}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5754387921803256773 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4188047236956719531, guid: da20c72b148170a4786e100c03ef5398,
+    type: 3}
+  m_PrefabInstance: {fileID: 8486294172842404462}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2154387847870839952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5754387921803256773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f52df3a92d44089dca71d6655ea403, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grid.BuildingSystem.Buildings.BuildingWindTurbine
+  producedUnits: 3
+  wireAnchor: {fileID: 7211358597031992364}
+  repairCost:
+  - item: {fileID: 11400000, guid: bbf6ce5786f27cc48ab3d4d459dfb3d6, type: 2}
+    amount: 1
+  - item: {fileID: 11400000, guid: 91ce43ce23a680e46bfbd4e26f94fd17, type: 2}
+    amount: 3
+  proximityReactor: {fileID: 2772445276547261768}
+  visual: {fileID: 6279687607853439450}
+--- !u!114 &6279687607853439450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5754387921803256773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d3c7f37f91444fa8564187d98c32f79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grid.BuildingSystem.Buildings.Visual.BuildingWindTurbineVisual
+  rotor: {fileID: 4582282920776477286}
+  maxSpinSpeed: 360
+  spinRampDuration: 2
+--- !u!1 &8399237075349667285 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 96064365467064251, guid: da20c72b148170a4786e100c03ef5398,
+    type: 3}
+  m_PrefabInstance: {fileID: 8486294172842404462}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2772445276547261768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8399237075349667285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f899ae25d3f4cf1bae8bfd5853d00d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grid.BuildingSystem.PowerSystem.PowerWireProximityReactor
+  playerTrigger: {fileID: 4214723526215405524}

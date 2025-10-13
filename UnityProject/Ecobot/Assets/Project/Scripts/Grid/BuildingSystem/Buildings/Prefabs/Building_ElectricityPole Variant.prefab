@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1676642206518323201
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8186031074909915359}
+  m_Layer: 10
+  m_Name: WireAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8186031074909915359
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1676642206518323201}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 4.121, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3675378547397435661}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &366680481180091163
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -73,15 +104,85 @@ PrefabInstance:
       propertyPath: m_Name
       value: Building_ElectricityPole Variant
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8586650156256686512, guid: da20c72b148170a4786e100c03ef5398, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3897624292232798742, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8186031074909915359}
     - targetCorrespondingSourceObject: {fileID: 6755515045247424536, guid: da20c72b148170a4786e100c03ef5398,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3005244825436359362}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4188047236956719531, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 1890868283738754722}
+    - targetCorrespondingSourceObject: {fileID: 96064365467064251, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 9121564056397939828}
   m_SourcePrefab: {fileID: 100100000, guid: da20c72b148170a4786e100c03ef5398, type: 3}
+--- !u!1 &307370659434189984 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 96064365467064251, guid: da20c72b148170a4786e100c03ef5398,
+    type: 3}
+  m_PrefabInstance: {fileID: 366680481180091163}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9121564056397939828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 307370659434189984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f899ae25d3f4cf1bae8bfd5853d00d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grid.BuildingSystem.PowerSystem.PowerNodeProximityRelay
+  playerTrigger: {fileID: 5381342875353032353}
+--- !u!4 &3675378547397435661 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3897624292232798742, guid: da20c72b148170a4786e100c03ef5398,
+    type: 3}
+  m_PrefabInstance: {fileID: 366680481180091163}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4541980493026134704 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4188047236956719531, guid: da20c72b148170a4786e100c03ef5398,
+    type: 3}
+  m_PrefabInstance: {fileID: 366680481180091163}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1890868283738754722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4541980493026134704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a34d3fd86fe14b2c994e552c608b3e2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grid.BuildingSystem.Buildings.BuildingPowerPole
+  wireAnchor: {fileID: 8186031074909915359}
+  proximityReactor: {fileID: 9121564056397939828}
+--- !u!114 &5381342875353032353 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5744599851965883834, guid: da20c72b148170a4786e100c03ef5398,
+    type: 3}
+  m_PrefabInstance: {fileID: 366680481180091163}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 307370659434189984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5749dc541d4441b279c3f9445713c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerProximityTrigger
 --- !u!4 &6401546707339352835 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6755515045247424536, guid: da20c72b148170a4786e100c03ef5398,

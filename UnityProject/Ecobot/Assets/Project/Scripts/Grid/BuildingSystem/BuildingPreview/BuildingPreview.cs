@@ -76,7 +76,6 @@ namespace Grid.BuildingSystem.BuildingPreview
         private void OnBuildingPlaced_Callback(BuildingBase obj)
         {
             _buildingPreviewVisual.RefreshVisual(CalcTargetPosition(), CalcVisualPlaneSize());
-            _canBuildByCollision.Value = false;
         }
 
         private void UpdatePreviewPosition()

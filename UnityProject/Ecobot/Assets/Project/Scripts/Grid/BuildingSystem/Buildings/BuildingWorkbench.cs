@@ -9,6 +9,11 @@ namespace Grid.BuildingSystem.Buildings
     {
         public void Interact(IInteractor interactor)
         {
+            if (_context?.PowerWireToolService?.IsActive == true)
+            {
+                return;
+            }
+            
             HandleCraftingWindow();
         }
 

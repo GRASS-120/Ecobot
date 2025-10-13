@@ -44,5 +44,15 @@ namespace Grid.BuildingSystem
                 BuildingsData.Remove(building.BuildingAssetData);
             }
         }
+        
+        public IEnumerable<BuildingBase> EnumerateAll()
+        {
+            return BuildingsData.Values.SelectMany(v => v);
+        }
+
+        public IEnumerable<T> GetAllOfType<T>() where T : BuildingBase
+        {
+            return EnumerateAll().OfType<T>();
+        }
     }
 }

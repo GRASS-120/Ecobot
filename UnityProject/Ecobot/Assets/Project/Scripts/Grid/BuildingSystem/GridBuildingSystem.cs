@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Game;
 using Grid.Base;
 using Grid.BuildingSystem.Buildings;
+using Grid.BuildingSystem.PowerSystem;
 using Inventory;
 using Player;
 using R3;
@@ -24,7 +25,9 @@ namespace Grid.BuildingSystem
         [SerializeField] private GameManager gameManager;
         [SerializeField] private BuildingPreview.BuildingPreview buildingPreview;
         [SerializeField] private BuildingListConfig buildingListConfig;
-        
+        [SerializeField] private PowerGridService powerGridService;
+        [SerializeField] private PowerWireToolService powerWireToolService;
+
         [Title("Visual")]
         [SerializeField] private GameObject pointer;
         [SerializeField] private GameObject gridVisualTiles;
@@ -47,6 +50,7 @@ namespace Grid.BuildingSystem
         public BuildingAssetData.Dir Dir => _dir;
         public GameManager GameManager => gameManager;
         public PlayerManager Player => player;
+        public BuildingDatabase BuildingDatabase => _buildingDatabase;
         
         public ReadOnlyReactiveProperty<BuildingAssetData> CurrentBuildingItem => _currentBuildingItem;
 
@@ -84,19 +88,13 @@ namespace Grid.BuildingSystem
         
         private void OnSelectionChanged(InventorySelectionService.InventorySelection sel)
         {
-            Debug.Log($"OnSelectionChanged: IsValid={sel.IsValid}, ItemData={sel.ItemData?.name}");
-    
             // Если ничего не выбрано ИЛИ выбран НЕ билдинг — выходим из режима строительства
             if (!sel.IsValid || sel.ItemData is not BuildingAssetData buildingData)
             {
-                Debug.Log("Not a building item or nothing selected, exiting building mode");
                 ClearBuildingItem();
                 gameManager.EnterGameplayMode();
                 return;
             }
-    
-            // Выбран билдинг — входим в режим строительства
-            Debug.Log($"Building selected: {buildingData.name}");
     
             _currentBuildingItem.Value = buildingData;
             gameManager.EnterBuildingMode();
@@ -125,6 +123,10 @@ namespace Grid.BuildingSystem
         private void OnBuildingPlaced_Callback(BuildingBase obj)
         {
             _buildingDatabase.Append(obj);
+            if (obj is IPowerNode node)
+            {
+                powerGridService.Register(node);
+            }
         }
         
         private void ResetDir()
@@ -147,14 +149,20 @@ namespace Grid.BuildingSystem
         {
             GridNode gridNode = _grid.GetGridObject(_mousePosition);
             BuildingBase building = gridNode.BuildingBase;
-
-            if (building == null) return;
             
+            if (building == null) return;
+
+            if (building is IPowerNode node)
+            {
+                powerGridService.Unregister(node);
+            }
+
             _buildingDatabase.Remove(building);
             building.DestroySelf();
-            
+
             Vector2Int[,] gridPositionList = building.AllGridPositions;
-            foreach (Vector2Int gridPosition in gridPositionList) {
+            foreach (Vector2Int gridPosition in gridPositionList)
+            {
                 _grid.GetGridObject(gridPosition).ClearBuilding();
             }
         }
@@ -176,8 +184,8 @@ namespace Grid.BuildingSystem
                 Quaternion.Euler(0, buildingAssetData.GetRotationAngle(dir), 0)
             );
             
-            var context = new BuildingContext(player.WindowManager, player);
-
+            var context = new BuildingContext(player.WindowManager, player, powerGridService, powerWireToolService);
+            
             building.Init(buildingAssetData, origin, context, dir);
 
             return building;
