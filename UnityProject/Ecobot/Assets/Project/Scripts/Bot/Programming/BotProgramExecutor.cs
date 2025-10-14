@@ -27,18 +27,28 @@ namespace Bot.Programming
         
         private void InitializeSimulationData()
         {
-            // Создаем тестовые данные для симуляции
+            // Создаем тестовые данные
             var testItem = ScriptableObject.CreateInstance<InventoryItemData>();
             testItem.displayName = "Test Item";
             testItem.maxStackValue = 10;
             simulatedItems["Test Item"] = testItem;
-            itemPositions[testItem] = new Vector3(5, 0, 5);
+            itemPositions[testItem] = new Vector3(3, 0, 3);
             createdObjects.Add(testItem);
-            
-            var testBuildingObject = new GameObject("Test Building");
-            var testBuilding = testBuildingObject.AddComponent<BuildingBase>();
-            simulatedBuildings["Storage"] = testBuilding;
-            createdObjects.Add(testBuildingObject);
+
+            // --- создаём 2 тестовых здания ---
+            var building1Obj = new GameObject("Storage_A");
+            var building1 = building1Obj.AddComponent<BuildingBase>();
+            building1Obj.transform.position = new Vector3(12, 0, 8); // 📍 верхний левый угол
+            simulatedBuildings["Storage_A"] = building1;
+            createdObjects.Add(building1Obj);
+
+            var building2Obj = new GameObject("Storage_B");
+            var building2 = building2Obj.AddComponent<BuildingBase>();
+            building2Obj.transform.position = new Vector3(12, 0, 2); // 📍 нижний правый угол
+            simulatedBuildings["Storage_B"] = building2;
+            createdObjects.Add(building2Obj);
+
+            Debug.Log($"[Simulation] Spawned Storage_A at {building1Obj.transform.position}, Storage_B at {building2Obj.transform.position}");
         }
         
         // Метод для очистки созданных объектов

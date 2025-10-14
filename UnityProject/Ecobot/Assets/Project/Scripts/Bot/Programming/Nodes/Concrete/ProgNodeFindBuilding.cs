@@ -27,9 +27,13 @@ namespace Bot.Programming.Nodes.Concrete
             // Симуляция поиска здания
             bool found = executor.SimulateFindBuilding(buildingTypeName, out BuildingBase building);
             
-            if (found)
+            if (found && building != null)
             {
-                Debug.Log($"[{NodeName}] Found building of type: {buildingTypeName}");
+                // Логи для отладки позиции — это ключ
+                Vector3 pos = building.transform != null ? building.transform.position : Vector3.zero;
+                Debug.Log($"[{NodeName}] Found building '{buildingTypeName}' -> object: {building.GetType().Name}, position: {pos}");
+
+                // Записываем сам объект в слот (передаём ссылку)
                 foundBuildingSlot.Value = building;
                 
                 if (successSlot.ConnectedNode != null)
@@ -39,7 +43,7 @@ namespace Bot.Programming.Nodes.Concrete
             }
             else
             {
-                Debug.Log($"[{NodeName}] Building not found: {buildingTypeName}");
+                Debug.LogWarning($"[{NodeName}] Building not found or null: {buildingTypeName}");
                 
                 if (failureSlot.ConnectedNode != null)
                 {

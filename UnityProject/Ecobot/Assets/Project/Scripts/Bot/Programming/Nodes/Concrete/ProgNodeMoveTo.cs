@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using Bot.Programming.Nodes.Slots;
-using Grid.BuildingSystem;
+using Grid.BuildingSystem.Buildings.Base;
 using Inventory;
 using UnityEngine;
 
@@ -27,63 +27,79 @@ namespace Bot.Programming.Nodes.Concrete
             
             if (target != null)
             {
-                // bool success = executor.SimulateFindItem();
+                switch (target)
+                {
+                    case Transform transform:
+                        targetPosition = transform.position;
+                        hasTarget = true;
+                        break;
+                    
+                    case GameObject go:
+                        targetPosition = go.transform.position;
+                        hasTarget = true;
+                        break;
+                    
+                    case BuildingBase building:
+                        targetPosition = building.transform.position;
+                        hasTarget = true;
+                        break;
 
-                
-                // targetPosition = executor.GetItemPosition(target);
-                // // Получаем позицию в зависимости от типа объекта
-                // if (target is InventoryItemData item)
-                // {
-                //     // targetPosition = item.transform.position;
-                //     // targetPosition = new Vector3(5F, 0F, 5F);
-                //
-                //     hasTarget = true;
-                // }
-                // else if (target is Building building)
-                // {
-                //     targetPosition = building.transform.position;
-                //     hasTarget = true;
-                // }
-                // else if (target is Transform transform)
-                // {
-                //     targetPosition = transform.position;
-                //     hasTarget = true;
-                // }
-                // else if (target is GameObject gameObject)
-                // {
-                //     targetPosition = gameObject.transform.position;
-                //     hasTarget = true;
-                // }
+                    case Vector3 vec:
+                        targetPosition = vec;
+                        hasTarget = true;
+                        break;
+
+                    case InventoryItemData item:
+                        targetPosition = executor.GetItemPosition(item);
+                        hasTarget = true;
+                        break;
+
+                    default:
+                        Debug.LogWarning($"[{NodeName}] Unknown target type: {target.GetType().Name}");
+                        break;
+                }
             }
-            
+
             if (!hasTarget)
             {
-                Debug.LogWarning($"[{NodeName}] No valid target found");
-                
+                Debug.LogWarning($"[{NodeName}] ❌ No valid target found for movement");
                 if (failureSlot.ConnectedNode != null)
-                {
                     yield return executor.ExecuteNode(failureSlot.ConnectedNode);
-                }
-                
                 yield break;
             }
-            
-            
+
             Debug.Log($"[{NodeName}] Moving to position: {targetPosition}");
-            // Создаем и выполняем команду движения
+            
+            // Создаем и запускаем команду движения
             var moveCommand = bot.CommandController.Fabric.CreateMoveCommand(targetPosition);
             bot.CommandController.AddCommand(moveCommand);
             moveCommand.Execute();
-            
-            // Симулируем движение для тестирования
-            yield return new WaitForSeconds(0.5f);
-            
-            Debug.Log($"[{NodeName}] Reached position: {targetPosition}");
-            
-            if (successSlot.ConnectedNode != null)
+
+            // ✅ Ожидаем прибытия
+            float timeout = 10f;
+            float elapsed = 0f;
+            float stopDistance = 0.15f;
+
+            while (Vector3.Distance(bot.transform.position, targetPosition) > stopDistance)
             {
-                yield return executor.ExecuteNode(successSlot.ConnectedNode);
+                elapsed += Time.deltaTime;
+
+                if (elapsed > timeout)
+                {
+                    Debug.LogWarning($"[{NodeName}] ⏱ Timeout while moving to target!");
+                    if (failureSlot.ConnectedNode != null)
+                        yield return executor.ExecuteNode(failureSlot.ConnectedNode);
+                    yield break;
+                }
+
+                yield return null;
             }
+
+            Debug.Log($"[{NodeName}] ✅ Reached position: {targetPosition}");
+
+            // Выполняем следующую ноду
+            if (successSlot.ConnectedNode != null)
+                yield return executor.ExecuteNode(successSlot.ConnectedNode);
         }
     }
 }
