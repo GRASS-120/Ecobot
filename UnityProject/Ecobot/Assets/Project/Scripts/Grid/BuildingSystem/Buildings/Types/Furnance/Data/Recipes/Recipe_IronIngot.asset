@@ -16,5 +16,5 @@ MonoBehaviour:
   inputAmountPerOutput: 2
   resultItem: {fileID: 11400000, guid: 1fb045d0cd673d946afe817bea258c9c, type: 2}
   resultAmount: 1
-  smeltTimeSeconds: 2
+  smeltTimeSeconds: 3
   fuelPerOutput: 1

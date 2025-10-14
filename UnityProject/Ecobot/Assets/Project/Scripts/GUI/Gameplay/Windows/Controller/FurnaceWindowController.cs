@@ -47,6 +47,7 @@ namespace GUI.Gameplay.Windows.Controller
                 {
                     RefreshSlots();
                     RefreshRecipesAvailability();
+                    RefreshOreDisplay();
                 })
                 .AddTo(Subs);
 
@@ -63,6 +64,7 @@ namespace GUI.Gameplay.Windows.Controller
                 {
                     RefreshResultDisplay();
                     RefreshRecipesAvailability();
+                    RefreshOreDisplay();
                     BindSlots();   // <-- обновить валидаторы под новый рецепт
                 })
                 .AddTo(Subs);
@@ -77,12 +79,26 @@ namespace GUI.Gameplay.Windows.Controller
             base.OnClose();
             ClearRecipeList();
         }
+        
+        private void RefreshOreDisplay()
+        {
+            var r = _furnace.CurrentRecipe;
+            if (r != null && r.inputItem != null)
+            {
+                View.SetOreDisplay(r.inputItem.icon, r.inputItem.displayName, r.inputAmountPerOutput);
+            }
+            else
+            {
+                View.SetOreDisplay(null, "", 0);
+            }
+        }
 
         public void SelectRecipe(SmeltingRecipeData recipe)
         {
             _furnace.SelectRecipe(recipe);
             RefreshResultDisplay();
             RefreshRecipesAvailability();
+            RefreshOreDisplay();
         }
         
         private void BindSlots()
@@ -200,6 +216,7 @@ namespace GUI.Gameplay.Windows.Controller
             RefreshResultDisplay();
             RefreshSlots();
             RefreshRecipesAvailability();
+            RefreshOreDisplay();
         }
     }
 }

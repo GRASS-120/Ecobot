@@ -14,15 +14,19 @@ namespace GUI.Gameplay.Windows.View
         [SerializeField] private Transform recipeListContainer;
         [SerializeField] private GameObject recipeItemPrefab;
 
-        [Header("Right Panel")]
+        [Header("Power Icon")]
         [SerializeField] private Image electricityIcon;
         [SerializeField] private Color powerOnColor = new Color(1f, 0.9f, 0f);
         [SerializeField] private Color powerOffColor = Color.gray;
-
+        
         [SerializeField] private Image resultIcon;
         [SerializeField] private TextMeshProUGUI resultNameText;
         [SerializeField] private TextMeshProUGUI resultAmountText;
 
+        [SerializeField] private Image oreIcon;
+        [SerializeField] private TextMeshProUGUI oreNameText;
+        [SerializeField] private TextMeshProUGUI oreAmountText;
+        
         [SerializeField] private Image progressFill;
         [SerializeField] private Button closeButton;
 
@@ -44,6 +48,23 @@ namespace GUI.Gameplay.Windows.View
             foreach (var item in items)
             {
                 if (item != null) Destroy(item.gameObject);
+            }
+        }
+        
+        public void SetOreDisplay(Sprite icon, string name, int amount)
+        {
+            if (oreIcon != null)
+            {
+                oreIcon.sprite = icon;
+                oreIcon.enabled = icon != null;
+            }
+            if (oreNameText != null)
+            {
+                oreNameText.text = string.IsNullOrEmpty(name) ? "" : name;
+            }
+            if (oreAmountText != null)
+            {
+                oreAmountText.text = amount > 0 ? $"x{amount}" : "";
             }
         }
 

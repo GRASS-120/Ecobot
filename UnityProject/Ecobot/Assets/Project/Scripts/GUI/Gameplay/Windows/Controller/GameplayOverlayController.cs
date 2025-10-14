@@ -15,21 +15,23 @@ namespace GUI.Gameplay.Windows.Controller
 
         private PlayerInventoryHolder _inventoryHolder;
         private WindowManager _windowManager;
+        private MouseInventoryItemUI _mouse;
 
-        public void Init(PlayerInventoryHolder inventoryHolder, WindowManager windowManager)
+        public void Init(PlayerInventoryHolder inventoryHolder, WindowManager windowManager, MouseInventoryItemUI mouse)
         {
             _inventoryHolder = inventoryHolder;
             _windowManager = windowManager;
+            _mouse = mouse;
         }
 
         public override void OnOpen()
         {
-            View.MouseInventoryItemUI.Init(Subs);
+            // View.MouseInventoryItemUI.Init(Subs);
             
             View.PlayerHotbarUI.Init(
                 _inventoryHolder.HotbarInventorySystem, 
                 _inventoryHolder.InventorySelectionService,
-                View.MouseInventoryItemUI, 
+                _mouse, 
                 Subs,
                 quickMoveTarget: _inventoryHolder.MainInventory);
 
@@ -37,16 +39,16 @@ namespace GUI.Gameplay.Windows.Controller
             inventoryWindowController.Init(
                 _inventoryHolder.MainInventory,
                 _inventoryHolder.InventorySelectionService,
-                View.MouseInventoryItemUI,
+                _mouse,
                 _inventoryHolder.HotbarInventorySystem);
 
             var storageWindowController = _windowManager.GetController<StorageInventoryWindowController>();
             storageWindowController.Init(
                 _inventoryHolder.InventorySelectionService,
-                View.MouseInventoryItemUI,
+                _mouse,
                 _inventoryHolder.MainInventory); 
             
-            MouseUI = View.MouseInventoryItemUI;
+            MouseUI = _mouse;
         }
     }
 }
