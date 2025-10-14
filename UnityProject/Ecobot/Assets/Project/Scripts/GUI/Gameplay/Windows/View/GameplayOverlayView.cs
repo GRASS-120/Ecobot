@@ -8,9 +8,9 @@ namespace GUI.Gameplay.Windows.View
     {
         [Header("Inventory")]
         [SerializeField] private HotbarUI playerHotbarUI;
-        [SerializeField] private MouseInventoryItemUI mouseInventoryItemUI;
+        // [SerializeField] private MouseInventoryItemUI mouseInventoryItemUI;
 
         public HotbarUI PlayerHotbarUI => playerHotbarUI;
-        public MouseInventoryItemUI MouseInventoryItemUI => mouseInventoryItemUI;
+        // public MouseInventoryItemUI MouseInventoryItemUI => mouseInventoryItemUI;
     }
 }

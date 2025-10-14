@@ -6,6 +6,7 @@ using GUI.Gameplay.Windows;
 using GUI.Gameplay.Windows.Controller;
 using GUI.UIFramework;
 using Inventory;
+using Inventory.UI;
 using Player;
 using UnityEngine;
 
@@ -20,13 +21,19 @@ namespace GUI.Gameplay
         private GameMode _mode;
         private GameManager _gameManager;
         private PlayerInventoryHolder _inventoryHolder;
+        private MouseInventoryItemUI _mouse;
 
-        public void Init(WindowManager windowManager, GameManager gameManager, PlayerManager player)
+        public void Init(
+            WindowManager windowManager,
+            GameManager gameManager,
+            PlayerManager player,
+            MouseInventoryItemUI mouse)
         {
             _gameManager = gameManager;
             _windowManager = windowManager;
             _mode = _gameManager.GameplayMode;
             _inventoryHolder = player.Inventory;
+            _mouse = mouse;
             
             _mode.OnEnterEvent += OpenOverlay;
         }
@@ -35,7 +42,7 @@ namespace GUI.Gameplay
         {
             _windowManager.OpenWindow<GameplayOverlayController>(controller =>
             {
-                controller.Init(_inventoryHolder, _windowManager);
+                controller.Init(_inventoryHolder, _windowManager, _mouse);
             });
         }
     }

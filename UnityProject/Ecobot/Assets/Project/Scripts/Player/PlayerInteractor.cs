@@ -18,6 +18,8 @@ namespace Player
         
         [Header("Interaction Params")]
         [SerializeField] private float interactionRange = 20f;
+        [SerializeField] private float interactSphereRadius = 0.6f;
+        [SerializeField] private LayerMask interactionMask = ~0;
         
         public Transform InteractorSource { get; set; }
         public bool IsHoldInteracting { get; set; }
@@ -25,7 +27,8 @@ namespace Player
         private PlayerInputManager _input;
         private IInteractable _currentInteractable;
         private ILootReceiver _lootReceiver;     
-        private readonly CompositeDisposable _lootSubscription = new (); 
+        private readonly CompositeDisposable _lootSubscription = new ();
+        private Coroutine _holdRoutine;
         
         public void Init(PlayerManager player, ILootReceiver lootReceiver)
         {
@@ -41,63 +44,99 @@ namespace Player
         
         public void HandleInteraction()
         {
-            var r = new Ray(InteractorSource.position, InteractorSource.forward);
-            if (Physics.Raycast(r, out RaycastHit hit, interactionRange))
+            if (TryFindBestInteractable(out var interactable))
             {
-                if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
-                {
-                    interactable.Interact(this);
-                }
+                interactable.Interact(this);
             }
         }
-        
+
         public void HandleAltInteraction()
         {
-            var r = new Ray(InteractorSource.position, InteractorSource.forward);
-            if (Physics.Raycast(r, out RaycastHit hit, interactionRange))
+            if (TryFindBestInteractable(out var interactable))
             {
-                if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
-                {
-                    interactable.AltInteract(this);
-                }
+                interactable.AltInteract(this);
             }
         }
 
         public void HandleHoldInteraction()
         {
-            var r = new Ray(InteractorSource.position, InteractorSource.forward);
-            if (Physics.Raycast(r, out RaycastHit hit, interactionRange))
+            if (IsHoldInteracting) return;
+
+            if (TryFindBestInteractable(out var interactable))
             {
-                if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
+                _currentInteractable = interactable;
+                IsHoldInteracting = true;
+
+                if (interactable is ILootProvider provider)
                 {
-                    _currentInteractable = interactable;
-                    IsHoldInteracting = true;
-                    
-                    // Если цель производит лут — подпишемся и складываем в lootReceiver (если он есть)
-                    if (interactable is ILootProvider provider)
+                    _lootSubscription.Clear();
+                    provider.OnProvideLoot.Subscribe(loot =>
                     {
-                        _lootSubscription.Clear();
-                        provider.OnProvideLoot.Subscribe(loot =>
-                        {
-                            _lootReceiver.TryReceive(loot);
-                        }).AddTo(_lootSubscription);
-                    }
-                    
-                    StartCoroutine(interactable.HoldInteract(this));
+                        _lootReceiver.TryReceive(loot);
+                    }).AddTo(_lootSubscription);
                 }
+
+                _holdRoutine = StartCoroutine(interactable.HoldInteract(this));
             }
         }
 
         public void HandleHoldInteractionCanceled()
         {
             if (_currentInteractable == null) return;
-            
-            StopCoroutine(_currentInteractable.HoldInteract(this));
-            
+
+            if (_holdRoutine != null)
+            {
+                StopCoroutine(_holdRoutine);
+                _holdRoutine = null;
+            }
+
             _currentInteractable.HoldInteractionCancel(this);
-            
-            IsHoldInteracting = true;
+
+            IsHoldInteracting = false;
             _currentInteractable = null;
+            _lootSubscription.Clear();
+        }
+        
+        private bool TryFindBestInteractable(out IInteractable target)
+        {
+            target = null;
+
+            var origin = InteractorSource != null ? InteractorSource.position : transform.position;
+            var dir = InteractorSource != null ? InteractorSource.forward : transform.forward;
+
+            var hits = Physics.SphereCastAll(
+                origin,
+                interactSphereRadius,
+                dir,
+                interactionRange,
+                interactionMask,
+                QueryTriggerInteraction.Ignore
+            );
+
+            if (hits == null || hits.Length == 0) return false;
+
+            Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+            for (int i = 0; i < hits.Length; i++)
+            {
+                var col = hits[i].collider;
+                if (col == null) continue;
+
+                if (col.TryGetComponent(out IInteractable direct))
+                {
+                    target = direct;
+                    return true;
+                }
+
+                var parent = col.GetComponentInParent<IInteractable>();
+                if (parent != null)
+                {
+                    target = parent;
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

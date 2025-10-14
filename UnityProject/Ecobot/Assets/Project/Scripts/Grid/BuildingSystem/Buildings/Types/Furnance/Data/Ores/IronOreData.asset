@@ -15,5 +15,5 @@ MonoBehaviour:
   guid: 29137eb5-c916-4bad-9949-67c648ffd6b7
   displayName: Iron Ore
   description: Iron ore
-  icon: {fileID: 21300000, guid: aee454fcb90274c42b8096a03bf7a1ef, type: 3}
+  icon: {fileID: 21300000, guid: ec66e8516e7ad7446984505155fb6fb6, type: 3}
   maxStackValue: 30
