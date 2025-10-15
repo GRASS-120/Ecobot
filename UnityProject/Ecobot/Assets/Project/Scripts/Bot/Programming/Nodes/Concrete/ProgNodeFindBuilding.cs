@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using Bot.Programming.Nodes.Slots;
-using Grid.BuildingSystem;
-using Grid.BuildingSystem.Buildings;
 using Grid.BuildingSystem.Buildings.Base;
 using UnityEngine;
 
@@ -11,42 +9,44 @@ namespace Bot.Programming.Nodes.Concrete
     {
         private string buildingTypeName;
         private ProgNodeDataSlot<BuildingBase> foundBuildingSlot;
-        
+
         public ProgNodeFindBuilding(string buildingTypeName) : base("Find Building")
         {
             this.buildingTypeName = buildingTypeName;
-            Description = $"Find nearest {buildingTypeName} building";
+            Description = $"Find nearest {buildingTypeName}";
             foundBuildingSlot = new ProgNodeDataSlot<BuildingBase>("Found Building", this);
             slots.Add(foundBuildingSlot);
         }
-        
+
         public override IEnumerator Execute(BotBase bot, BotProgramExecutor executor)
         {
-            Debug.Log($"[{NodeName}] Looking for building: {buildingTypeName}");
-            
-            // Симуляция поиска здания
+            Debug.Log($"[{NodeName}] 🔍 Searching for building: '{buildingTypeName}'");
+
             bool found = executor.SimulateFindBuilding(buildingTypeName, out BuildingBase building);
-            
+
             if (found && building != null)
             {
-                // Логи для отладки позиции — это ключ
-                Vector3 pos = building.transform != null ? building.transform.position : Vector3.zero;
-                Debug.Log($"[{NodeName}] Found building '{buildingTypeName}' -> object: {building.GetType().Name}, position: {pos}");
-
-                // Записываем сам объект в слот (передаём ссылку)
+                Vector3 pos = building.transform ? building.transform.position : Vector3.zero;
+                Debug.Log($"[{NodeName}] ✅ Found building '{buildingTypeName}' at {pos}, object={building.gameObject.name}");
                 foundBuildingSlot.Value = building;
-                
+
                 if (successSlot.ConnectedNode != null)
                 {
+                    Debug.Log($"[{NodeName}] → Executing success slot -> {successSlot.ConnectedNode.NodeName}");
                     yield return executor.ExecuteNode(successSlot.ConnectedNode);
+                }
+                else
+                {
+                    Debug.Log($"[{NodeName}] Success slot is not connected — stopping.");
                 }
             }
             else
             {
-                Debug.LogWarning($"[{NodeName}] Building not found or null: {buildingTypeName}");
-                
+                Debug.LogWarning($"[{NodeName}] ❌ Could not find building '{buildingTypeName}'");
+
                 if (failureSlot.ConnectedNode != null)
                 {
+                    Debug.Log($"[{NodeName}] → Executing failure slot -> {failureSlot.ConnectedNode.NodeName}");
                     yield return executor.ExecuteNode(failureSlot.ConnectedNode);
                 }
             }
