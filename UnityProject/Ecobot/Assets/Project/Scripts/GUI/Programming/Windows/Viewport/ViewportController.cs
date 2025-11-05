@@ -59,7 +59,7 @@ namespace GUI.Programming.Windows.Viewport
         private void CancelAllActiveConnections()
         {
             // Находим все ноды и отменяем их активные соединения
-            NodeController[] allNodes = FindObjectsOfType<NodeController>();
+            NodeController[] allNodes = FindObjectsByType<NodeController>(FindObjectsSortMode.None);
             foreach (var node in allNodes)
             {
                 if (node.HasActiveConnection)

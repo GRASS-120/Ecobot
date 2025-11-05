@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Handbook.Models;
-using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Handbook.ContentProvider
 {
@@ -36,8 +36,7 @@ namespace Handbook.ContentProvider
             var json = await reader.ReadToEndAsync();
             ct.ThrowIfCancellationRequested();
 
-            // Используем JsonUtility для простоты и совместимости
-            var manifest = JsonUtility.FromJson<HandbookManifest>(json);
+            var manifest = JsonConvert.DeserializeObject<HandbookManifest>(json);
             if (manifest == null)
                 throw new InvalidOperationException("Failed to parse Handbook manifest.json");
 

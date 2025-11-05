@@ -1,0 +1,224 @@
+{
+  "version": "1.0.0",
+  "language": "ru",
+  "mediaBasePath": "media",
+  "defaultPageId": "vstuplenie",
+  "sections": [
+    {
+      "id": "vvedenie",
+      "title": "Введение",
+      "pages": [
+        {
+          "id": "vstuplenie",
+          "title": "Добро пожаловать в Ecobot!",
+          "fileName": "Вступление",
+          "filePath": "00_Введение/Вступление",
+          "tags": null,
+          "summary": null,
+          "hash": "3aec700821bc5c8febc5e891c8b2e9bc06fb4049",
+          "updatedAt": "2025-10-27T08:26:32.5430976Z",
+          "hidden": false
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "programmirovanie",
+      "title": "Программирование",
+      "pages": [
+        {
+          "id": "osnovy-algoritmizacii",
+          "title": "Основы алгоритмизации",
+          "fileName": "01_Основы алгоритмизации",
+          "filePath": "01_Программирование/01_Основы алгоритмизации",
+          "tags": null,
+          "summary": null,
+          "hash": "f2921659d08913f819cd9005802171089fbb9dda",
+          "updatedAt": "2025-10-27T08:40:50.4788134Z",
+          "hidden": false
+        },
+        {
+          "id": "vizualnoe-programmirovanie",
+          "title": "Визуальное программирование",
+          "fileName": "02_Визуальное программирование",
+          "filePath": "01_Программирование/02_Визуальное программирование",
+          "tags": null,
+          "summary": null,
+          "hash": "06ef500cac33e98daf2edbd7d65984f499c8a29c",
+          "updatedAt": "2025-10-27T09:45:57.4065289Z",
+          "hidden": false
+        },
+        {
+          "id": "idle",
+          "title": "Блок idle",
+          "fileName": "03_Idle",
+          "filePath": "01_Программирование/03_Idle",
+          "tags": null,
+          "summary": null,
+          "hash": "4bad70aa9409f64a7c4f0f7faae0a15548be5c16",
+          "updatedAt": "2025-10-27T09:50:29.7500088Z",
+          "hidden": false
+        },
+        {
+          "id": "dobycha-resursa",
+          "title": "Блок mining",
+          "fileName": "04_Добыча ресурса",
+          "filePath": "01_Программирование/04_Добыча ресурса",
+          "tags": null,
+          "summary": null,
+          "hash": "5079245b00f69b210888868be4ed7f2b99264ca4",
+          "updatedAt": "2025-10-27T10:10:33.5090568Z",
+          "hidden": false
+        },
+        {
+          "id": "peremeschenie-robota",
+          "title": "Блок move to",
+          "fileName": "05_Перемещение робота",
+          "filePath": "01_Программирование/05_Перемещение робота",
+          "tags": null,
+          "summary": null,
+          "hash": "da0251a9861bc0f1ea3c14f8f32cebec5761a6ec",
+          "updatedAt": "2025-10-27T10:11:19.9495774Z",
+          "hidden": false
+        },
+        {
+          "id": "poisk-resursa",
+          "title": "Блок find ore",
+          "fileName": "06_Поиск ресурса",
+          "filePath": "01_Программирование/06_Поиск ресурса",
+          "tags": null,
+          "summary": null,
+          "hash": "ffc855ba3cab46759b6efe03a46deaa18bd6ea17",
+          "updatedAt": "2025-10-27T10:12:05.6529490Z",
+          "hidden": false
+        },
+        {
+          "id": "poisk-postroyki",
+          "title": "Блок find building",
+          "fileName": "07_Поиск постройки",
+          "filePath": "01_Программирование/07_Поиск постройки",
+          "tags": null,
+          "summary": null,
+          "hash": "4d6fb35eac6983507c5abee7943e0c6c1f769914",
+          "updatedAt": "2025-10-27T10:11:47.2700096Z",
+          "hidden": false
+        },
+        {
+          "id": "perenos-resursa-v-zdanie",
+          "title": "Блок put",
+          "fileName": "08_Перенос ресурса в здание",
+          "filePath": "01_Программирование/08_Перенос ресурса в здание",
+          "tags": null,
+          "summary": null,
+          "hash": "3001df53b619a515fcfab377e12e56167d20927f",
+          "updatedAt": "2025-10-27T10:10:20.0770159Z",
+          "hidden": false
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "kraft-i-inventar",
+      "title": "Крафт и инвентарь",
+      "pages": [
+        {
+          "id": "inventar",
+          "title": "Инвентарь",
+          "fileName": "01_Инвентарь",
+          "filePath": "02_Крафт и инвентарь/01_Инвентарь",
+          "tags": null,
+          "summary": null,
+          "hash": "753fdcf3753d9c39611b0780f4bc7fb55800e543",
+          "updatedAt": "2025-10-27T10:46:29.0282745Z",
+          "hidden": false
+        },
+        {
+          "id": "kraft-i-verstak",
+          "title": "Верстак и крафт",
+          "fileName": "02_Крафт и верстак",
+          "filePath": "02_Крафт и инвентарь/02_Крафт и верстак",
+          "tags": null,
+          "summary": null,
+          "hash": "88a7658c9668c8b7e2bc4e2dee394d41b595f977",
+          "updatedAt": "2025-10-27T10:43:45.2843520Z",
+          "hidden": false
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "stroitelstvo",
+      "title": "Строительство",
+      "pages": [
+        {
+          "id": "stroitelstvo",
+          "title": "Строительство",
+          "fileName": "01_Строительство",
+          "filePath": "03_Строительство/01_Строительство",
+          "tags": null,
+          "summary": null,
+          "hash": "fd3393a5a80e97632bbb114822c6175ece46e234",
+          "updatedAt": "2025-10-27T10:29:45.6046361Z",
+          "hidden": false
+        },
+        {
+          "id": "energiya",
+          "title": "Электричество",
+          "fileName": "02_Энергия",
+          "filePath": "03_Строительство/02_Энергия",
+          "tags": null,
+          "summary": null,
+          "hash": "87a1a5c415114ce7b1e88b1ebbce250e3bb437dd",
+          "updatedAt": "2025-10-27T10:36:23.1725015Z",
+          "hidden": false
+        },
+        {
+          "id": "vetryak",
+          "title": "Ветряк",
+          "fileName": "03_Ветряк",
+          "filePath": "03_Строительство/03_Ветряк",
+          "tags": null,
+          "summary": null,
+          "hash": "bc9f241ae69da3dcdd3724c923cee3c5100322fb",
+          "updatedAt": "2025-10-27T11:11:39.8117907Z",
+          "hidden": false
+        },
+        {
+          "id": "lep",
+          "title": "ЛЭП",
+          "fileName": "04_ЛЭП",
+          "filePath": "03_Строительство/04_ЛЭП",
+          "tags": null,
+          "summary": null,
+          "hash": "37dd018cb5dea40f30ea0c1e89fbdfd3d11e4245",
+          "updatedAt": "2025-10-27T11:09:41.4598355Z",
+          "hidden": false
+        },
+        {
+          "id": "plavilnya",
+          "title": "Плавильня",
+          "fileName": "05_Плавильня",
+          "filePath": "03_Строительство/05_Плавильня",
+          "tags": null,
+          "summary": null,
+          "hash": "0fde2067fb6fb2b07ba6d1c3c54f1bf25cbfddc4",
+          "updatedAt": "2025-10-27T11:10:47.2364844Z",
+          "hidden": false
+        },
+        {
+          "id": "sklad",
+          "title": "Склад",
+          "fileName": "06_Склад",
+          "filePath": "03_Строительство/06_Склад",
+          "tags": null,
+          "summary": null,
+          "hash": "2118c0a7bcd86e6ec65f5f6709155e35b99f804f",
+          "updatedAt": "2025-10-27T11:08:49.2038522Z",
+          "hidden": false
+        }
+      ],
+      "children": []
+    }
+  ],
+  "redirects": []
+}

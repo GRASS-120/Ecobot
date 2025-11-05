@@ -18,14 +18,18 @@ namespace Inventory
         
         private void OnValidate()
         {
+#if UNITY_EDITOR
+
             if (string.IsNullOrEmpty(guid))
             {
-                GenerateGUID();
+                GenerateGuid();
             }
+#endif
         }
+
 #if UNITY_EDITOR
         [ContextMenu("Generate New GUID")]
-        private void GenerateGUID()
+        private void GenerateGuid()
         {
             guid = Guid.NewGuid().ToString();
             EditorUtility.SetDirty(this);

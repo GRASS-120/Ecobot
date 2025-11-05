@@ -7,7 +7,8 @@ namespace Handbook.Models
     {
         public string id;
         public string title;
-
+        public string fileName;
+        public string filePath;
         public string[] tags;
         public string summary;
         public string hash;

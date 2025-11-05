@@ -8,7 +8,7 @@ using Handbook.Models;
 
 namespace Handbook.Parser
 {
-    public class HandbookRepository
+    public class HandbookRepository : IHandbookRepository
     {
         public HandbookManifest Manifest => _manifest;
         public string Language => _language;
@@ -153,8 +153,12 @@ namespace Handbook.Parser
                     return entry.Page;
             }
 
-            var raw = await _provider.LoadPageMarkdownAsync(pageId, _language, ct);
+            var fileKey = !string.IsNullOrWhiteSpace(pageRef.filePath)
+                ? pageRef.filePath
+                : (!string.IsNullOrWhiteSpace(pageRef.fileName) ? pageRef.fileName : pageId);
 
+            var raw = await _provider.LoadPageMarkdownAsync(fileKey, _language, ct);
+            
             // Парсим markdown → AST/anchors/links
             var parsed = _parser.Parse(pageId, raw);
 
