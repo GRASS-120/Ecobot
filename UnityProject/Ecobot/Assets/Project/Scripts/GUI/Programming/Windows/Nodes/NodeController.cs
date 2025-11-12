@@ -3,38 +3,13 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using GUI.Programming.Windows.Slots;
-using Bot.Programming.Nodes.Base;
-using Bot.Programming.Nodes.Slots;
+using GUI.Programming.Graph;
 
 namespace GUI.Programming.Windows.Nodes
 {
     public class NodeController : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
     {
-        private RectTransform _rectTransform;
-        private RectTransform _parentRect;
-        private Canvas _canvas;
-        private Vector2 _offset;
-        private bool _isDragging;
-
-        [Header("Connections Setup")]
-        [SerializeField] private RectTransform connectionsContainer;
-        [SerializeField] private UIBezierConnection connectionPrefab;
-
-        [Header("Selection")]
-        [SerializeField] private Outline selectionOutline;
-
-        [Header("Permissions")]
-        [SerializeField] private bool canBeDeleted = true;
-
-        private bool _isSelected;
-        public static NodeController SelectedNode { get; private set; }
-
-        private UIBezierConnection _activeConnection;
-        private SlotController _activeOutputSlot;
-        private RectTransform _tempEndPoint;
-
-        private readonly List<SlotController> _inputSlots = new();
-        private readonly List<SlotController> _outputSlots = new();
+        public enum UINodeKind { IdleStart, IdleEnd, FindBuilding, FindOre, MoveTo, Mine, Put }
 
         private class ConnectionInfo
         {
@@ -43,77 +18,132 @@ namespace GUI.Programming.Windows.Nodes
             public UIBezierConnection Line;
         }
 
+        [Header("Node Kind")]
+        [SerializeField] private UINodeKind nodeKind = UINodeKind.IdleStart;
+
+        [Header("Connections Setup")]
+        [SerializeField] private RectTransform connectionsContainer;
+        [SerializeField] private UIBezierConnection connectionPrefab;
+
+        [Header("Selection")]
+        [SerializeField] private Outline selectionOutline;
+
+        [Header("Drag / Select Handle")]
+        [Tooltip("Перетаскивать И ВЫДЕЛЯТЬ узел можно ТОЛЬКО за этот заголовок. Если пусто — за любое место.")]
+        [SerializeField] private RectTransform titleDragHandle;
+
+        [Header("Permissions")]
+        [SerializeField] private bool canBeDeleted = true;
+
+        private RectTransform _rectTransform;
+        private RectTransform _parentRect;
+        private NodeGraphController _graph;
+
+        private bool _isSelected;
+        private bool _isDragging;
+        private bool _canDragOrSelectThisGesture; // ← один флаг: и для драг, и для select
+        private Vector2 _offset;
+        
+        private UIBezierConnection _activeConnection;
+        private SlotController _activeOutputSlot;
+
+        public UIBezierConnection GetCurrentPreviewLine() => _activeConnection;
+        public SlotController GetActiveOutputSlot() => _activeOutputSlot;
+
+        private RectTransform _tempEndPoint;
+
+        private readonly List<SlotController> _inputSlots = new();
+        private readonly List<SlotController> _outputSlots = new();
         private readonly List<ConnectionInfo> _connections = new();
-        private static readonly List<ConnectionInfo> _allConnections = new();
 
         public static NodeController ActiveConnectionNode { get; private set; }
         public bool HasActiveConnection => _activeConnection != null;
 
-        // === Привязка к программной ноде ===
-        public ProgNodeBase LinkedProgramNode { get; private set; }
+        private string Pfx => $"[Node:{name}]";
 
-        public void Initialize(ProgNodeBase programNode)
+        // ===== Dropdown binding (lazy + logs) =====
+        private NodeDropdownBinding _dropdownBinding;
+        private NodeDropdownBinding DropdownBinding
         {
-            LinkedProgramNode = programNode;
+            get
+            {
+                if (_dropdownBinding == null)
+                {
+                    _dropdownBinding = GetComponentInChildren<NodeDropdownBinding>(true);
+                    Debug.Log($"{Pfx} DropdownBinding resolved: {(_dropdownBinding ? _dropdownBinding.name : "NULL")} (includeInactive=true)");
+                    if (_dropdownBinding != null) _dropdownBinding.DebugDump();
+                }
+                return _dropdownBinding;
+            }
+        }
+
+        public UINodeKind NodeType => nodeKind;
+        public IReadOnlyList<SlotController> InputSlots  => _inputSlots;
+        public IReadOnlyList<SlotController> OutputSlots => _outputSlots;
+
+        public bool TryGetDropdownTechnical(out string technical)
+        {
+            Debug.Log($"{Pfx} TryGetDropdownTechnical: ENTER");
+            technical = null;
+            var binding = DropdownBinding;
+            if (binding == null)
+            {
+                Debug.LogWarning($"{Pfx} TryGetDropdownTechnical: binding=NULL");
+                return false;
+            }
+
+            bool ok = binding.TryGetTechnical(out technical);
+            Debug.Log($"{Pfx} TryGetDropdownTechnical: {(ok ? $"OK '{technical}'" : "FAIL")}");
+            return ok;
+        }
+
+        public bool TryGetDropdownVisual(out string visual)
+        {
+            Debug.Log($"{Pfx} TryGetDropdownVisual: ENTER");
+            visual = null;
+            var binding = DropdownBinding;
+            if (binding == null)
+            {
+                Debug.LogWarning($"{Pfx} TryGetDropdownVisual: binding=NULL");
+                return false;
+            }
+
+            bool ok = binding.TryGetVisual(out visual);
+            Debug.Log($"{Pfx} TryGetDropdownVisual: {(ok ? $"OK '{visual}'" : "FAIL")}");
+            return ok;
         }
 
         private void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
             _parentRect = _rectTransform.parent as RectTransform;
-            _canvas = GetComponentInParent<Canvas>();
 
-            // === Найти контейнер соединений через родителя ===
-            if (connectionsContainer == null)
-            {
-                var nodesContainer = GetComponentInParent<NodesContainer>();
-                if (nodesContainer != null)
-                {
-                    connectionsContainer = nodesContainer.GetConnectionsContainer();
-                }
-                else
-                {
-                    Debug.LogWarning($"[NodeController] No NodesContainer found for {name}, connections will not work!");
-                }
-            }
+            // пробуем найти граф через иерархию (может быть null во время Rebuild)
+            _graph = GetComponentInParent<NodeGraphController>();
+            if (_graph == null)
+                Debug.Log($"{Pfx} Awake: No NodeGraphController found (will wait InjectGraph).");
+
+            if (connectionsContainer == null && _graph != null)
+                connectionsContainer = _graph.ConnectionsContainer;
 
             FindAllSlots();
             SetupSlotsEvents();
 
+            _dropdownBinding = GetComponentInChildren<NodeDropdownBinding>(true);
+            Debug.Log($"{Pfx} Awake: initial dropdown binding = {(_dropdownBinding ? _dropdownBinding.name : "NULL")}");
+            if (_dropdownBinding != null) _dropdownBinding.DebugDump();
+
             if (selectionOutline != null)
                 selectionOutline.enabled = false;
-        }
-        
-        public void SetConnectionsContainer(RectTransform container)
-        {
-            connectionsContainer = container;
+
+            // регистрируемся только если граф уже найден; иначе — ждём InjectGraph(...)
+            _graph?.RegisterNode(this);
         }
 
-        private void FindAllSlots()
+        private void OnDestroy()
         {
-            var slots = GetComponentsInChildren<SlotController>();
-            foreach (var slot in slots)
-            {
-                if (slot.Direction == SlotController.SlotDirection.Input)
-                    _inputSlots.Add(slot);
-                else
-                    _outputSlots.Add(slot);
-            }
-        }
-
-        private void SetupSlotsEvents()
-        {
-            foreach (var slot in _inputSlots)
-            {
-                slot.OnSlotPressed += OnInputSlotPressed;
-                slot.OnSlotReleased += OnInputSlotReleased;
-            }
-
-            foreach (var slot in _outputSlots)
-            {
-                slot.OnSlotPressed += OnOutputSlotPressed;
-                slot.OnSlotReleased += OnOutputSlotReleased;
-            }
+            _graph?.UnregisterNode(this);
+            Debug.Log($"{Pfx} OnDestroy: removed.");
         }
 
         private void Update()
@@ -121,15 +151,63 @@ namespace GUI.Programming.Windows.Nodes
             if (_activeConnection != null)
                 UpdateActiveConnectionToMouse();
 
-            // Удаление выделенной ноды (если разрешено)
             if (_isSelected && canBeDeleted && (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.X)))
             {
                 DeleteNode();
             }
         }
 
-        #region Slot Handlers
+        public Vector2 GetUIPosition()
+        {
+            var rt = GetComponent<RectTransform>();
+            return rt != null ? rt.anchoredPosition : Vector2.zero;
+        }
 
+        // === НОВОЕ: безопасная инъекция графа, когда он известен вызывающему ===
+        public void InjectGraph(NodeGraphController graph)
+        {
+            _graph = graph;
+            if (connectionsContainer == null && _graph != null)
+                connectionsContainer = _graph.ConnectionsContainer;
+
+            // если ещё не были зарегистрированы — зарегистрируемся сейчас
+            _graph?.RegisterNode(this);
+        }
+
+        private void FindAllSlots()
+        {
+            var slots = GetComponentsInChildren<SlotController>(true);
+            _inputSlots.Clear();
+            _outputSlots.Clear();
+
+            foreach (var slot in slots)
+            {
+                slot.Owner = this;
+                if (slot.Direction == SlotController.SlotDirection.Input)
+                    _inputSlots.Add(slot);
+                else
+                    _outputSlots.Add(slot);
+            }
+
+            Debug.Log($"{Pfx} FindAllSlots: inputs={_inputSlots.Count} outputs={_outputSlots.Count}");
+        }
+
+        private void SetupSlotsEvents()
+        {
+            foreach (var slot in _inputSlots)
+            {
+                slot.OnSlotPressed  += OnInputSlotPressed;
+                slot.OnSlotReleased += OnInputSlotReleased;
+            }
+
+            foreach (var slot in _outputSlots)
+            {
+                slot.OnSlotPressed  += OnOutputSlotPressed;
+                slot.OnSlotReleased += OnOutputSlotReleased;
+            }
+        }
+
+        // --- Slot handlers ---
         private void OnOutputSlotPressed(SlotController outputSlot)
         {
             CancelActiveConnection();
@@ -137,33 +215,29 @@ namespace GUI.Programming.Windows.Nodes
             ActiveConnectionNode = this;
         }
 
-        private void OnInputSlotPressed(SlotController inputSlot)
-        {
-            TryCompleteConnection(inputSlot);
-        }
-
-        private void OnInputSlotReleased(SlotController inputSlot)
-        {
-            TryCompleteConnection(inputSlot);
-        }
-
-        private void OnOutputSlotReleased(SlotController outputSlot)
-        {
-        }
-
-        #endregion
-
-        #region Connection Management
+        private void OnInputSlotPressed(SlotController inputSlot)  => TryCompleteConnection(inputSlot);
+        private void OnInputSlotReleased(SlotController inputSlot) => TryCompleteConnection(inputSlot);
+        private void OnOutputSlotReleased(SlotController outputSlot) { }
 
         private void StartNewConnection(SlotController outputSlot)
         {
             CancelActiveConnection();
             _activeOutputSlot = outputSlot;
-            _activeConnection = Instantiate(connectionPrefab, connectionsContainer);
 
+            if (connectionPrefab == null || connectionsContainer == null)
+            {
+                Debug.LogWarning($"{Pfx} StartNewConnection: Missing connection prefab or container.");
+                return;
+            }
+
+            _activeConnection = Instantiate(connectionPrefab, connectionsContainer);
+            _activeConnection.name = $"Connection_{outputSlot.gameObject.name}_Preview";
             _activeConnection.SetContainer(connectionsContainer);
             _activeConnection.SetStartSlot(outputSlot.ConnectionPoint);
+            _activeConnection.SetGraph(_graph);
             _activeConnection.SetInteractable(false);
+
+            Debug.Log($"{Pfx} StartNewConnection: preview line spawned from {outputSlot.gameObject.name}");
         }
 
         private void TryCompleteConnection(SlotController inputSlot)
@@ -172,94 +246,53 @@ namespace GUI.Programming.Windows.Nodes
                 return;
 
             var activeOutput = ActiveConnectionNode._activeOutputSlot;
-            var activeLine = ActiveConnectionNode._activeConnection;
+            var activeLine   = ActiveConnectionNode._activeConnection;
 
             if (activeOutput != null && activeOutput.CanConnectWith(inputSlot))
             {
-                bool alreadyConnected = _allConnections.Exists(c =>
-                    (c.Output == activeOutput && c.Input == inputSlot) ||
-                    (c.Output == inputSlot && c.Input == activeOutput));
-
-                if (alreadyConnected)
-                {
-                    ActiveConnectionNode.CancelActiveConnection();
-                    return;
-                }
-
                 activeLine.SetEndSlot(inputSlot.ConnectionPoint);
                 activeLine.SetInteractable(true);
                 activeLine.AssociatedOutput = activeOutput;
-                activeLine.AssociatedInput = inputSlot;
+                activeLine.AssociatedInput  = inputSlot;
 
-                var connection = new ConnectionInfo
+                bool added = _graph != null && _graph.RegisterConnection(activeOutput, inputSlot, activeLine);
+                if (added)
                 {
-                    Output = activeOutput,
-                    Input = inputSlot,
-                    Line = activeLine
-                };
+                    _connections.Add(new ConnectionInfo { Output = activeOutput, Input = inputSlot, Line = activeLine });
 
-                ActiveConnectionNode._connections.Add(connection);
-                _allConnections.Add(connection);
+                    Debug.Log($"{Pfx} TryCompleteConnection: COMMIT " +
+                              $"{activeOutput.gameObject.name}[{activeOutput.Direction}/{activeOutput.ContentType}] → " +
+                              $"{inputSlot.gameObject.name}[{inputSlot.Direction}/{inputSlot.ContentType}] " +
+                              $"line={activeLine.name}@{activeLine.GetInstanceID()}");
 
-                activeOutput.SetConnected(true);
-                inputSlot.SetConnected(true);
-
-                TryLinkProgramSlots(activeOutput, inputSlot);
-
-                ActiveConnectionNode.ClearTempEndPoint();
-                ActiveConnectionNode._activeConnection = null;
-                ActiveConnectionNode._activeOutputSlot = null;
-                ActiveConnectionNode = null;
+                    ActiveConnectionNode.ClearTempEndPoint();
+                    ActiveConnectionNode._activeConnection = null;
+                    ActiveConnectionNode._activeOutputSlot = null;
+                    ActiveConnectionNode = null;
+                }
+                else
+                {
+                    Debug.Log($"{Pfx} TryCompleteConnection: REJECT (duplicate/failed) — destroying preview line.");
+                    activeLine.SetInteractable(false);
+                    Destroy(activeLine.gameObject);
+                    ActiveConnectionNode._activeConnection = null;
+                    ActiveConnectionNode._activeOutputSlot = null;
+                    ActiveConnectionNode.ClearTempEndPoint();
+                    ActiveConnectionNode = null;
+                }
             }
             else
             {
+                Debug.Log($"{Pfx} TryCompleteConnection: incompatible slots — cancel preview.");
                 ActiveConnectionNode.CancelActiveConnection();
             }
         }
-
-        private void TryLinkProgramSlots(SlotController output, SlotController input)
-        {
-            if (output.LinkedSlot == null || input.LinkedSlot == null)
-                return;
-
-            var outSlot = output.LinkedSlot;
-            var inSlot = input.LinkedSlot;
-
-            if (outSlot.CanConnect(input.LinkedSlot.Owner))
-            {
-                outSlot.Connect(input.LinkedSlot.Owner);
-                Debug.Log($"[NodeController] Linked flow: {outSlot.SlotName} -> {input.LinkedSlot.SlotName}");
-            }
-            else if (outSlot is ProgNodeDataSlot<object> dataOut && inSlot is ProgNodeDataSlot<object> dataIn)
-            {
-                dataIn.ConnectToDataSlot(dataOut);
-                Debug.Log($"[NodeController] Linked data: {dataOut.SlotName} -> {dataIn.SlotName}");
-            }
-        }
-
-        public void RemoveConnection(UIBezierConnection line)
-        {
-            _connections.RemoveAll(c => c.Line == line);
-            _allConnections.RemoveAll(c => c.Line == line);
-        }
-
-        public static void RemoveGlobalConnection(UIBezierConnection line)
-        {
-            var toRemove = _allConnections.Find(c => c.Line == line);
-            if (toRemove != null)
-            {
-                if (toRemove.Output != null) toRemove.Output.SetConnected(false);
-                if (toRemove.Input != null) toRemove.Input.SetConnected(false);
-                _allConnections.Remove(toRemove);
-            }
-        }
-
-        public SlotController GetActiveOutputSlot() => _activeOutputSlot;
 
         public void CancelActiveConnection()
         {
             if (_activeConnection != null)
             {
+                Debug.Log($"{Pfx} CancelActiveConnection: destroying preview line {_activeConnection.name}");
                 Destroy(_activeConnection.gameObject);
                 _activeConnection = null;
                 _activeOutputSlot = null;
@@ -272,7 +305,7 @@ namespace GUI.Programming.Windows.Nodes
 
         private void UpdateActiveConnectionToMouse()
         {
-            if (_activeConnection == null) return;
+            if (_activeConnection == null || connectionsContainer == null) return;
 
             if (_tempEndPoint == null)
             {
@@ -280,6 +313,7 @@ namespace GUI.Programming.Windows.Nodes
                 _tempEndPoint = go.GetComponent<RectTransform>();
                 _tempEndPoint.SetParent(connectionsContainer, false);
                 _activeConnection.SetEndSlot(_tempEndPoint);
+                Debug.Log($"{Pfx} UpdateActiveConnectionToMouse: temp end point created.");
             }
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -297,108 +331,86 @@ namespace GUI.Programming.Windows.Nodes
             {
                 Destroy(_tempEndPoint.gameObject);
                 _tempEndPoint = null;
+                Debug.Log($"{Pfx} ClearTempEndPoint: removed temp end point.");
             }
-        }
-
-        #endregion
-
-        #region Selection Logic
-
-        private void ToggleSelection()
-        {
-            if (_isSelected)
-                Deselect();
-            else
-                Select();
-        }
-
-        private void Select()
-        {
-            if (SelectedNode != null && SelectedNode != this)
-                SelectedNode.Deselect();
-
-            _isSelected = true;
-            SelectedNode = this;
-
-            if (selectionOutline != null)
-                selectionOutline.enabled = true;
-        }
-
-        private void Deselect()
-        {
-            _isSelected = false;
-
-            if (SelectedNode == this)
-                SelectedNode = null;
-
-            if (selectionOutline != null)
-                selectionOutline.enabled = false;
         }
 
         private void DeleteNode()
         {
-            if (!canBeDeleted)
-                return;
-
-            // === Удаляем активное соединение, если оно тянется ===
-            if (_activeConnection != null)
+            Debug.Log($"{Pfx} DeleteNode: start, local connections={_connections.Count}");
+            if (_graph != null && _connections.Count > 0)
             {
-                CancelActiveConnection();
-            }
-
-            // === Удаляем все связи этой ноды (входящие и исходящие) ===
-            var connectionsToRemove = new List<ConnectionInfo>();
-
-            foreach (var conn in _allConnections)
-            {
-                if ((conn.Input != null && _inputSlots.Contains(conn.Input)) ||
-                    (conn.Output != null && _outputSlots.Contains(conn.Output)))
+                var copy = new List<ConnectionInfo>(_connections);
+                foreach (var c in copy)
                 {
-                    connectionsToRemove.Add(conn);
+                    if (c?.Line != null)
+                    {
+                        Debug.Log($"{Pfx} DeleteNode: request remove line {c.Line.name}@{c.Line.GetInstanceID()}");
+                        _graph.RequestRemoveConnection(c.Line);
+                    }
                 }
             }
 
-            foreach (var conn in connectionsToRemove)
-            {
-                if (conn.Line != null)
-                    Destroy(conn.Line.gameObject);
-
-                _allConnections.Remove(conn);
-            }
-
             _connections.Clear();
-
-            Deselect();
+            _graph?.UnregisterNode(this);
+            Debug.Log($"{Pfx} DeleteNode: destroying GO");
             Destroy(gameObject);
         }
 
-        #endregion
+        // === локальный учёт связей ===
+        internal void AddLocalConnectionIfMissing(SlotController output, SlotController input, UIBezierConnection line)
+        {
+            for (int i = 0; i < _connections.Count; i++)
+            {
+                var c = _connections[i];
+                if (c.Line == line) return;
+                if (c.Output == output && c.Input == input && c.Line == line) return;
+            }
 
-        #region Pointer Handlers
+            _connections.Add(new ConnectionInfo { Output = output, Input = input, Line = line });
+            Debug.Log($"{Pfx} AddLocalConnectionIfMissing: added line={line.name}@{line.GetInstanceID()}");
+        }
 
-        private bool _isPointerDown;
-        private Vector2 _pointerDownPosition;
-        private const float DragThreshold = 5f;
+        internal void RemoveLocalConnectionByLine(UIBezierConnection line)
+        {
+            if (line == null) return;
+            for (int i = _connections.Count - 1; i >= 0; i--)
+            {
+                if (_connections[i].Line == line)
+                {
+                    _connections.RemoveAt(i);
+                    Debug.Log($"{Pfx} RemoveLocalConnectionByLine: removed line={line.name}@{line.GetInstanceID()}");
+                }
+            }
+        }
 
+        // --- UGUI events (drag & select only by title) ---
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (eventData.button != PointerEventData.InputButton.Left)
-                return;
+            if (eventData.button != PointerEventData.InputButton.Left) return;
 
-            _isPointerDown = true;
-            _pointerDownPosition = eventData.position;
+            _isDragging = false;
 
-            _rectTransform.SetAsLastSibling();
-
-            if (_parentRect != null)
-            {
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    _parentRect,
+            // Разрешаем и перетаскивание, и выделение ТОЛЬКО если клик по заголовку (или если handle не задан)
+            _canDragOrSelectThisGesture =
+                titleDragHandle == null ||
+                RectTransformUtility.RectangleContainsScreenPoint(
+                    titleDragHandle,
                     eventData.position,
-                    eventData.pressEventCamera,
-                    out Vector2 pointerLocalPoint);
+                    eventData.pressEventCamera);
 
-                _offset = _rectTransform.anchoredPosition - pointerLocalPoint;
+            if (_canDragOrSelectThisGesture)
+            {
+                _rectTransform.SetAsLastSibling();
+
+                if (_parentRect != null)
+                {
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                        _parentRect, eventData.position, eventData.pressEventCamera,
+                        out Vector2 pointerLocalPoint);
+
+                    _offset = _rectTransform.anchoredPosition - pointerLocalPoint;
+                }
             }
 
             eventData.Use();
@@ -406,24 +418,15 @@ namespace GUI.Programming.Windows.Nodes
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (!_isPointerDown || _parentRect == null)
-                return;
+            if (!_canDragOrSelectThisGesture) return; // тянем только если жест начат на title
+            if (_parentRect == null) return;
 
-            if (!_isDragging && Vector2.Distance(_pointerDownPosition, eventData.position) > DragThreshold)
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    _parentRect, eventData.position, eventData.pressEventCamera,
+                    out Vector2 pointerLocalPoint))
             {
+                _rectTransform.anchoredPosition = pointerLocalPoint + _offset;
                 _isDragging = true;
-            }
-
-            if (_isDragging)
-            {
-                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                        _parentRect,
-                        eventData.position,
-                        eventData.pressEventCamera,
-                        out Vector2 pointerLocalPoint))
-                {
-                    _rectTransform.anchoredPosition = pointerLocalPoint + _offset;
-                }
             }
 
             eventData.Use();
@@ -431,16 +434,28 @@ namespace GUI.Programming.Windows.Nodes
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if (_isPointerDown && !_isDragging)
+            // Выделяем/снимаем выделение только если клик был по title
+            if (_canDragOrSelectThisGesture && !_isDragging)
             {
-                ToggleSelection();
+                if (_isSelected) Deselect();
+                else Select();
             }
 
-            _isPointerDown = false;
             _isDragging = false;
+            _canDragOrSelectThisGesture = false; // сброс на конец жеста
             eventData.Use();
         }
 
-        #endregion
+        private void Select()
+        {
+            if (selectionOutline != null) selectionOutline.enabled = true;
+            _isSelected = true;
+        }
+
+        private void Deselect()
+        {
+            if (selectionOutline != null) selectionOutline.enabled = false;
+            _isSelected = false;
+        }
     }
 }

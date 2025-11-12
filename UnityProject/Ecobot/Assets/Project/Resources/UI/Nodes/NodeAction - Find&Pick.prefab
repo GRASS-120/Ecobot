@@ -706,6 +706,8 @@ MonoBehaviour:
   defaultMaterial: {fileID: 0}
   validMaterial: {fileID: 0}
   invalidMaterial: {fileID: 0}
+  _slotKey: 
+  _dataTypeName: 
 --- !u!1 &1626389386307975350
 GameObject:
   m_ObjectHideFlags: 0
@@ -1026,6 +1028,8 @@ MonoBehaviour:
   defaultMaterial: {fileID: 0}
   validMaterial: {fileID: 0}
   invalidMaterial: {fileID: 0}
+  _slotKey: 
+  _dataTypeName: 
 --- !u!1 &3590549279784335388
 GameObject:
   m_ObjectHideFlags: 0
@@ -1243,6 +1247,8 @@ MonoBehaviour:
   defaultMaterial: {fileID: 0}
   validMaterial: {fileID: 0}
   invalidMaterial: {fileID: 0}
+  _slotKey: 
+  _dataTypeName: 
 --- !u!114 &230152540018083247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1262,6 +1268,8 @@ MonoBehaviour:
   defaultMaterial: {fileID: 0}
   validMaterial: {fileID: 0}
   invalidMaterial: {fileID: 0}
+  _slotKey: 
+  _dataTypeName: 
 --- !u!1 &4087020834463531167
 GameObject:
   m_ObjectHideFlags: 0
@@ -2698,6 +2706,8 @@ MonoBehaviour:
   defaultMaterial: {fileID: 0}
   validMaterial: {fileID: 0}
   invalidMaterial: {fileID: 0}
+  _slotKey: 
+  _dataTypeName: 
 --- !u!1 &8619731571808588369
 GameObject:
   m_ObjectHideFlags: 0
@@ -2831,10 +2841,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8823b82d244b53f4ca11cff8c54037d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeController
+  nodeKind: 0
   connectionsContainer: {fileID: 0}
   connectionPrefab: {fileID: 4899158444216150950, guid: b518692297a1971429821b9fabf19efc,
     type: 3}
   selectionOutline: {fileID: 1571679394665518940}
+  titleDragHandle: {fileID: 1620511925442823020}
   canBeDeleted: 1
 --- !u!114 &1571679394665518940
 MonoBehaviour:

@@ -1,168 +1,210 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using Bot;
+using Bot.Programming.Navigation;          // IApproachPointProvider
+using Bot.Programming.Nodes.Base;          // ProgNodeAction
+using Bot.Programming;                     // BotProgramExecutor
 using Bot.Programming.Nodes.Slots;
-using Grid.BuildingSystem.Buildings.Base;
-using Inventory;
+using Grid.Base;                           // GridMap
+using Grid.BuildingSystem;                 // GridBuildingSystem
 using UnityEngine;
 
 namespace Bot.Programming.Nodes.Concrete
 {
+    /// <summary>
+    /// MoveTo: цель сообщает точку подъезда через IApproachPointProvider.
+    /// Без кулдауна/анти-спама: нода идемпотентно выдаёт команду и ждёт прибытия.
+    /// При отсутствии прогресса в окне стагнации — выход по Fail (если подключён).
+    /// </summary>
     public class ProgNodeMoveTo : ProgNodeAction
     {
-        private ProgNodeDataSlot<object> targetSlot;
+        private readonly ProgNodeDataSlot<object> targetSlot;
+
+        // Тюнинги ожидания
+        private const float TimeoutSeconds      = 15f;  // жёсткий лимит ожидания
+        private const float StagnationWindowSec = 0.6f; // окно "нет прогресса"
+        private const float ProgressEps         = 0.10f; // насколько должна уменьшаться дистанция, чтобы считать прогрессом
 
         public ProgNodeMoveTo() : base("Move To")
         {
-            Description = "Move to the specified target";
+            Description = "Move to the specified target via IApproachPointProvider";
             targetSlot = new ProgNodeDataSlot<object>("Target", this);
             slots.Add(targetSlot);
         }
 
         public override IEnumerator Execute(BotBase bot, BotProgramExecutor executor)
         {
-            Debug.Log($"[{NodeName}] ▶️ Starting execution");
+            if (bot == null)
+            {
+                Debug.LogWarning($"[{NodeName}] Bot is null");
+                yield break;
+            }
 
+            // 1) достаём цель из data-слота
             object target = null;
-            try
-            {
-                target = targetSlot.Value;
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogWarning($"[{NodeName}] Exception reading targetSlot.Value: {ex}");
-            }
+            try { target = targetSlot.Value; } catch { /* ignore */ }
 
             if (target == null)
             {
-                Debug.LogWarning($"[{NodeName}] ❌ Target is NULL");
-            }
-            else
-            {
-                Debug.Log($"[{NodeName}] Target type: {target.GetType().Name}");
-            }
-
-            Vector3 targetPos = Vector3.zero;
-            bool hasTarget = false;
-
-            if (target != null)
-            {
-                switch (target)
-                {
-                    case BuildingBase building:
-                        if (building.transform)
-                        {
-                            targetPos = building.transform.position;
-                            hasTarget = true;
-                            Debug.Log($"[{NodeName}] Target is BuildingBase '{building.name}' -> {targetPos}");
-                        }
-                        break;
-
-                    case GameObject go:
-                        targetPos = go.transform.position;
-                        hasTarget = true;
-                        Debug.Log($"[{NodeName}] Target is GameObject '{go.name}' -> {targetPos}");
-                        break;
-
-                    case Transform t:
-                        targetPos = t.position;
-                        hasTarget = true;
-                        Debug.Log($"[{NodeName}] Target is Transform -> {targetPos}");
-                        break;
-
-                    case InventoryItemData item:
-                        targetPos = executor.GetItemPosition(item);
-                        hasTarget = true;
-                        Debug.Log($"[{NodeName}] Target is InventoryItemData '{item.displayName}' -> {targetPos}");
-                        break;
-
-                    case Vector3 vec:
-                        targetPos = vec;
-                        hasTarget = true;
-                        Debug.Log($"[{NodeName}] Target is Vector3 -> {targetPos}");
-                        break;
-
-                    default:
-                        Debug.LogWarning($"[{NodeName}] Unknown target type: {target.GetType().Name}");
-                        break;
-                }
-            }
-
-            if (!hasTarget)
-            {
-                Debug.LogWarning($"[{NodeName}] ❌ No valid target found for MoveTo");
-                if (failureSlot.ConnectedNode != null)
-                    yield return executor.ExecuteNode(failureSlot.ConnectedNode);
+                Debug.LogWarning($"[{NodeName}] Target is NULL");
                 yield break;
             }
 
-            Debug.Log($"[{NodeName}] Moving to {targetPos}...");
+            // 2) резолвим точку подъезда через IApproachPointProvider
+            if (!TryResolveTargetPoint(bot, target, out var targetPos))
+                yield break;
 
-            if (bot == null)
+            // 3) радиус прибытия
+            float stopDistance = ResolveStopDistance();
+
+            // если уже на месте — готово
+            if (XZDistance(bot.transform.position, targetPos) <= stopDistance)
             {
-                Debug.LogWarning($"[{NodeName}] Bot reference is null");
+                Debug.Log($"[{NodeName}] ✅ Already in range (≤ {stopDistance:F2})");
+                if (successSlot?.ConnectedNode != null)
+                    yield return executor.ExecuteNode(successSlot.ConnectedNode);
                 yield break;
             }
 
+            // 4) создаём команду движения (идемпотентно)
             if (bot.CommandController == null || bot.CommandController.Fabric == null)
             {
-                Debug.LogWarning($"[{NodeName}] CommandController or Fabric is null — cannot move");
+                Debug.LogWarning($"[{NodeName}] Missing CommandController/Fabric");
                 yield break;
             }
 
             var moveCmd = bot.CommandController.Fabric.CreateMoveCommand(targetPos);
             if (moveCmd == null)
             {
-                Debug.LogWarning($"[{NodeName}] ❌ CreateMoveCommand returned NULL");
+                Debug.LogWarning($"[{NodeName}] CreateMoveCommand returned NULL");
                 yield break;
             }
 
-            Debug.Log($"[{NodeName}] Command created, adding and executing...");
             bot.CommandController.AddCommand(moveCmd);
             moveCmd.Execute();
 
-            // Debug движение
-            float timeout = 12f;
-            float elapsed = 0f;
-            float stopDistance = 1f;
-            float logTimer = 0.5f;
+            // 5) ждём прибытия / либо фиксируем стагнацию/таймаут
+            bool arrived = false;
+            bool stuck   = false;
+
+            float elapsed          = 0f;
+            float stagnationTimer  = 0f;
+            float lastDist         = XZDistance(bot.transform.position, targetPos);
 
             while (true)
             {
-                if (bot == null) yield break;
-                Vector3 botPos = bot.transform.position;
-                float distXZ = Vector2.Distance(new Vector2(botPos.x, botPos.z), new Vector2(targetPos.x, targetPos.z));
+                if (bot == null) break;
 
-                elapsed += Time.deltaTime;
-                logTimer -= Time.deltaTime;
-                if (logTimer <= 0f)
-                {
-                    Debug.Log($"[{NodeName}] ⏱ {elapsed:F1}s | BotPos={botPos} | Target={targetPos} | DistXZ={distXZ:F2}");
-                    logTimer = 0.5f;
-                }
+                float dist = XZDistance(bot.transform.position, targetPos);
 
-                if (distXZ <= stopDistance)
+                // прибытие
+                if (dist <= stopDistance)
                 {
-                    Debug.Log($"[{NodeName}] ✅ Reached target! Distance={distXZ:F2}");
+                    Debug.Log($"[{NodeName}] ✅ Arrived (≤ {stopDistance:F2})");
+                    arrived = true;
                     break;
                 }
 
-                if (elapsed > timeout)
+                // прогресс?
+                if (lastDist - dist < ProgressEps)
                 {
-                    Debug.LogWarning($"[{NodeName}] ⏱ Timeout after {elapsed:F1}s (Dist={distXZ:F2})");
+                    stagnationTimer += Time.deltaTime;
+                    if (stagnationTimer >= StagnationWindowSec)
+                    {
+                        Debug.LogWarning($"[{NodeName}] 🛑 No progress for {StagnationWindowSec:F1}s");
+                        stuck = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    stagnationTimer = 0f;
+                    lastDist = dist;
+                }
+
+                // таймаут
+                elapsed += Time.deltaTime;
+                if (elapsed > TimeoutSeconds)
+                {
+                    Debug.LogWarning($"[{NodeName}] ⏱ Timeout {elapsed:F1}s");
+                    stuck = true;
                     break;
                 }
 
                 yield return null;
             }
 
-            if (successSlot.ConnectedNode != null)
+            // 6) маршрутизация по выходам
+            if (arrived)
             {
-                Debug.Log($"[{NodeName}] → Executing success slot -> {successSlot.ConnectedNode.NodeName}");
-                yield return executor.ExecuteNode(successSlot.ConnectedNode);
+                if (successSlot?.ConnectedNode != null)
+                    yield return executor.ExecuteNode(successSlot.ConnectedNode);
+            }
+            else if (stuck)
+            {
+                if (failureSlot?.ConnectedNode != null)
+                    yield return executor.ExecuteNode(failureSlot.ConnectedNode);
+            }
+        }
+
+        // ---------- provider ----------
+
+        private bool TryResolveTargetPoint(BotBase bot, object target, out Vector3 point)
+        {
+            point = default;
+
+            IApproachPointProvider provider = null;
+            GameObject targetGO = null;
+
+            if (target is Component comp)
+            {
+                targetGO = comp.gameObject;
+                provider = comp.GetComponent<IApproachPointProvider>();
+            }
+            else if (target is GameObject go)
+            {
+                targetGO = go;
+                provider = go.GetComponent<IApproachPointProvider>();
             }
             else
             {
-                Debug.Log($"[{NodeName}] Success slot not connected.");
+                Debug.LogWarning(
+                    $"[{NodeName}] ❌ Target type '{target.GetType().Name}' не поддерживается без провайдера " +
+                    "(нужен Component/GameObject с IApproachPointProvider).");
+                return false;
             }
+
+            if (provider == null)
+            {
+                var name = targetGO != null ? $"'{targetGO.name}'" : "(no GameObject)";
+                Debug.LogWarning($"[{NodeName}] ❌ На цели {name} нет IApproachPointProvider. Добавь BuildingApproachProvider / OreApproachProvider.");
+                return false;
+            }
+
+            if (!provider.TryGetApproachPoint(bot.transform.position, out point))
+            {
+                var name = targetGO != null ? $"'{targetGO.name}'" : "(no GameObject)";
+                Debug.LogWarning($"[{NodeName}] ❌ Провайдер на {name} не смог вернуть точку подъезда.");
+                return false;
+            }
+
+            Debug.Log($"[{NodeName}] 🔌 Provider '{provider.GetType().Name}' → point={point}");
+            return true;
         }
+
+        // ---------- helpers ----------
+
+        private float ResolveStopDistance()
+        {
+            float stop = 1f; // дефолт
+            var gbs = GameObject.FindObjectOfType<GridBuildingSystem>();
+            var map = gbs ? gbs.GetComponentInParent<GridMap>() : null;
+            if (map != null && map.Grid != null)
+                stop = Mathf.Max(0.35f, map.Grid.CellSize * 0.45f);
+            return stop;
+        }
+
+        private static float XZDistance(Vector3 a, Vector3 b)
+            => Vector2.Distance(new Vector2(a.x, a.z), new Vector2(b.x, b.z));
     }
 }

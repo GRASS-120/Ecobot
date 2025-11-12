@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.Linq;
 using Bot.Programming.Nodes.Slots;
+using Grid.BuildingSystem;
 using Grid.BuildingSystem.Buildings.Base;
 using UnityEngine;
 
@@ -7,49 +9,95 @@ namespace Bot.Programming.Nodes.Concrete
 {
     public class ProgNodeFindBuilding : ProgNodeAction
     {
-        private string buildingTypeName;
-        private ProgNodeDataSlot<BuildingBase> foundBuildingSlot;
+        private readonly string buildingTypeName;
+        private readonly ProgNodeDataSlot<BuildingBase> foundBuildingSlot;
+        
+        // Добавляем минимальные задержки
+        private const float FoundDelaySec = 0.1f;
+        private const float FailDelaySec = 0.1f;
 
         public ProgNodeFindBuilding(string buildingTypeName) : base("Find Building")
         {
             this.buildingTypeName = buildingTypeName;
-            Description = $"Find nearest {buildingTypeName}";
+            Description = $"Find nearest building of type '{buildingTypeName}'";
             foundBuildingSlot = new ProgNodeDataSlot<BuildingBase>("Found Building", this);
             slots.Add(foundBuildingSlot);
         }
 
         public override IEnumerator Execute(BotBase bot, BotProgramExecutor executor)
         {
-            Debug.Log($"[{NodeName}] 🔍 Searching for building: '{buildingTypeName}'");
+            Debug.Log($"[{NodeName}] 🔍 Searching for nearest '{buildingTypeName}'...");
 
-            bool found = executor.SimulateFindBuilding(buildingTypeName, out BuildingBase building);
-
-            if (found && building != null)
+            if (bot == null)
             {
-                Vector3 pos = building.transform ? building.transform.position : Vector3.zero;
-                Debug.Log($"[{NodeName}] ✅ Found building '{buildingTypeName}' at {pos}, object={building.gameObject.name}");
-                foundBuildingSlot.Value = building;
-
-                if (successSlot.ConnectedNode != null)
-                {
-                    Debug.Log($"[{NodeName}] → Executing success slot -> {successSlot.ConnectedNode.NodeName}");
-                    yield return executor.ExecuteNode(successSlot.ConnectedNode);
-                }
-                else
-                {
-                    Debug.Log($"[{NodeName}] Success slot is not connected — stopping.");
-                }
+                Debug.LogWarning($"[{NodeName}] ❌ Bot reference is null!");
+                yield break;
             }
-            else
-            {
-                Debug.LogWarning($"[{NodeName}] ❌ Could not find building '{buildingTypeName}'");
 
+            GridBuildingSystem gridSystem = GameObject.FindObjectOfType<GridBuildingSystem>();
+            if (gridSystem == null)
+            {
+                Debug.LogWarning($"[{NodeName}] ❌ GridBuildingSystem not found in scene!");
+                yield break;
+            }
+
+            var database = gridSystem.BuildingDatabase;
+            if (database == null)
+            {
+                Debug.LogWarning($"[{NodeName}] ❌ BuildingDatabase is null!");
+                yield break;
+            }
+
+            var allBuildings = database.EnumerateAll();
+            if (allBuildings == null)
+            {
+                Debug.LogWarning($"[{NodeName}] ❌ No buildings found in database!");
+                yield break;
+            }
+
+            var matchingBuildings = allBuildings
+                .Where(b => b != null && b.BuildingAssetData != null && b.BuildingAssetData.name == buildingTypeName)
+                .ToList();
+
+            if (matchingBuildings.Count == 0)
+            {
+                Debug.Log($"[{NodeName}] ❌ No buildings of type '{buildingTypeName}' found!");
+                if (FailDelaySec > 0f) yield return new WaitForSeconds(FailDelaySec);
                 if (failureSlot.ConnectedNode != null)
-                {
-                    Debug.Log($"[{NodeName}] → Executing failure slot -> {failureSlot.ConnectedNode.NodeName}");
                     yield return executor.ExecuteNode(failureSlot.ConnectedNode);
+                yield break;
+            }
+
+            Vector3 botPos = bot.transform.position;
+            BuildingBase closest = null;
+            float closestDist = float.MaxValue;
+
+            foreach (var b in matchingBuildings)
+            {
+                float dist = Vector3.Distance(botPos, b.transform.position);
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    closest = b;
                 }
             }
+
+            if (closest == null)
+            {
+                Debug.Log($"[{NodeName}] ❌ Could not find a valid closest building of type '{buildingTypeName}'.");
+                yield break;
+            }
+
+            foundBuildingSlot.Value = closest;
+
+            Debug.Log($"[{NodeName}] ✅ Found '{buildingTypeName}' at {closest.transform.position} | Distance = {closestDist:F1}");
+
+            // 🔸 Короткая пауза, чтобы не спамил если стоит рядом
+            if (FoundDelaySec > 0f)
+                yield return new WaitForSeconds(FoundDelaySec);
+
+            if (successSlot.ConnectedNode != null)
+                yield return executor.ExecuteNode(successSlot.ConnectedNode);
         }
     }
 }

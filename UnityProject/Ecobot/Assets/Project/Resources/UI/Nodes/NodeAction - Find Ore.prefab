@@ -234,10 +234,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8823b82d244b53f4ca11cff8c54037d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeController
+  nodeKind: 3
   connectionsContainer: {fileID: 0}
   connectionPrefab: {fileID: 4899158444216150950, guid: b518692297a1971429821b9fabf19efc,
     type: 3}
   selectionOutline: {fileID: 4403446421210673247}
+  titleDragHandle: {fileID: 5100282097937670242}
   canBeDeleted: 1
 --- !u!114 &4403446421210673247
 MonoBehaviour:
@@ -625,6 +627,8 @@ MonoBehaviour:
   defaultMaterial: {fileID: 0}
   validMaterial: {fileID: 0}
   invalidMaterial: {fileID: 0}
+  _slotKey: Success
+  _dataTypeName: 
 --- !u!1 &2947457410043208193
 GameObject:
   m_ObjectHideFlags: 0
@@ -812,7 +816,7 @@ GameObject:
   - component: {fileID: 1235498116866537481}
   - component: {fileID: 1614870152883097943}
   m_Layer: 0
-  m_Name: DataSlot
+  m_Name: Found Ore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -894,6 +898,8 @@ MonoBehaviour:
   defaultMaterial: {fileID: 0}
   validMaterial: {fileID: 0}
   invalidMaterial: {fileID: 0}
+  _slotKey: Found Ore
+  _dataTypeName: environment.Ore.Ore
 --- !u!1 &3655147126003356655
 GameObject:
   m_ObjectHideFlags: 0
@@ -1196,7 +1202,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Item 1
+  m_text: Coal
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1685,6 +1691,8 @@ MonoBehaviour:
   defaultMaterial: {fileID: 0}
   validMaterial: {fileID: 0}
   invalidMaterial: {fileID: 0}
+  _slotKey: Fail
+  _dataTypeName: 
 --- !u!1 &6154314752634581715
 GameObject:
   m_ObjectHideFlags: 0
@@ -1992,6 +2000,8 @@ MonoBehaviour:
   defaultMaterial: {fileID: 0}
   validMaterial: {fileID: 0}
   invalidMaterial: {fileID: 0}
+  _slotKey: In
+  _dataTypeName: 
 --- !u!114 &6089222539664509898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2011,6 +2021,8 @@ MonoBehaviour:
   defaultMaterial: {fileID: 0}
   validMaterial: {fileID: 0}
   invalidMaterial: {fileID: 0}
+  _slotKey: 
+  _dataTypeName: 
 --- !u!1 &6936842260449359791
 GameObject:
   m_ObjectHideFlags: 0
@@ -2135,6 +2147,7 @@ GameObject:
   - component: {fileID: 2161327575966011302}
   - component: {fileID: 8950684396246021504}
   - component: {fileID: 365819406888629210}
+  - component: {fileID: 788089742082814032}
   m_Layer: 0
   m_Name: Dropdown
   m_TagString: Untagged
@@ -2253,16 +2266,32 @@ MonoBehaviour:
   m_MultiSelect: 0
   m_Options:
     m_Options:
-    - m_Text: Item 1
+    - m_Text: Coal
       m_Image: {fileID: 21300000, guid: 83d4c0e3d19d65146ad1dc996a82dc81, type: 3}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: Item 2
+    - m_Text: Iron
       m_Image: {fileID: 21300000, guid: f6ffe664302d59f40bf31d68c06209a7, type: 3}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
   m_AlphaFadeSpeed: 0.15
+--- !u!114 &788089742082814032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7102514886489049325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeb4a5da414ff3b4b86ce31bac35fa93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GUI.Programming.Windows.Nodes.NodeDropdownBinding
+  dropdown: {fileID: 365819406888629210}
+  technicalKeys:
+  - CoalData
+  - IronData
 --- !u!1 &7754256291820900639
 GameObject:
   m_ObjectHideFlags: 0

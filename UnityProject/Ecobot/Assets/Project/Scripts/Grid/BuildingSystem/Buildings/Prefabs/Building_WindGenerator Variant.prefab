@@ -1076,6 +1076,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6279687607853439450}
+    - targetCorrespondingSourceObject: {fileID: 4188047236956719531, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7869959998444008165}
     - targetCorrespondingSourceObject: {fileID: 96064365467064251, guid: da20c72b148170a4786e100c03ef5398,
         type: 3}
       insertIndex: 2
@@ -1186,6 +1190,18 @@ MonoBehaviour:
   spinRampDuration: 2
   localAxis: {x: 0, y: 0, z: 1}
   invertDirection: 0
+--- !u!114 &7869959998444008165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5754387921803256773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360415ff5c7fab142801f840ab9d9e17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Environment.Approach.BuildingApproachProvider
 --- !u!1 &8399237075349667285 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 96064365467064251, guid: da20c72b148170a4786e100c03ef5398,

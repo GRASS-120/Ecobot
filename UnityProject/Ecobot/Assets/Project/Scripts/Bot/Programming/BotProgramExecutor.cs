@@ -44,7 +44,7 @@ namespace Bot.Programming
 
             var building2Obj = new GameObject("Storage_B");
             var building2 = building2Obj.AddComponent<BuildingBase>();
-            building2Obj.transform.position = new Vector3(12, 0, 2); // 📍 нижний правый угол
+            building2Obj.transform.position = new Vector3(30, 0, 20); // 📍 нижний правый угол
             simulatedBuildings["Storage_B"] = building2;
             createdObjects.Add(building2Obj);
 
