@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
+using System.Reflection;
 using Bot.Command;
 using Bot.Programming;
 using Bot.States;
@@ -13,7 +16,6 @@ using InteractionSystem;
 using Inventory;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Bot
 {
@@ -24,78 +26,88 @@ namespace Bot
         [SerializeField] private BotCommandController commandController;
         [SerializeField] private BotProgrammingController programmingController;
 
+        // ОБЯЗАТЕЛЬНО повесь этот компонент в инспекторе
+        [SerializeField] private BotInteractor botInteractor;
+
         [Title("Inventory")]
         [SerializeField] [Min(1)] private int inventorySize = 8;
-        
+
+        [Title("UI / Overlay")]
+        [SerializeField] private Transform programmingOverlayParent;
+
         private GameManager _gameManager;
         private WindowManager _windowManager;
         private StateMachine _stateMachine;
-        private BotStateIdle _stateIdle;
-        private BotStateWorking _stateWorking;
-        private BotStateWaiting _stateWaiting;
         private InventorySystem _inventorySystem;
-        
+
         public BotMovementController MovementController => movementController;
         public BotCommandController CommandController => commandController;
         public BotProgrammingController ProgrammingController => programmingController;
         public InventorySystem InventorySystem => _inventorySystem;
 
+        // это нужно нодам
+        public BotInteractor Interactor => botInteractor;
+
         public void Init(GridMap gridMap, GameManager gameManager, WindowManager windowManager)
         {
-            _stateMachine = new StateMachine();
-            _stateIdle = new BotStateIdle();
-            _stateWorking = new BotStateWorking();
-            _stateWaiting = new BotStateWaiting();
-            
+            _gameManager = gameManager;
+            _windowManager = windowManager;
+
+            // инвентарь бота
+            _inventorySystem = new InventorySystem(inventorySize);
+
             movementController.Init(this, gridMap);
             commandController.Init(this);
             programmingController.Init(this);
-            
-            _gameManager = gameManager;
-            _windowManager = windowManager;
-            _inventorySystem = new InventorySystem(inventorySize);
-            
-            _stateMachine.AddAnyTransition(_stateIdle, new FuncPredicate(() => true));
-            _stateMachine.SetState(_stateIdle);
+
+            _stateMachine = new StateMachine();
+            _stateMachine.SetState(new BotStateIdle());
+
+            // ВАЖНО: связать интерактор и инвентарь
+            if (botInteractor != null)
+            {
+                botInteractor.Init(this);
+            }
+            else
+            {
+                Debug.LogWarning("[BotBase] BotInteractor is NULL — бот будет майнить, но лут не сохранит.");
+            }
         }
 
         public void Interact(IInteractor interactor)
         {
-            // Открытие режима программирования
             _gameManager.FSM.SetState(_gameManager.ProgrammingMode);
+            Debug.Log("[BotBase] Enter ProgrammingMode.");
+
+            if (programmingOverlayParent == null)
+            {
+                Debug.LogError("[BotBase] programmingOverlayParent is NULL — назначь в инспекторе.");
+                return;
+            }
+
+            // Holder ссылается на конкретного BotProgrammingController
+            var holder = programmingOverlayParent.GetComponent<ProgrammingOverlayBotHolder>();
+            if (holder == null)
+            {
+                holder = programmingOverlayParent.gameObject.AddComponent<ProgrammingOverlayBotHolder>();
+                Debug.Log($"[BotBase] Added ProgrammingOverlayBotHolder on '{programmingOverlayParent.name}'");
+            }
+            holder.Set(programmingController);
+
+            // Открываем окно. ВАЖНО: Больше НЕ биндим граф здесь, это делает сам OverlayController.
+            _windowManager.OpenWindow<GUI.Programming.Windows.ProgrammingOverlayController>();
+            Debug.Log("[BotBase] Opened ProgrammingOverlayController (overlay).");
         }
 
-        public void AltInteract(IInteractor interactor)
-        {
-            OpenInventory();
-        }
-
-        public void HoldInteractionCancel(IInteractor interactor)
-        {
-            // Можно добавить визуальную обратную связь об отмене
-            Debug.Log("Bot inventory opening cancelled");
-        }
+        public void AltInteract(IInteractor interactor) => OpenInventory();
 
         private void OpenInventory()
         {
-            if (_windowManager == null)
-            {
-                Debug.LogError("WindowManager is null! Bot was not initialized properly.");
-                return;
-            }
-
             var storageWindow = _windowManager.GetController<StorageInventoryWindowController>();
-            
-            if (storageWindow == null)
-            {
-                Debug.LogError("StorageInventoryWindowController not found in WindowManager!");
-                return;
-            }
+            if (storageWindow == null) return;
 
             if (storageWindow.IsOpen)
-            {
                 _windowManager.CloseWindow<StorageInventoryWindowController>();
-            }
             else
             {
                 storageWindow.SetStorage(_inventorySystem);
@@ -103,9 +115,24 @@ namespace Bot
             }
         }
 
+        // это требует IInventoryHolder
         public bool TryAddToInventory(InventoryItemData data, int amount)
         {
             return _inventorySystem.TryAddToInventory(data, amount);
+        }
+    }
+
+    public class ProgrammingOverlayBotHolder : MonoBehaviour
+    {
+        [SerializeField] private BotProgrammingController botProgramming;
+        public BotProgrammingController BotProgramming => botProgramming;
+
+        public void Set(BotProgrammingController value)
+        {
+            botProgramming = value;
+            Debug.Log(value
+                ? $"[BotHolder] Set BotProgramming='{value.name}' on holder '{name}'"
+                : $"[BotHolder] Cleared BotProgramming on holder '{name}'");
         }
     }
 }

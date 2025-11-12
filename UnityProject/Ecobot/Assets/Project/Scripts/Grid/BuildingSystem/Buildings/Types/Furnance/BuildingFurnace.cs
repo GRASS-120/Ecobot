@@ -19,9 +19,18 @@ namespace Grid.BuildingSystem.Buildings.Types.Furnance
         [SerializeField] private Transform wireAnchor;
         [SerializeField] private PowerWireProximityReactor proximityReactor;
         [SerializeField] private BuildingFurnaceVisual visual;
+
         [SerializeField] private List<SmeltingRecipeData> recipes = new();
+
+        // оставляем для совместимости: окно и логика могут опираться на это поле
         [SerializeField] private InventoryItemData coalItem;
-        
+
+        [Header("Whitelists (drag & drop items)")]
+        [Tooltip("Если список НЕ пуст — только эти предметы разрешены как топливо.")]
+        [SerializeField] private List<InventoryItemData> fuelWhitelist = new();
+        [Tooltip("Если список НЕ пуст — только эти предметы разрешены как руда (input).")]
+        [SerializeField] private List<InventoryItemData> oreWhitelist = new();
+
         private readonly List<IPowerNode> _inputs = new();
         private readonly List<IPowerNode> _outputs = new();
         private bool _isPowered;
@@ -33,6 +42,7 @@ namespace Grid.BuildingSystem.Buildings.Types.Furnance
         private Coroutine _smeltRoutine;
         private float _progress01;
 
+        // === ПУБЛИЧНЫЙ API (как ждёт окно) ===
         public List<SmeltingRecipeData> Recipes => recipes;
         public SmeltingRecipeData CurrentRecipe => _currentRecipe;
         public InventorySystem FurnaceInventory => _furnaceInv;
@@ -42,11 +52,13 @@ namespace Grid.BuildingSystem.Buildings.Types.Furnance
         public InventoryItemData CoalItem => coalItem;
         public float Progress01 => _progress01;
 
-// События для UI
+        // UI events
         public Subject<Unit> OnSlotsChanged = new();
         public Subject<float> OnProgressChanged = new();
         public Subject<bool> OnPoweredChanged = new();
         public Subject<Unit> OnRecipeChanged = new();
+
+        // Power node
         public bool IsPowered => _isPowered;
         public PowerNodeType NodeType => PowerNodeType.Consumer;
         public int ProducedUnits => 0;
@@ -73,7 +85,6 @@ namespace Grid.BuildingSystem.Buildings.Types.Furnance
             _progress01 = 0f;
             OnProgressChanged.OnNext(_progress01);
             
-            // Вставить вместо текущей подписки _furnaceInv.OnInventorySlotChanged в Init(...)
             _furnaceInv.OnInventorySlotChanged
                 .Subscribe(changedSlot =>
                 {
@@ -90,7 +101,7 @@ namespace Grid.BuildingSystem.Buildings.Types.Furnance
                 })
                 .AddTo(this);
 
-// Добавить сразу после подписки (инициализация при спавне, если руда уже лежит)
+            // Если при спавне руда уже лежит
             TryAutoSelectRecipeFromOreSlot();
         }
         
@@ -149,7 +160,6 @@ namespace Grid.BuildingSystem.Buildings.Types.Furnance
             var ore = _furnaceInv.GetSlot(ORE_INDEX);
             if (ore.ItemData == null) return;
 
-            // Ищем первый рецепт, где inputItem совпадает с тем, что в слоте руды
             var match = recipes.Find(r => r != null && r.inputItem == ore.ItemData);
             if (match != null && match != _currentRecipe)
             {
@@ -157,7 +167,50 @@ namespace Grid.BuildingSystem.Buildings.Types.Furnance
                 OnRecipeChanged.OnNext(Unit.Default);
             }
         }
-        
+
+        // ==== МЕТОДЫ, КОТОРЫЕ ЖДЁТ ОКНО ====
+
+        // Вызывается из FurnaceWindowController.SelectRecipe(...)
+        public void SelectRecipe(SmeltingRecipeData r)
+        {
+            if (r == _currentRecipe) return;
+            _currentRecipe = r;
+            OnRecipeChanged.OnNext(Unit.Default);
+            EvaluateAndRun();
+        }
+
+        // Вызывается из FurnaceWindowController для подсветки рецептов
+        public bool IsRecipePotentiallyAvailable(SmeltingRecipeData r)
+        {
+            if (r == null) return false;
+            // Лёгкая проверка на пригодность (оставляем логически простой индикатор)
+            // Можно усложнить по желанию.
+            return true;
+        }
+
+        // ===== Whitelists helpers =====
+        public bool IsFuelItem(InventoryItemData item)
+        {
+            if (fuelWhitelist != null && fuelWhitelist.Count > 0)
+                return item != null && fuelWhitelist.Contains(item);
+
+            if (coalItem != null) return item == coalItem;
+            return item != null;
+        }
+
+        public bool IsOreItem(InventoryItemData item)
+        {
+            if (oreWhitelist != null && oreWhitelist.Count > 0)
+                return item != null && oreWhitelist.Contains(item);
+
+            if (item == null) return false;
+            foreach (var r in recipes)
+                if (r != null && r.inputItem == item) return true;
+            return false;
+        }
+
+        // ===== ЛОГИКА ПЛАВКИ =====
+
         public bool CanAcceptInputFrom(IPowerNode from)
         {
             if (_inputs.Count >= MaxInputs) return false;
@@ -180,23 +233,7 @@ namespace Grid.BuildingSystem.Buildings.Types.Furnance
             _inputs.Remove(other);
             (other as IPowerNodeInternalDisconnect)?.InternalRemoveOutput(this);
         }
-        
-        public void SelectRecipe(SmeltingRecipeData r)
-        {
-            if (r == _currentRecipe) return;
-            _currentRecipe = r;
-            OnRecipeChanged.OnNext(Unit.Default);
-            EvaluateAndRun();
-        }
 
-        public bool IsRecipePotentiallyAvailable(SmeltingRecipeData r)
-        {
-            if (r == null) return false;
-            // достаточно ли руды под выбранный рецепт (по иконке/названию) — проверка простая
-            return true;
-        }
-
-        // Внутренняя логика
         private void EvaluateAndRun()
         {
             if (_smeltRoutine != null) return;
@@ -208,12 +245,10 @@ namespace Grid.BuildingSystem.Buildings.Types.Furnance
                 if (_currentRecipe == null) return;
             }
 
-            // Если текущий рецепт не можем запустить — пробуем подобрать по руде ещё раз
             if (!HasResourcesForOneOutput(_currentRecipe) || !CanAcceptOutput(_currentRecipe))
             {
                 var prev = _currentRecipe;
                 TryAutoSelectRecipeFromOreSlot();
-                // Если рецепт изменился и новый подходит — пускаем
                 if (_currentRecipe != prev && _currentRecipe != null)
                 {
                     if (!HasResourcesForOneOutput(_currentRecipe) || !CanAcceptOutput(_currentRecipe))
@@ -237,16 +272,7 @@ namespace Grid.BuildingSystem.Buildings.Types.Furnance
             if (r.fuelPerOutput > 0)
             {
                 var fuel = _furnaceInv.GetSlot(FUEL_INDEX);
-                // Если coalItem указан — требуем именно его.
-                // Если не указан — достаточно любого предмета в слоте.
-                if (coalItem != null)
-                {
-                    if (fuel.ItemData != coalItem) return false;
-                }
-                else
-                {
-                    if (fuel.ItemData == null) return false;
-                }
+                if (!IsFuelItem(fuel.ItemData)) return false;
                 if (fuel.StackSize < r.fuelPerOutput) return false;
             }
             return true;
@@ -263,82 +289,78 @@ namespace Grid.BuildingSystem.Buildings.Types.Furnance
         private IEnumerator SmeltRoutine()
         {
             _progress01 = 0f;
-    OnProgressChanged.OnNext(_progress01);
+            OnProgressChanged.OnNext(_progress01);
 
-    float time = _currentRecipe.smeltTimeSeconds;
-    float t = 0f;
+            float time = _currentRecipe.smeltTimeSeconds;
+            float t = 0f;
 
-    visual?.SetSmelting(true);
+            visual?.SetSmelting(true);
 
-    while (t < time)
-    {
-        // нет питания — пауза и VFX off
-        if (!_isPowered)
-        {
+            while (t < time)
+            {
+                if (!_isPowered)
+                {
+                    visual?.SetSmelting(false);
+                    yield return null;
+                    continue;
+                }
+                if (!HasResourcesForOneOutput(_currentRecipe) || !CanAcceptOutput(_currentRecipe))
+                {
+                    visual?.SetSmelting(false);
+                    yield return null;
+                    continue;
+                }
+
+                if (t == 0f) visual?.SetSmelting(true);
+                t += UnityEngine.Time.deltaTime;
+                _progress01 = Mathf.Clamp01(t / time);
+                OnProgressChanged.OnNext(_progress01);
+                yield return null;
+            }
+
+            if (!_isPowered || !HasResourcesForOneOutput(_currentRecipe) || !CanAcceptOutput(_currentRecipe))
+            {
+                visual?.SetSmelting(false);
+                _progress01 = 0f;
+                OnProgressChanged.OnNext(_progress01);
+                _smeltRoutine = null;
+                EvaluateAndRun();
+                yield break;
+            }
+
+            // списываем ресурсы
+            _furnaceInv.GetSlot(ORE_INDEX).RemoveFromStack(_currentRecipe.inputAmountPerOutput);
+            if (_furnaceInv.GetSlot(ORE_INDEX).StackSize <= 0) _furnaceInv.GetSlot(ORE_INDEX).ClearSlot();
+
+            if (_currentRecipe.fuelPerOutput > 0) // <-- фикс: r -> _currentRecipe
+            {
+                _furnaceInv.GetSlot(FUEL_INDEX).RemoveFromStack(_currentRecipe.fuelPerOutput);
+                if (_furnaceInv.GetSlot(FUEL_INDEX).StackSize <= 0) _furnaceInv.GetSlot(FUEL_INDEX).ClearSlot();
+            }
+
+            OnSlotsChanged.OnNext(Unit.Default);
+            _furnaceInv.NotifySlotChanged(ORE_INDEX);
+            _furnaceInv.NotifySlotChanged(FUEL_INDEX);
+
+            if (_furnaceInv.GetSlot(OUTPUT_INDEX).ItemData == null)
+                _furnaceInv.GetSlot(OUTPUT_INDEX).UpdateSlot(_currentRecipe.resultItem, 0);
+
+            if (_furnaceInv.GetSlot(OUTPUT_INDEX).ItemData == _currentRecipe.resultItem)
+            {
+                _furnaceInv.GetSlot(OUTPUT_INDEX).AddToStack(_currentRecipe.resultAmount);
+            }
+
+            OnSlotsChanged.OnNext(Unit.Default);
+            _furnaceInv.NotifySlotChanged(OUTPUT_INDEX);
+
             visual?.SetSmelting(false);
-            yield return null;
-            continue;
+
+            _progress01 = 0f;
+            OnProgressChanged.OnNext(_progress01);
+
+            _smeltRoutine = null;
+            EvaluateAndRun();
         }
-        // нет условий — пауза и VFX off (ждём пока появятся руда/топливо/место под выход)
-        if (!HasResourcesForOneOutput(_currentRecipe) || !CanAcceptOutput(_currentRecipe))
-        {
-            visual?.SetSmelting(false);
-            yield return null;
-            continue;
-        }
-
-        // условия норм — плавим и VFX on
-        if (t == 0f) visual?.SetSmelting(true);
-        t += UnityEngine.Time.deltaTime;
-        _progress01 = Mathf.Clamp01(t / time);
-        OnProgressChanged.OnNext(_progress01);
-        yield return null;
-    }
-
-    // перед выдачей результата — финальная проверка
-    if (!_isPowered || !HasResourcesForOneOutput(_currentRecipe) || !CanAcceptOutput(_currentRecipe))
-    {
-        visual?.SetSmelting(false);
-        _progress01 = 0f;
-        OnProgressChanged.OnNext(_progress01);
-        _smeltRoutine = null;
-        EvaluateAndRun();
-        yield break;
-    }
-
-    // теперь списываем ресурсы и выдаём результат (поэтапно, в конце цикла)
-    _furnaceInv.GetSlot(ORE_INDEX).RemoveFromStack(_currentRecipe.inputAmountPerOutput);
-    if (_furnaceInv.GetSlot(ORE_INDEX).StackSize <= 0) _furnaceInv.GetSlot(ORE_INDEX).ClearSlot();
-
-    if (_currentRecipe.fuelPerOutput > 0)
-    {
-        _furnaceInv.GetSlot(FUEL_INDEX).RemoveFromStack(_currentRecipe.fuelPerOutput);
-        if (_furnaceInv.GetSlot(FUEL_INDEX).StackSize <= 0) _furnaceInv.GetSlot(FUEL_INDEX).ClearSlot();
-    }
-
-    OnSlotsChanged.OnNext(Unit.Default);
-    _furnaceInv.NotifySlotChanged(ORE_INDEX);
-    _furnaceInv.NotifySlotChanged(FUEL_INDEX);
-
-    if (_furnaceInv.GetSlot(OUTPUT_INDEX).ItemData == null)
-        _furnaceInv.GetSlot(OUTPUT_INDEX).UpdateSlot(_currentRecipe.resultItem, 0);
-
-    if (_furnaceInv.GetSlot(OUTPUT_INDEX).ItemData == _currentRecipe.resultItem)
-    {
-        _furnaceInv.GetSlot(OUTPUT_INDEX).AddToStack(_currentRecipe.resultAmount);
-    }
-
-    OnSlotsChanged.OnNext(Unit.Default);
-    _furnaceInv.NotifySlotChanged(OUTPUT_INDEX);
-
-    visual?.SetSmelting(false);
-
-    _progress01 = 0f;
-    OnProgressChanged.OnNext(_progress01);
-
-    _smeltRoutine = null;
-    EvaluateAndRun();
-        }        
 
         public void OnPowerStateChanged(bool isPowered)
         {

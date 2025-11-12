@@ -5,6 +5,7 @@ using Grid.BuildingSystem.Buildings.Base;
 using R3;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Grid.Base; // --- CHANGED: нужен для доступа к GridNode (HasDynamicOccupant/BuildingBase)
 
 namespace Grid.BuildingSystem.BuildingPreview
 {
@@ -49,8 +50,30 @@ namespace Grid.BuildingSystem.BuildingPreview
             // Обновляем позицию мыши
             _mousePosition = buildingSystem.Player.GetMouseRaycast().position;
     
+            // --- CHANGED: пересчитываем И коллизию, и грид, чтобы визуал сразу подсветился корректно
+            var targetPos = CalcTargetPosition();
+            var planeSize = CalcVisualPlaneSize();
+
+            // размер бокса для оверлапа
+            _buildingItem.Value.GetSizesDependsOnDir(buildingSystem.Dir, out int w, out int h);
+            var boxHalfExtents = new Vector3(
+                buildingSystem.Grid.CellSize * w / 2f,
+                1,
+                buildingSystem.Grid.CellSize * h / 2f
+            );
+
+            bool canByCollision = _buildingPreviewVisual.Plane
+                .GetComponent<BuildingPreviewPlane>()
+                .CheckCollision(targetPos, boxHalfExtents);
+
+            var cell = buildingSystem.Grid.GetGridPosition(targetPos);
+            bool canByGrid = CalcCanBuildByGrid(cell); // ← учёт зданий и руды
+
+            _canBuildByCollision.Value = canByCollision && canByGrid;
+            // -------------------------------------------------------------
+
             // Принудительно обновляем визуал
-            _buildingPreviewVisual.RefreshVisual(CalcTargetPosition(), CalcVisualPlaneSize());
+            _buildingPreviewVisual.RefreshVisual(targetPos, planeSize);
             _buildingPreviewVisual.HandleVisual(_canBuildByCollision.Value);
         }
         
@@ -92,14 +115,24 @@ namespace Grid.BuildingSystem.BuildingPreview
 
             if (_buildingItem.Value == null) return;
 
-            
+            // размеры оверлап-бокса для коллизии
             _buildingItem.Value.GetSizesDependsOnDir(buildingSystem.Dir, out int w, out int h);  // если left/right, то h = w, w = h
-            
-            var size = new Vector3(
+            var halfExtents = new Vector3(
                 buildingSystem.Grid.CellSize * w / 2f,
                 1, 
-                buildingSystem.Grid.CellSize * h / 2f);
-            _canBuildByCollision.Value = _buildingPreviewVisual.Plane.GetComponent<BuildingPreviewPlane>().CheckCollision(targetPosition, size);
+                buildingSystem.Grid.CellSize * h / 2f
+            );
+
+            bool canByCollision = _buildingPreviewVisual
+                .Plane
+                .GetComponent<BuildingPreviewPlane>()
+                .CheckCollision(targetPosition, halfExtents);
+
+            // --- CHANGED: добавляем учет грида (здания + динамические оккупанты/руда)
+            Vector2Int originCell = buildingSystem.Grid.GetGridPosition(targetPosition);
+            bool canByGrid = CalcCanBuildByGrid(originCell);
+            _canBuildByCollision.Value = canByCollision && canByGrid;
+            // --------------------------------------------------------------------
         }
 
         private Vector3 CalcTargetPosition()
@@ -114,6 +147,35 @@ namespace Grid.BuildingSystem.BuildingPreview
                 buildingSystem.Grid.CellSize * _buildingItem.Value.width / 10f,
                 1, 
                 buildingSystem.Grid.CellSize * _buildingItem.Value.height / 10f);
+        }
+
+        // --- CHANGED: единственное новое приватное вычисление, использует текущий грид и твои же типы.
+        // Проверяет, что все клетки под сооружением пусты: нет здания и нет динамического оккупанта (руды).
+        private bool CalcCanBuildByGrid(Vector2Int originCell)
+        {
+            if (_buildingItem.Value == null) return true;
+
+            var grid = buildingSystem.Grid;
+            if (grid == null) return true;
+
+            Vector2Int[,] cells = _buildingItem.Value.GetAllGridPositions(originCell, buildingSystem.Dir);
+            int w = cells.GetLength(0);
+            int h = cells.GetLength(1);
+
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+                    var c = cells[i, j];
+                    var node = grid.GetGridObject(c);
+                    if (node == null) return false;
+
+                    // нельзя строить, если здесь уже есть здание или динамический оккупант (руда и т.п.)
+                    if (node.BuildingBase != null || node.HasDynamicOccupant)
+                        return false;
+                }
+            }
+            return true;
         }
     }
 }

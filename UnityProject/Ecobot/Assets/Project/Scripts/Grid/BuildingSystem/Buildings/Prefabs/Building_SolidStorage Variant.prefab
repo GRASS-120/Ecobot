@@ -96,6 +96,10 @@ PrefabInstance:
         type: 3}
       insertIndex: 1
       addedObject: {fileID: 6069139008918627155}
+    - targetCorrespondingSourceObject: {fileID: 4188047236956719531, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -924247657102464919}
   m_SourcePrefab: {fileID: 100100000, guid: da20c72b148170a4786e100c03ef5398, type: 3}
 --- !u!1 &4436375183781704371 stripped
 GameObject:
@@ -115,7 +119,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2fb8ea398cb41eba4d3ab4dbc4cdca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Grid.BuildingSystem.Buildings.BuildingSolidStorage
-  inventorySize: 12
+  inventorySize: 2
+--- !u!114 &-924247657102464919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4436375183781704371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360415ff5c7fab142801f840ab9d9e17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Environment.Approach.BuildingApproachProvider
 --- !u!4 &6507609482144621312 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6755515045247424536, guid: da20c72b148170a4786e100c03ef5398,

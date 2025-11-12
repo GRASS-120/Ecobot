@@ -159,6 +159,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8582127735381278040}
+    - targetCorrespondingSourceObject: {fileID: 4188047236956719531, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7423759540974467315}
     - targetCorrespondingSourceObject: {fileID: 96064365467064251, guid: da20c72b148170a4786e100c03ef5398,
         type: 3}
       insertIndex: 2
@@ -214,6 +218,10 @@ MonoBehaviour:
   recipes:
   - {fileID: 11400000, guid: a3c2f4c7de45e144bb8725c6a0aa48e7, type: 2}
   coalItem: {fileID: 11400000, guid: b83c0ea004e8e4343933e877b71fcdf7, type: 2}
+  fuelWhitelist:
+  - {fileID: 11400000, guid: b83c0ea004e8e4343933e877b71fcdf7, type: 2}
+  oreWhitelist:
+  - {fileID: 11400000, guid: 17bd8addcde651949bda7c83ef53928d, type: 2}
 --- !u!114 &8582127735381278040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,6 +236,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Grid.BuildingSystem.Buildings.Visual.BuildingFurnaceVisual
   smokeVfx: {fileID: 8485569437615711143}
   fadeInDuration: 0.8
+--- !u!114 &-7423759540974467315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4224578879116452296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360415ff5c7fab142801f840ab9d9e17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Environment.Approach.BuildingApproachProvider
 --- !u!114 &5694447683166932441 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5744599851965883834, guid: da20c72b148170a4786e100c03ef5398,

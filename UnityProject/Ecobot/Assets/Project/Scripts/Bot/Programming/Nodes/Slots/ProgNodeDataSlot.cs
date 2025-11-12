@@ -55,26 +55,48 @@ namespace Bot.Programming.Nodes.Slots
         }
 
         // Соединяет этот слот с другим слотом данных
-        public void ConnectToDataSlot<TSource>(ProgNodeDataSlot<TSource> sourceSlot, Func<TSource, T> conversionFunc = null)
+        public void ConnectToDataSlot<TSource>(
+            ProgNodeDataSlot<TSource> sourceSlot,
+            Func<TSource, T> conversionFunc = null)
         {
-            if (sourceSlot != null)
+            if (sourceSlot == null)
+                return;
+
+            connectedSlot = sourceSlot;
+
+            if (conversionFunc != null)
             {
-                connectedSlot = sourceSlot;
-                
-                // Если предоставлена функция конвертации, используем её
-                if (conversionFunc != null)
-                {
-                    converter = (obj) => conversionFunc((TSource)obj);
-                }
-                // Иначе пытаемся использовать прямое приведение типов
-                else if (typeof(TSource).IsAssignableFrom(typeof(T)) || typeof(T).IsAssignableFrom(typeof(TSource)))
-                {
-                    converter = (obj) => (T)obj;
-                }
-                
-                Debug.Log($"Connected data slot {SlotName} to {sourceSlot.SlotName}");
+                converter = obj => conversionFunc((TSource)obj);
             }
+            else if (typeof(T).IsAssignableFrom(typeof(TSource)))
+            {
+                // например, BuildingBase → object
+                converter = obj => (T)(object)(TSource)obj;
+            }
+            else if (typeof(TSource).IsAssignableFrom(typeof(T)))
+            {
+                // например, object → BuildingBase
+                converter = obj => (T)obj;
+            }
+            else
+            {
+                converter = obj =>
+                {
+                    try
+                    {
+                        return (T)Convert.ChangeType(obj, typeof(T));
+                    }
+                    catch
+                    {
+                        Debug.LogWarning($"[Slot] ⚠ Cannot convert {typeof(TSource).Name} → {typeof(T).Name} in {SlotName}");
+                        return default;
+                    }
+                };
+            }
+
+            Debug.Log($"Connected data slot {SlotName} → {sourceSlot.SlotName} ({typeof(TSource).Name} → {typeof(T).Name})");
         }
+
 
         public override bool CanConnect(ProgNodeBase node)
         {

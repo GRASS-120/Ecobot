@@ -1,9 +1,8 @@
-
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using GUI.Programming.Windows.Nodes;
 using GUI.Programming.Windows.Slots;
+using GUI.Programming.Graph;
 
 [RequireComponent(typeof(CanvasRenderer))]
 public class UIBezierConnection : MaskableGraphic
@@ -17,15 +16,18 @@ public class UIBezierConnection : MaskableGraphic
 
     [Header("Line Settings")]
     public float thickness = 3f;
-    public Color lineColor = Color.white;
-    public Color selectedColor = Color.yellow;
     public float curveIntensity = 50f;
     public int segmentCount = 20;
 
     [Header("Materials")]
+    [Tooltip("Обычный материал линии/квадратика")]
     [SerializeField] private Material normalMaterial;
-    [SerializeField] private Material validMaterial;
-    [SerializeField] private Material invalidMaterial;
+    [Tooltip("Материал предпросмотра при наведении на валидный слот")]
+    [SerializeField] private Material hoverValidMaterial;
+    [Tooltip("Материал предпросмотра при наведении на невалидный слот")]
+    [SerializeField] private Material hoverInvalidMaterial;
+    [Tooltip("Материал выбранной линии/квадратика")]
+    [SerializeField] private Material selectedMaterial;
 
     public bool IsInteractable { get; private set; }
     public bool IsPreview { get; private set; }
@@ -41,6 +43,9 @@ public class UIBezierConnection : MaskableGraphic
     private Vector3 _lastContainerPos;
     private Vector3 _lastContainerScale;
 
+    private NodeGraphController _graph;
+    private bool _removedByGraph = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -49,8 +54,7 @@ public class UIBezierConnection : MaskableGraphic
         raycastTarget = false;
         maskable = false;
 
-        if (normalMaterial != null)
-            material = normalMaterial;
+        ApplyMaterial(normalMaterial);
     }
 
     private void Start()
@@ -58,21 +62,45 @@ public class UIBezierConnection : MaskableGraphic
         CreateSelectionCircle();
     }
 
+    public void SetGraph(NodeGraphController graph)
+    {
+        _graph = graph;
+        if (_graph == null)
+            Debug.LogWarning($"[Line] SetGraph: graph is NULL on {name}@{GetInstanceID()}");
+        else
+            Debug.Log($"[Line] SetGraph: bound graph to {name}@{GetInstanceID()}");
+    }
+
+    private void EnsureGraph()
+    {
+        if (_graph != null) return;
+        _graph = GetComponentInParent<NodeGraphController>();
+        if (_graph == null)
+            _graph = FindFirstObjectByType<NodeGraphController>();
+        if (_graph != null)
+            Debug.Log($"[Line] EnsureGraph: late bound graph for {name}@{GetInstanceID()}");
+    }
+
     private void CreateSelectionCircle()
     {
-        GameObject circleObj = new GameObject("SelectionCircle", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+        var circleObj = new GameObject("SelectionCircle",
+            typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+
         _circle = circleObj.GetComponent<RectTransform>();
         _circle.SetParent(transform, false);
         _circle.sizeDelta = new Vector2(16f, 16f);
 
         _circleImage = circleObj.GetComponent<Image>();
-        _circleImage.color = new Color(1f, 1f, 1f, 0.5f);
+        _circleImage.color = new Color(1f, 1f, 1f, 0.5f); // полупрозрачный, реальный «цвет» задаёт материал/свет
         _circleImage.raycastTarget = true;
 
-        Button btn = circleObj.GetComponent<Button>();
-        btn.onClick.AddListener(ToggleSelection);
+        var btn = circleObj.GetComponent<Button>();
+        btn.onClick.AddListener(() => SetSelected(!IsSelected));
 
         _circle.SetAsLastSibling();
+
+        // синхронизируем стартовый материал кружка с линией
+        SyncHandleMaterialToCurrent();
     }
 
     public void SetContainer(RectTransform container)
@@ -100,36 +128,67 @@ public class UIBezierConnection : MaskableGraphic
         SetAllDirty();
     }
 
+    // ---------- Публичный API подсветки материалами ----------
+
+    public void SetHoverPreview(bool isValid)
+    {
+        IsPreview = true;
+        IsInteractable = false;
+        ApplyMaterial(isValid ? hoverValidMaterial : hoverInvalidMaterial);
+    }
+
+    public void ClearHoverPreview()
+    {
+        IsPreview = false;
+        if (IsSelected && selectedMaterial != null)
+            ApplyMaterial(selectedMaterial);
+        else
+            ApplyMaterial(normalMaterial);
+    }
+
+    public void SetSelected(bool selected)
+    {
+        IsSelected = selected;
+
+        if (_circleImage != null)
+            _circleImage.color = IsSelected
+                ? new Color(1f, 1f, 0.3f, 0.8f)
+                : new Color(1f, 1f, 1f, 0.5f);
+
+        if (!IsPreview)
+            ApplyMaterial(IsSelected && selectedMaterial != null ? selectedMaterial : normalMaterial);
+
+        SetAllDirty();
+        Debug.Log($"[Line] SetSelected: line={name}@{GetInstanceID()} IsSelected={IsSelected}");
+    }
+
     public void SetInteractable(bool state)
     {
         IsInteractable = state;
         IsPreview = false;
-        if (normalMaterial != null)
-            material = normalMaterial;
+        ApplyMaterial(IsSelected && selectedMaterial != null ? selectedMaterial : normalMaterial);
         SetAllDirty();
     }
 
-    public void SetPreviewState(bool isValid)
+    private void ApplyMaterial(Material mat)
     {
-        IsPreview = true;
-        IsInteractable = false;
-
-        if (isValid && validMaterial != null)
-            material = validMaterial;
-        else if (!isValid && invalidMaterial != null)
-            material = invalidMaterial;
+        // Линия
+        material = mat; // допускаем null → дефолт
+        // Квадратик
+        if (_circleImage != null)
+            _circleImage.material = mat;
 
         SetAllDirty();
     }
 
-    public void ClearPreview()
+    private void SyncHandleMaterialToCurrent()
     {
-        if (!IsPreview) return;
-        IsPreview = false;
-        if (normalMaterial != null)
-            material = normalMaterial;
-        SetAllDirty();
+        // На старте (или при создании круга) синхронизируем материал квадратика с текущим материалом линии
+        if (_circleImage != null)
+            _circleImage.material = material;
     }
+
+    // ---------- Рендер ----------
 
     private void UpdateRectTransform()
     {
@@ -157,7 +216,20 @@ public class UIBezierConnection : MaskableGraphic
         _rt.sizeDelta = size;
         _rt.localScale = Vector3.one;
     }
+    private static Vector2 CalculateBezierPoint(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
+    {
+        float u   = 1f - t;
+        float tt  = t * t;
+        float uu  = u * u;
+        float uuu = uu * u;
+        float ttt = tt * t;
 
+        Vector2 p = uuu * p0;                 // (1 - t)^3 * P0
+        p += 3f * uu * t * p1;                // 3(1 - t)^2 t * P1
+        p += 3f * u * tt * p2;                // 3(1 - t) t^2 * P2
+        p += ttt * p3;                        // t^3 * P3
+        return p;
+    }
     protected override void OnPopulateMesh(VertexHelper vh)
     {
         vh.Clear();
@@ -165,11 +237,12 @@ public class UIBezierConnection : MaskableGraphic
             return;
 
         Vector2 startLocal = _rt.InverseTransformPoint(startSlot.position);
-        Vector2 endLocal = _rt.InverseTransformPoint(endSlot.position);
-        Vector2 control1 = startLocal + Vector2.right * curveIntensity;
-        Vector2 control2 = endLocal + Vector2.left * curveIntensity;
+        Vector2 endLocal   = _rt.InverseTransformPoint(endSlot.position);
+        Vector2 control1   = startLocal + Vector2.right * curveIntensity;
+        Vector2 control2   = endLocal   + Vector2.left  * curveIntensity;
 
-        var col = IsSelected ? selectedColor : lineColor;
+        // цвет вершин оставляем белым — материал рулит внешним видом
+        Color col = Color.white;
 
         for (int i = 0; i < segmentCount; i++)
         {
@@ -179,28 +252,29 @@ public class UIBezierConnection : MaskableGraphic
             Vector2 p1 = CalculateBezierPoint(t1, startLocal, control1, control2, endLocal);
             Vector2 p2 = CalculateBezierPoint(t2, startLocal, control1, control2, endLocal);
 
-            Vector2 n = new Vector2(-(p2 - p1).y, (p2 - p1).x);
+            Vector2 tangent = (p2 - p1);
+            Vector2 n = new Vector2(-tangent.y, tangent.x);
             if (n == Vector2.zero) n = Vector2.up;
             n = n.normalized * (thickness * 0.5f);
 
             int idx = vh.currentVertCount;
-            vh.AddVert(p1 - n, col, Vector2.zero);
-            vh.AddVert(p1 + n, col, Vector2.zero);
-            vh.AddVert(p2 + n, col, Vector2.zero);
-            vh.AddVert(p2 - n, col, Vector2.zero);
 
-            vh.AddTriangle(idx, idx + 1, idx + 2);
-            vh.AddTriangle(idx + 2, idx + 3, idx);
+            // v=0 — нижняя кромка, v=1 — верхняя кромка (относительно нормали)
+            // u идёт по длине: t1 -> t2
+            vh.AddVert(p1 - n, col, new Vector2(t1, 0f)); // 0
+            vh.AddVert(p1 + n, col, new Vector2(t1, 1f)); // 1
+            vh.AddVert(p2 + n, col, new Vector2(t2, 1f)); // 2
+            vh.AddVert(p2 - n, col, new Vector2(t2, 0f)); // 3
+
+            vh.AddTriangle(idx + 0, idx + 1, idx + 2);
+            vh.AddTriangle(idx + 2, idx + 3, idx + 0);
         }
     }
 
-    private Vector2 CalculateBezierPoint(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
+    private static Vector2 Bezier(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
     {
-        float u = 1 - t;
-        return u * u * u * p0 +
-               3f * u * u * t * p1 +
-               3f * u * t * t * p2 +
-               t * t * t * p3;
+        float u = 1f - t;
+        return u*u*u*p0 + 3f*u*u*t*p1 + 3f*u*t*t*p2 + t*t*t*p3;
     }
 
     private void LateUpdate()
@@ -208,19 +282,19 @@ public class UIBezierConnection : MaskableGraphic
         if (_container == null || startSlot == null) return;
 
         Vector3 startPos = startSlot.position;
-        Vector3 endPos = endSlot != null ? endSlot.position : startPos;
+        Vector3 endPos   = endSlot != null ? endSlot.position : startPos;
 
         bool changed =
             _lastStartPos != startPos ||
             _lastEndPos != endPos ||
-            _lastContainerPos != (_container != null ? _container.position : Vector3.zero) ||
+            _lastContainerPos   != (_container != null ? _container.position   : Vector3.zero) ||
             _lastContainerScale != (_container != null ? _container.lossyScale : Vector3.zero);
 
         if (changed)
         {
             _lastStartPos = startPos;
-            _lastEndPos = endPos;
-            _lastContainerPos = _container != null ? _container.position : Vector3.zero;
+            _lastEndPos   = endPos;
+            _lastContainerPos   = _container != null ? _container.position   : Vector3.zero;
             _lastContainerScale = _container != null ? _container.lossyScale : Vector3.zero;
 
             UpdateRectTransform();
@@ -228,13 +302,10 @@ public class UIBezierConnection : MaskableGraphic
             SetAllDirty();
         }
 
-        // Удаление по клавише Delete или X
         if (IsSelected && (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.X)))
         {
-            if (AssociatedOutput != null) AssociatedOutput.SetConnected(false);
-            if (AssociatedInput != null) AssociatedInput.SetConnected(false);
-            NodeController.RemoveGlobalConnection(this);
-            Destroy(gameObject);
+            Debug.Log($"[Line] LateUpdate: Delete/X on {name}@{GetInstanceID()} → RemoveSelf()");
+            RemoveSelf();
         }
     }
 
@@ -243,26 +314,53 @@ public class UIBezierConnection : MaskableGraphic
         if (_circle == null || startSlot == null || endSlot == null) return;
 
         Vector2 startLocal = _rt.InverseTransformPoint(startSlot.position);
-        Vector2 endLocal = _rt.InverseTransformPoint(endSlot.position);
-        Vector2 control1 = startLocal + Vector2.right * curveIntensity;
-        Vector2 control2 = endLocal + Vector2.left * curveIntensity;
+        Vector2 endLocal   = _rt.InverseTransformPoint(endSlot.position);
+        Vector2 c1         = startLocal + Vector2.right * curveIntensity;
+        Vector2 c2         = endLocal   + Vector2.left  * curveIntensity;
 
-        Vector2 mid = CalculateBezierPoint(0.5f, startLocal, control1, control2, endLocal);
+        Vector2 mid = Bezier(0.5f, startLocal, c1, c2, endLocal);
         _circle.anchoredPosition = mid;
     }
 
-    private void ToggleSelection()
+    public void MarkRemovedByGraph()
     {
-        IsSelected = !IsSelected;
-        _circleImage.color = IsSelected
-            ? new Color(1f, 1f, 0.3f, 0.8f)
-            : new Color(1f, 1f, 1f, 0.5f);
-        SetAllDirty();
+        _removedByGraph = true;
+        Debug.Log($"[Line] MarkRemovedByGraph: {name}@{GetInstanceID()}");
     }
 
-    public void ForceUpdate()
+    public void RemoveSelf()
     {
-        UpdateRectTransform();
-        UpdateCirclePosition();
+        EnsureGraph();
+        if (_graph != null)
+        {
+            Debug.Log($"[Line] RemoveSelf: request remove {name}@{GetInstanceID()}");
+            _graph.RequestRemoveConnection(this);
+        }
+        else
+        {
+            Debug.LogWarning($"[Line] RemoveSelf: graph not found, destroying {name}@{GetInstanceID()}");
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (!_removedByGraph)
+        {
+            EnsureGraph();
+            if (_graph != null)
+            {
+                Debug.Log($"[Line] OnDestroy: not marked by graph. Request remove {name}@{GetInstanceID()}");
+                _graph.RequestRemoveConnection(this);
+            }
+            else
+            {
+                Debug.Log($"[Line] OnDestroy: no graph found for {name}@{GetInstanceID()}");
+            }
+        }
+        else
+        {
+            Debug.Log($"[Line] OnDestroy: clean exit {name}@{GetInstanceID()}");
+        }
     }
 }

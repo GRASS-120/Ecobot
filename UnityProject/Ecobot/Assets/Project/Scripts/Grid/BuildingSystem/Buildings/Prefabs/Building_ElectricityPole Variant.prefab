@@ -451,6 +451,10 @@ PrefabInstance:
         type: 3}
       insertIndex: 3
       addedObject: {fileID: 5946515755375197269}
+    - targetCorrespondingSourceObject: {fileID: 4188047236956719531, guid: da20c72b148170a4786e100c03ef5398,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1967707151236637688}
     - targetCorrespondingSourceObject: {fileID: 96064365467064251, guid: da20c72b148170a4786e100c03ef5398,
         type: 3}
       insertIndex: 2
@@ -562,6 +566,18 @@ MonoBehaviour:
   noPower_Connected: {r: 0.6, g: 0.6, b: 0.6, a: 1}
   power_NoConnection: {r: 0.5, g: 0.4, b: 0, a: 1}
   power_Connected: {r: 1, g: 0.9, b: 0, a: 1}
+--- !u!114 &1967707151236637688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4541980493026134704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360415ff5c7fab142801f840ab9d9e17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Environment.Approach.BuildingApproachProvider
 --- !u!114 &5381342875353032353 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5744599851965883834, guid: da20c72b148170a4786e100c03ef5398,

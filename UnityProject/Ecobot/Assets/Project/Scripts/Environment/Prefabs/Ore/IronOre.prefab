@@ -75,6 +75,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6724857428366667310}
   - component: {fileID: 7665284464608216550}
+  - component: {fileID: 6070983360761630419}
+  - component: {fileID: 3957891594794941720}
   m_Layer: 0
   m_Name: IronOre
   m_TagString: Untagged
@@ -111,8 +113,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 9d1e07f757fb40148b1d18be5e0b8109, type: 2}
+  progressBar: {fileID: 0}
   currentCapacity:
     value: 0
+--- !u!114 &6070983360761630419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7555218975491971039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d279fdbb32ef866468e9ee531bda8c24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::environment.Ore.OreApproachProvider
+  oreType: IronData
+--- !u!114 &3957891594794941720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7555218975491971039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32e5aebe25c326c4a8eb518ff47935ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::environment.Ore.OreGridOccupant
+  size: {x: 10, y: 10}
+  pivot: {x: 0, y: 0}
 --- !u!1 &9212578743384925073
 GameObject:
   m_ObjectHideFlags: 0
