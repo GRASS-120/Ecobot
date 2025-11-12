@@ -8539,7 +8539,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Handbook.HandbookManager
   _windowManager: {fileID: 165064984}
-  _config: {fileID: 11400000, guid: 0590b7466aaab4c4cbdd4483c8018cfa, type: 2}
+  _config: {fileID: 0}
   _openKey: 112
 --- !u!1 &1142718648
 GameObject:

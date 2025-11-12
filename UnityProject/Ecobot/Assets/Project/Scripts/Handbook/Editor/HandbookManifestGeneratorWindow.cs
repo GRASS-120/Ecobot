@@ -9,6 +9,7 @@ using Handbook.Models;
 using Handbook.Parser;
 using Handbook.Parser.Validation;
 using Handbook.Routing;
+using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,16 +21,16 @@ namespace Handbook.Editor
         [SerializeField] private string _language = "ru";
         [SerializeField] private string _mediaBasePath = "media";
         [SerializeField] private string _version = "1.0.0";
+        [SerializeField] private int _defaultPageIndex = -1;
         [SerializeField] private string _defaultPageId = "";
-
+        [SerializeField] private string[] _pageOptions = Array.Empty<string>();
+        [SerializeField] private HandbookRuntimeConfig _runtimeConfig;
         [SerializeField] private bool _preserveTitles = true;
         [SerializeField] private bool _preserveTags = true;
         [SerializeField] private bool _preserveSummary = true;
         [SerializeField] private bool _preserveHidden = true;
         [SerializeField] private int _maxIssuesToPrint = 100;
-
-        private List<string> _allPageIds = new();
-
+        
         [MenuItem("Tools/Handbook/Manifest Generator")]
         public static void Open()
         {
@@ -53,6 +54,10 @@ namespace Handbook.Editor
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Source", EditorStyles.boldLabel);
 
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Runtime Config", EditorStyles.boldLabel);
+            _runtimeConfig = (HandbookRuntimeConfig)EditorGUILayout.ObjectField("Config Asset", _runtimeConfig, typeof(HandbookRuntimeConfig), false);
+            
             EditorGUILayout.BeginHorizontal();
             _rootFolder = EditorGUILayout.TextField("Root Folder", _rootFolder);
             if (GUILayout.Button("Browse", GUILayout.Width(80)))
@@ -72,14 +77,26 @@ namespace Handbook.Editor
 
             using (new EditorGUILayout.HorizontalScope())
             {
-                if (GUILayout.Button("Scan & Preview"))
-                    ScanAndPreview();
+                EditorGUILayout.LabelField("Default Page", GUILayout.Width(100));
 
-                if (GUILayout.Button("Generate & Save"))
-                    GenerateAndSave();
+                if (_pageOptions == null || _pageOptions.Length == 0)
+                {
+                    EditorGUILayout.LabelField("(no pages loaded)");
+                    if (GUILayout.Button("Load Pages", GUILayout.Width(100)))
+                        RebuildPageOptions();
+                }
+                else
+                {
+                    var newIndex = EditorGUILayout.Popup(_defaultPageIndex < 0 ? 0 : _defaultPageIndex, _pageOptions);
+                    if (newIndex != _defaultPageIndex)
+                    {
+                        _defaultPageIndex = newIndex;
+                        _defaultPageId = _pageOptions[_defaultPageIndex];
+                    }
 
-                if (GUILayout.Button("Validate"))
-                    ValidateCurrentManifest();
+                    if (GUILayout.Button("Reload", GUILayout.Width(80)))
+                        RebuildPageOptions();
+                }
             }
 
             EditorGUILayout.Space();
@@ -96,7 +113,13 @@ namespace Handbook.Editor
                     ScanAndPreview();
 
                 if (GUILayout.Button("Generate & Save"))
+                {
                     GenerateAndSave();
+                    SaveRuntimeConfig();
+                }
+
+                if (GUILayout.Button("Validate"))
+                    ValidateCurrentManifest();
             }
         }
 
@@ -145,33 +168,82 @@ namespace Handbook.Editor
             }
         }
         
-        private void ShowDefaultPagePicker()
+        private void SaveRuntimeConfig()
+        {
+            if (_runtimeConfig == null)
+                return;
+
+            _runtimeConfig.RootFolder = _rootFolder;
+            _runtimeConfig.Language = _language;
+            _runtimeConfig.MediaBasePath = _mediaBasePath;
+            _runtimeConfig.Version = _version;
+
+            EditorUtility.SetDirty(_runtimeConfig);
+            AssetDatabase.SaveAssets();
+        }
+
+        private void OnEnable()
+        {
+            InitDefaults();
+            RebuildPageOptions();
+        }
+
+        private void RebuildPageOptions()
         {
             try
             {
                 var manifestPath = Path.Combine(_rootFolder, "manifest.json");
-                HandbookManifest existing = null;
-                if (File.Exists(manifestPath))
-                    existing = Newtonsoft.Json.JsonConvert.DeserializeObject<HandbookManifest>(File.ReadAllText(manifestPath));
-
-                _allPageIds.Clear();
-                if (existing != null)
+                if (!File.Exists(manifestPath))
                 {
-                    var list = new List<HandbookPageRef>();
-                    CollectAllPages(existing.sections, list, includeHidden: true);
-                    for (int i = 0; i < list.Count; i++)
-                        _allPageIds.Add(list[i].id);
+                    _pageOptions = Array.Empty<string>();
+                    _defaultPageIndex = -1;
+                    return;
                 }
 
-                var idx = Mathf.Max(0, _allPageIds.IndexOf(_defaultPageId));
-                idx = EditorGUILayout.Popup("Default Page", idx, _allPageIds.ToArray());
+                var json = File.ReadAllText(manifestPath);
+                var existing = JsonConvert.DeserializeObject<HandbookManifest>(json);
+                if (existing == null || existing.sections == null)
+                {
+                    _pageOptions = Array.Empty<string>();
+                    _defaultPageIndex = -1;
+                    return;
+                }
+
+                var pages = new List<HandbookPageRef>();
+                CollectAllPages(existing.sections, pages, includeHidden: true);
+
+                // Берём id страниц (slug)
+                var ids = new List<string>(pages.Count);
+                for (int i = 0; i < pages.Count; i++)
+                {
+                    if (!string.IsNullOrWhiteSpace(pages[i].id))
+                        ids.Add(pages[i].id);
+                }
+
+                // Упорядочим по алфавиту (можно убрать, если нужен «как в манифесте»)
+                ids.Sort(StringComparer.OrdinalIgnoreCase);
+
+                _pageOptions = ids.ToArray();
+
+                if (!string.IsNullOrWhiteSpace(_defaultPageId))
+                {
+                    _defaultPageIndex = Array.IndexOf(_pageOptions, _defaultPageId);
+                }
+
+                if (_defaultPageIndex < 0 && _pageOptions.Length > 0)
+                {
+                    _defaultPageIndex = 0;
+                    _defaultPageId = _pageOptions[0];
+                }
             }
             catch (Exception ex)
             {
-                Debug.LogError($"[HB-Gen] Failed to load manifest for picker: {ex}");
+                Debug.LogError($"[HB-Gen] Failed to rebuild page options: {ex}");
+                _pageOptions = Array.Empty<string>();
+                _defaultPageIndex = -1;
             }
         }
-
+        
         private void ScanAndPreview()
         {
             if (!ValidateRoot()) return;

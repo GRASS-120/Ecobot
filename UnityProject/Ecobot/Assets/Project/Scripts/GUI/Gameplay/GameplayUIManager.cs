@@ -5,6 +5,7 @@ using GUI.Core;
 using GUI.Gameplay.Windows;
 using GUI.Gameplay.Windows.Controller;
 using GUI.UIFramework;
+using Handbook;
 using Inventory;
 using Inventory.UI;
 using Player;

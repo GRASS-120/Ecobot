@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "language": "ru",
   "mediaBasePath": "media",
-  "defaultPageId": "vstuplenie",
+  "defaultPageId": "dobycha-resursa",
   "sections": [
     {
       "id": "vvedenie",
